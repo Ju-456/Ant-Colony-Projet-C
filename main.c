@@ -5,7 +5,7 @@
 int main() 
 {
     int nbSaison;
-    Colonie *colonie = creerColonie(1, 5);
+    Colonie *colonie = creerColonie(1, 5); // a changer prochainement avec le cycle de vie
     SystemeAgricole agriculture = {100, 50};
     SystemeElevage elevage = {10};
     Hygiène hygiene = {100, 0};
@@ -19,7 +19,7 @@ int main()
     ajouterFourmiMale(&colonie->males, 2, 0, ROLE_MALE);
 
     // Gérer la colonie
-    //gererSaison(colonie, 0);  // Printemps
+    //gererSaison(colonie, 0);  // Printemps je n'ai pas compris l'interet
     simulationSaisons(colonie, &agriculture, &elevage, nbSaison);
     cultiverChampignons(&agriculture);
     elevagePucerons(&elevage);
