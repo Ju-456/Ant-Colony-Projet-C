@@ -90,7 +90,14 @@ void ajouterNectar(Fourmi *fourmi);
 // --- Gestion de la Colonie ---
 Colonie* creerColonie(int id, int nombreReines);
 void reproduction(Colonie *colonie);
-void gererSaison(Colonie *colonie, int saison);
+// --- Gestion des Saisons ---
+//void gererSaison(Colonie *colonie, int saison);
+void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage, int mois);
+void hiver(SystemeAgricole *agriculture, Colonie *colonie );
+void printemps(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
+void ete (SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
+void automne (SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
+void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage);
 
 // --- Systèmes Agricoles et d'Élevage ---
 void cultiverChampignons(SystemeAgricole *agriculture);
