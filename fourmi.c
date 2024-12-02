@@ -270,7 +270,7 @@ void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, 
         "*                 === Statistiques de la Colonie ===                  *\n"
         "*                                                                     *\n"
         "*       *******************              *****************            *\n"
-        "*       * Ouvrière :  %d  *             *  Reine :  %d   *             *\n"
+        "*       * Ouvrière :  %d  *             *  Reine :  %d   *            *\n"
         "*       * Soldats :   %d  ******          *               *            *\n"
         "*       *                      *         *               *            *\n"
         "*       *****           ********         *************************    *\n"
