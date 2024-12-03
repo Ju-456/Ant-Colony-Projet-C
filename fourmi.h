@@ -79,8 +79,8 @@ typedef struct Environnement
 // Structure pour gérer les événements externes
 typedef struct EvenementExterne 
 {
-    int type; // 0 pour invasion, 1 pour tempête
-    int impact;
+    int type; // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial 
+    int impact; // impact allant de 1 à 3, 3 étant la plus grosse échelle de gravité 
 } EvenementExterne;
 
 // Structure pour gérer les pheromones des fourmis reines et mâles
@@ -137,7 +137,7 @@ void elevagePucerons(SystemeElevage *elevage);
 
 // --- Infrastructure et Organisation ---
 void construireSalle(Architecture *architecture);
-void gererHygiene(Hygiène *hygiene);
+void gererHygiene(Hygiène *hyg);
 void gererSecurite(Sécurité *securite);
 
 // --- Exploration et Environnement ---

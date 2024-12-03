@@ -11,10 +11,10 @@ int main()
     Colonie *colonie = creerColonie(1, 5); // a changer prochainement avec le cycle de vie
     SystemeAgricole agriculture = {100, 50};
     SystemeElevage elevage = {10};
-    Hygiène hygiene = {100, 0};
-    Sécurité securite = {10, 0};
-    Architecture architecture = {0};
-    Environnement environnement = {0, 200};
+    Hygiène hyg = {100, 0};
+    Sécurité secu = {10, 0};
+    Architecture archi = {0};
+    Environnement enviro = {0, 200};
 
     // Ajouter des fourmis à la colonie
     ajouterFourmi(&colonie->ouvrieres, 1, 0, ROLE_OUVRIERE);
@@ -24,10 +24,10 @@ int main()
     simulationSaisons(colonie, &agriculture, &elevage, nbSaison);
     cultiverChampignons(&agriculture);
     elevagePucerons(&elevage);
-    gererHygiene(&hygiene);
-    gererSecurite(&securite);
-    construireSalle(&architecture);
-    explorer(&environnement);
+    gererHygiene(&hyg);
+    gererSecurite(&secu);
+    construireSalle(&archi);
+    explorer(&enviro);
 
     // Affichage des résultats
     printf("La colonie a %d reines.\n", colonie->nombreReines);
