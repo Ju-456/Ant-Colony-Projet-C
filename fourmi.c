@@ -4,7 +4,8 @@
 #include <unistd.h> //c'est pour le "sleep(3)"
 
 // Fonction pour ajouter une fourmi
-void ajouterFourmi(Fourmi **tete, int id, int age, int role) {
+void ajouterFourmi(Fourmi **tete, int id, int age, int role)
+{
     Fourmi *nouvelle = (Fourmi *)malloc(sizeof(Fourmi));
     nouvelle->id = id;
     nouvelle->age = age;
@@ -14,7 +15,8 @@ void ajouterFourmi(Fourmi **tete, int id, int age, int role) {
 }
 
 // Fonction pour ajouter une fourmi mâle
-void ajouterFourmiMale(FourmiMale **tete, int id, int age, int role) {
+void ajouterFourmiMale(FourmiMale **tete, int id, int age, int role)
+{
     FourmiMale *nouveau = (FourmiMale *)malloc(sizeof(FourmiMale));
     nouveau->id = id;
     nouveau->age = age;
@@ -24,7 +26,8 @@ void ajouterFourmiMale(FourmiMale **tete, int id, int age, int role) {
 }
 
 // Créer une colonie
-Colonie* creerColonie(int id, int nombreReines) {
+Colonie *creerColonie(int id, int nombreReines)
+{
     Colonie *colonie = (Colonie *)malloc(sizeof(Colonie));
     colonie->id = id;
     colonie->nombreReines = nombreReines;
@@ -35,101 +38,115 @@ Colonie* creerColonie(int id, int nombreReines) {
 }
 
 // Cultiver des champignons
-void cultiverChampignons(SystemeAgricole *agriculture) {
+void cultiverChampignons(SystemeAgricole *agriculture)
+{
     agriculture->quantitéChampignons += 10;
     printf("Cultivation de champignons. Quantité actuelle : %d\n", agriculture->quantitéChampignons);
 }
 
 // Élever des pucerons
-void elevagePucerons(SystemeElevage *elevage) {
+void elevagePucerons(SystemeElevage *elevage)
+{
     elevage->nombrePucerons += 5;
     printf("Élevage de pucerons. Nombre actuel : %d\n", elevage->nombrePucerons);
 }
 
 // Gérer l'hygiène
-void gererHygiene(Hygiène *hygiene) {
+void gererHygiene(Hygiène *hygiene)
+{
     hygiene->niveauProprete = 100;
     hygiene->maladies = 0;
     printf("Hygiène gérée. Niveau de propreté : %d, Maladies : %d\n", hygiene->niveauProprete, hygiene->maladies);
 }
 
 // Gérer la sécurité
-void gererSecurite(Sécurité *securite) {
+void gererSecurite(Sécurité *securite)
+{
     securite->niveauProtection = 10;
     securite->attaquesReçues = 0;
     printf("Sécurité gérée. Niveau de protection : %d, Attaques reçues : %d\n", securite->niveauProtection, securite->attaquesReçues);
 }
 
 // Ajouter du nectar
-void ajouterNectar(Fourmi *fourmi) {
+void ajouterNectar(Fourmi *fourmi)
+{
     printf("La fourmi %d a collecté du nectar.\n", fourmi->id);
 }
 
 // Construire une salle
-void construireSalle(Architecture *architecture) {
+void construireSalle(Architecture *architecture)
+{
     architecture->salles++;
     printf("Construction d'une salle. Nombre de salles : %d\n", architecture->salles);
 }
 
 // Explorer l'environnement
-void explorer(Environnement *environnement) {
+void explorer(Environnement *environnement)
+{
     environnement->exploration++;
     printf("Exploration de l'environnement. Exploration actuelle : %d\n", environnement->exploration);
 }
 
-// Gérer les événements externes
-void gererEvenement(EvenementExterne *evenement) {
-    printf("Gestion de l'événement : type %d, impact %d\n", evenement->type, evenement->impact);
-}
-
 // Faire évoluer l'âge d'une fourmi
-void evoluerAge(Fourmi *fourmi) {
+void evoluerAge(Fourmi *fourmi)
+{
     fourmi->age++;
     // printf("La fourmi %d a vieilli. Âge actuel : %d\n", fourmi->id, fourmi->age); ça fait une boucle infernal, faut trouver une solution !
 }
 
 // Gérer la reproduction de la colonie
-void reproduction(Colonie *colonie) {
+void reproduction(Colonie *colonie)
+{
     printf("Reproduction en cours...\n");
     colonie->nombreReines++;
-    ajouterFourmi(&colonie->ouvrieres, 100, 0, ROLE_OUVRIERE);  // Ajouter une ouvrière
+    ajouterFourmi(&colonie->ouvrieres, 100, 0, ROLE_OUVRIERE); // Ajouter une ouvrière
     printf("Une nouvelle fourmi ouvrière a été ajoutée.\n");
 }
 
 // Gérer la saison
-void gererSaison(Colonie *colonie, int saison) {
-    switch(saison) {
-        case 0: // Printemps
-            reproduction(colonie);
-            break;
-        case 1: // Été
-            cultiverChampignons(&(SystemeAgricole){0,0});
-            break;
-        case 2: // Automne
-            elevagePucerons(&(SystemeElevage){0});
-            break;
-        case 3: // Hiver
-            printf("La colonie se prépare pour l'hiver.\n");
-            break;
+void gererSaison(Colonie *colonie, int saison)
+{
+    switch (saison)
+    {
+    case 0: // Printemps
+        reproduction(colonie);
+        break;
+    case 1: // Été
+        cultiverChampignons(&(SystemeAgricole){0, 0});
+        break;
+    case 2: // Automne
+        elevagePucerons(&(SystemeElevage){0});
+        break;
+    case 3: // Hiver
+        printf("La colonie se prépare pour l'hiver.\n");
+        break;
     }
 }
 
 // Ajouter une fourmi dans une file
-void enfile(Queue *q, Fourmi *fourmi) {
-    if (q->queue == NULL) {
+void enfile(Queue *q, Fourmi *fourmi)
+{
+    if (q->queue == NULL)
+    {
         q->tete = fourmi;
         q->queue = fourmi;
-    } else {
+    }
+    else
+    {
         q->queue->suivante = fourmi;
         q->queue = fourmi;
     }
 }
 
 // Retirer une fourmi de la file
-Fourmi *defile(Queue *q) {
-    if (q->tete == NULL) {
+Fourmi *defile(Queue *q)
+{
+    if (q->tete == NULL)
+    {
         return NULL;
-    } else {
+    }
+    else
+    {
         Fourmi *temp = q->tete;
         q->tete = q->tete->suivante;
         return temp;
@@ -137,18 +154,22 @@ Fourmi *defile(Queue *q) {
 }
 
 // Empiler une fourmi dans une pile
-void empile(Pile *p, Fourmi *fourmi) {
+void empile(Pile *p, Fourmi *fourmi)
+{
     p->elements[p->sommet++] = fourmi;
 }
 
 // Dépiler une fourmi de la pile
-Fourmi *depile(Pile *p) {
-    if (p->sommet == 0) return NULL;
+Fourmi *depile(Pile *p)
+{
+    if (p->sommet == 0)
+        return NULL;
     return p->elements[--p->sommet];
 }
 
 // Créer un arbre pour l'architecture
-Noeud *creerNoeud(char *nom) {
+Noeud *creerNoeud(char *nom)
+{
     Noeud *nouveau = (Noeud *)malloc(sizeof(Noeud));
     nouveau->nom = strdup(nom);
     nouveau->gauche = NULL;
@@ -157,28 +178,38 @@ Noeud *creerNoeud(char *nom) {
 }
 
 // Insérer un nœud dans l'arbre
-void insererNoeud(Noeud **racine, char *nom) {
-    if (*racine == NULL) {
+void insererNoeud(Noeud **racine, char *nom)
+{
+    if (*racine == NULL)
+    {
         *racine = creerNoeud(nom);
-    } else {
-        if (strcmp(nom, (*racine)->nom) < 0) {
+    }
+    else
+    {
+        if (strcmp(nom, (*racine)->nom) < 0)
+        {
             insererNoeud(&((*racine)->gauche), nom);
-        } else {
+        }
+        else
+        {
             insererNoeud(&((*racine)->droit), nom);
         }
     }
 }
 
 // Afficher l'arbre
-void afficherArbre(Noeud *racine) {
-    if (racine != NULL) {
+void afficherArbre(Noeud *racine)
+{
+    if (racine != NULL)
+    {
         afficherArbre(racine->gauche);
         printf("%s\n", racine->nom);
         afficherArbre(racine->droit);
     }
 }
 
-void hiver(SystemeAgricole *agriculture, Colonie *colonie ){
+void hiver(SystemeAgricole *agriculture, Colonie *colonie)
+{
     agriculture->quantitéDeNourriture += 10; // Simule une faible production alimentaire en hiver
     agriculture->quantitéChampignons += 5;
 
@@ -189,7 +220,8 @@ void hiver(SystemeAgricole *agriculture, Colonie *colonie ){
     }
 }
 
-void printemps(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie){
+void printemps(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie)
+{
     agriculture->quantitéDeNourriture += 25; // Production accrue au printemps
     agriculture->quantitéChampignons += 15;
     elevage->nombrePucerons += 20;
@@ -201,7 +233,8 @@ void printemps(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *c
     }
 }
 
-void ete(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie){
+void ete(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie)
+{
     agriculture->quantitéDeNourriture += 30; // Production stable en été
     agriculture->quantitéChampignons += 20;
     elevage->nombrePucerons += 30;
@@ -213,7 +246,8 @@ void ete(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie
     }
 }
 
-void automne(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie){
+void automne(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie)
+{
     agriculture->quantitéDeNourriture += 15; // Production décroissante en automne
     agriculture->quantitéChampignons += 10;
     elevage->nombrePucerons += 10;
@@ -225,28 +259,33 @@ void automne(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *col
     }
 }
 
-void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage) {
+// appeler après GestionEvenementExterne
+void affichageCycleSaison(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage)
+{
     int totalOuvrieres = 0;
     int totalSoldats = 0;
     int totalMales = 0;
 
     // Compter les ouvrières
     Fourmi *current = colonie->ouvrieres;
-    while (current != NULL) {
+    while (current != NULL)
+    {
         totalOuvrieres++;
         current = current->suivante;
     }
 
     // Compter les soldats
     current = colonie->soldats;
-    while (current != NULL) {
+    while (current != NULL)
+    {
         totalSoldats++;
         current = current->suivante;
     }
 
     // Compter les mâles
     FourmiMale *currentMale = colonie->males;
-    while (currentMale != NULL) {
+    while (currentMale != NULL)
+    {
         totalMales++;
         currentMale = currentMale->suivante;
     }
@@ -254,7 +293,7 @@ void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, 
     // Affichage des statistiques
     /*
     printf("=== Statistiques de la Colonie ===\n");
-    printf("Nombre d'ouvrières : %d\n", totalOuvrieres); 
+    printf("Nombre d'ouvrières : %d\n", totalOuvrieres);
     printf("Nombre de soldats : %d\n", totalSoldats);
     printf("Nombre de mâles : %d\n", totalMales);
     printf("Nombre de reines : %d\n", colonie->nombreReines);
@@ -289,39 +328,43 @@ void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, 
         "*           *************                                             *\n"
         "*                                                                     *\n"
         "***********************************************************************\n",
-    totalOuvrieres, colonie->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons , agriculture->quantitéChampignons);
+        totalOuvrieres, colonie->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons, agriculture->quantitéChampignons);
     sleep(3);
 }
 
-void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison) {
-    for (int i = 0; i < nbSaison; ++i) {
-        switch (i % 4) { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
+void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison)
+{
+    for (int i = 0; i < nbSaison; ++i)
+    {
+        switch (i % 4)
+        { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
+
         case 0: // HIVER
             hiver(agriculture, colonie);
             printf(
-            "***********************************************************************\n"
-            "*                      --- Fin de l'HIVERS ---                        *\n");
+                "***********************************************************************\n"
+                "*                      --- Fin de l'HIVERS ---                        *\n");
             break;
 
         case 1: // PRINTEMPS
             printemps(agriculture, elevage, colonie);
             printf(
-            "***********************************************************************\n"
-            "*                      --- Fin de PRINTEMPS ---                       *\n");
+                "***********************************************************************\n"
+                "*                      --- Fin de PRINTEMPS ---                       *\n");
             break;
 
         case 2: // ETE
             ete(agriculture, elevage, colonie);
             printf(
-            "***********************************************************************\n"
-            "*                         --- Fin de l'ÉTÉ ---                        *\n");
+                "***********************************************************************\n"
+                "*                         --- Fin de l'ÉTÉ ---                        *\n");
             break;
 
         case 3: // AUTOMNE
             automne(agriculture, elevage, colonie);
             printf(
-            "***********************************************************************\n"
-            "*                      --- Fin de l'AUTOMNE ---                       *\n");
+                "***********************************************************************\n"
+                "*                      --- Fin de l'AUTOMNE ---                       *\n");
             break;
 
         default:
@@ -329,23 +372,358 @@ void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeEl
         }
 
         // Afficher les statistiques après chaque saison
-        afficherStatistiquesSaison(colonie, agriculture, elevage);
+        affichageCycleSaison(colonie, agriculture, elevage);
 
         // Simuler le vieillissement des fourmis
         Fourmi *current = colonie->ouvrieres;
-        while (current != NULL) {
+        while (current != NULL)
+        {
             evoluerAge(current);
             current = current->suivante;
         }
         current = colonie->soldats;
-        while (current != NULL) {
+        while (current != NULL)
+        {
             evoluerAge(current);
             current = current->suivante;
         }
         current = (Fourmi *)colonie->males;
-        while (current != NULL) {
+        while (current != NULL)
+        {
             evoluerAge(current);
             current = current->suivante;
         }
     }
+}
+
+// valeur à changer en fonction des saisons
+// impact le taux de pheromones des fourmis qui impact la reproduction
+void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero)
+{
+    // récuperer la saison actuel !!!
+    if (saisonActuel == 0)
+    { // HIVER
+        int T[8] = {0, 1, 1, 1, 2, 3, 3, 3};
+        // srand EvenementExterne.type du tab
+        if (EvnmtExt.type == 0)
+        {
+            EvnmtExt.impact = 0;
+            phero.alarme = 0;
+            phero.reine = 1;
+            phero.male = 1;
+        }
+       else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        if (EvnmtExt.type == 5)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+    }
+    else if (saisonActuel == 1)
+    { // PRINTEMPS
+        int T[8] = {0, 1, 1, 1, 2, 3, 3, 3};
+        // srand EvenementExterne.type du tab
+        if (EvnmtExt.type == 0)
+        {
+            EvnmtExt.impact = 0;
+            phero.alarme = 0;
+            phero.reine = 1;
+            phero.male = 1;
+        }
+        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        if (EvnmtExt.type == 5)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+    }
+    else if (saisonActuel == 2)
+    { // ETE
+        int T[8] = {0, 1, 1, 1, 2, 3, 3, 3};
+        // srand EvenementExterne.type du tab
+        if (EvnmtExt.type == 0)
+        {
+            EvnmtExt.impact = 0;
+            phero.alarme = 0;
+            phero.reine = 1;
+            phero.male = 1;
+        }
+        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        if (EvnmtExt.type == 5)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+    }
+    else if (saisonActuel == 3)
+    { // AUTOMNE
+        int T[8] = {0, 1, 1, 1, 2, 3, 3, 3};
+        // srand EvenementExterne.type du tab
+        if (EvnmtExt.type == 0)
+        {
+            EvnmtExt.impact = 0;
+            phero.alarme = 0;
+            phero.reine = 1;
+            phero.male = 1;
+        }
+        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+        if (EvnmtExt.type == 5)
+        {
+            // srand EvenementExterne.impact entre 1 et 3
+            if (EvnmtExt.impact == 1)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 2)
+            {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+            else if (EvnmtExt.impact == 3)
+                {   
+                phero.reine = 1;
+                phero.male = 1;
+                phero.alarme = 1;
+            }
+        }
+    }
+}
+
+// utiliser les pheromones changés dans GestionEvenementExterne pour la reproduction
+void reproduction(Pheromone phero)
+{
+    /* if(phero.alarme >= 3) // le danger est trop grand, pas de reproduction
+    {
+
+    } else if {
+    int pheroGlobal = phero.reine + phero.male
+    if (pheroGlobal >= 2){
+    }
+    } */
 }

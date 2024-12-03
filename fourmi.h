@@ -10,21 +10,27 @@
 #define ROLE_MALE 3
 #define ROLE_POT_DE_MIEL 4
 
-typedef struct Fourmi {
+// Structure pour une fourmi
+typedef struct Fourmi 
+{
     int id;
     int age;
     int role;
     struct Fourmi *suivante;
 } Fourmi;
 
-typedef struct FourmiMale {
+// Structure pour une fourmi mâle
+typedef struct FourmiMale 
+{
     int id;
     int age;
     int role;
     struct FourmiMale *suivante;
 } FourmiMale;
 
-typedef struct Colonie {
+// Structure pour une colonie
+typedef struct Colonie 
+{
     int id;
     int nombreReines;
     Fourmi *ouvrieres;
@@ -32,50 +38,76 @@ typedef struct Colonie {
     Fourmi *soldats;
 } Colonie;
 
-typedef struct SystemeAgricole {
+// Structures pour les systèmes agricoles et d'élevage
+typedef struct SystemeAgricole 
+{
     int quantitéDeNourriture;
     int quantitéChampignons;
 } SystemeAgricole;
 
-typedef struct SystemeElevage {
+typedef struct SystemeElevage 
+{
     int nombrePucerons;
 } SystemeElevage;
 
-typedef struct Hygiène {
+// Structures pour l'hygiène et la sécurité
+typedef struct Hygiène 
+{
     int niveauProprete;
     int maladies;
 } Hygiène;
 
-typedef struct Sécurité {
+typedef struct Sécurité 
+{
     int niveauProtection;
     int attaquesReçues;
 } Sécurité;
 
-typedef struct Architecture {
+// Structure pour l'architecture de la fourmilière
+typedef struct Architecture 
+{
     int salles;
 } Architecture;
 
-typedef struct Environnement {
+// Structure pour l'environnement extérieur
+typedef struct Environnement 
+{
     int exploration;
     int ressourcesNourriture;
 } Environnement;
 
-typedef struct EvenementExterne {
-    int type;
+// Structure pour gérer les événements externes
+typedef struct EvenementExterne 
+{
+    int type; // 0 pour invasion, 1 pour tempête
     int impact;
 } EvenementExterne;
 
-typedef struct Queue {
+// Structure pour gérer les pheromones des fourmis reines et mâles
+typedef struct
+{
+    char reine;
+    char male;
+    char alarme;
+} Pheromone;
+
+// Structure pour gérer les files de fourmis
+typedef struct Queue 
+{
     Fourmi *tete;
     Fourmi *queue;
 } Queue;
 
-typedef struct Pile {
+// Structure pour gérer les piles de fourmis
+typedef struct Pile 
+{
     Fourmi *elements[100];
     int sommet;
 } Pile;
 
-typedef struct Noeud {
+// Structure pour gérer un arbre (pour l'architecture)
+typedef struct Noeud 
+{
     char *nom;
     struct Noeud *gauche;
     struct Noeud *droit;
@@ -90,14 +122,14 @@ void ajouterNectar(Fourmi *fourmi);
 // --- Gestion de la Colonie ---
 Colonie* creerColonie(int id, int nombreReines);
 void reproduction(Colonie *colonie);
+
 // --- Gestion des Saisons ---
-//void gererSaison(Colonie *colonie, int saison);
 void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage, int mois);
 void hiver(SystemeAgricole *agriculture, Colonie *colonie );
 void printemps(SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
 void ete (SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
 void automne (SystemeAgricole *agriculture, SystemeElevage *elevage, Colonie *colonie);
-void afficherStatistiquesSaison(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage);
+void affichageCycleSaison(Colonie *colonie, SystemeAgricole *agriculture, SystemeElevage *elevage);
 
 // --- Systèmes Agricoles et d'Élevage ---
 void cultiverChampignons(SystemeAgricole *agriculture);
@@ -110,7 +142,7 @@ void gererSecurite(Sécurité *securite);
 
 // --- Exploration et Environnement ---
 void explorer(Environnement *environnement);
-void gererEvenement(EvenementExterne *evenement);
+// Gestion evenement ext saison
 
 // --- Gestion des Files ---
 void enfile(Queue *q, Fourmi *fourmi);
