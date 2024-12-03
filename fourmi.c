@@ -397,27 +397,26 @@ void simulationSaisons(Colonie *colonie, SystemeAgricole *agriculture, SystemeEl
     }
 }
 
-// valeur à changer en fonction des saisons
 // impact le taux de pheromones des fourmis qui impact la reproduction
 void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero)
 {
     // récuperer la saison actuel !!!
-    if (saisonActuel == 0)
-    { // HIVER
-        int Hiv[8] = {0, 0, 1, 1, 2, 3, 3, 4}; // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
+    if (saisonActuel == 0) // HIVER
+    { 
+        int Hiv[8] = {0, 0, 1, 1, 2, 3, 3, 4}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
         // le 4 (hiver glacial) ne parait qu'en hiver
 
         int index = rand() % 8;     // Génère un index aléatoire entre 0 et 7
         EvnmtExt.type = Hiv[index]; // selectionne une valeur du tableau
 
-        if (EvnmtExt.type == 0)
+        if (EvnmtExt.type == 0) // AUCUN
         {
             EvnmtExt.impact = 0;
-            phero.alarme = 0;
+            phero.alarme = EvnmtExt.impact;
             phero.reine = 1 + (rand() % 2);
             phero.male = 1 + (rand() % 2);
         }
-        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
@@ -439,7 +438,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.alarme = EvnmtExt.impact;
             }
         }
-        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
+        else if (EvnmtExt.type == 3) // INVASION
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
@@ -461,7 +460,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.alarme = EvnmtExt.impact;
             }
         }
-        if (EvnmtExt.type == 5)
+        if (EvnmtExt.type == 4) // HIVER GLACIAL
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
@@ -485,66 +484,38 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
         }
     }
     
-    else if (saisonActuel == 1)
-    { // PRINTEMPS
-        int Print[8] = {0, 1, 2, 2, 3, 3, 3, 3}; // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
+    else if (saisonActuel == 1) // PRINTEMPS
+    { 
+        int Print[8] = {0, 1, 2, 2, 3, 3, 3, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
         // les risques de 3 (invasion) sont plus eleves pdt le printemps
 
         int index = rand() % 8;       // Génère un index aléatoire entre 0 et 7
         EvnmtExt.type = Print[index]; // selectionne une valeur du tableau
 
-        if (EvnmtExt.type == 0)
+        if (EvnmtExt.type == 0) // aucun 
         {
             EvnmtExt.impact = 0;
-            phero.alarme = 0;
-            phero.reine = 2 + (rand() % 5);
+            phero.alarme = EvnmtExt.impact;
+            phero.reine = 3 + (rand() % 5);
             phero.male = 2 + (rand() % 3);
         }
-        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2)
+        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
             {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
+                phero.reine = 3 + (rand() % 5);
+                phero.male = 2 + (rand() % 3);
                 phero.alarme = EvnmtExt.impact;
             }
-            else if (EvnmtExt.impact == 2)
+            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de reproduction de tte façon => even ext rend encore + bas
             {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
+                phero.reine = 2 + (rand() % 3);
+                phero.male = 1 + (rand() % 3);
                 phero.alarme = EvnmtExt.impact;
             }
         }
-        else if (EvnmtExt.type == 3 || EvnmtExt.type == 4)
-        {
-            EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
-            if (EvnmtExt.impact == 1)
-            {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
-            }
-        }
-        if (EvnmtExt.type == 5)
+        else if (EvnmtExt.type == 3 ) // INVASION
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
@@ -567,78 +538,66 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             }
         }
     }
-    else if (saisonActuel == 2)
-    { // ETE
-        int Ete[8] = {0, 1, 1, 1, 3, 3, 3, 3}; // 0 = rien ; 1 = tempete ; 2 = inondation ; 3 = invasion
+    else if (saisonActuel == 2) // ETE
+    { 
+        int Ete[8] = {0, 1, 1, 1, 3, 3, 3, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
         // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
 
         int index = rand() % 8;     // Génère un index aléatoire entre 0 et 7
         EvnmtExt.type = Ete[index]; // Sélectionne une valeur du tableau
 
-        if (EvnmtExt.type == 0) // Rien
+        if (EvnmtExt.type == 0) // aucun 
         {
             EvnmtExt.impact = 0;
-            phero.alarme = 0;
+            phero.alarme = EvnmtExt.impact;
             phero.reine = 5;
-            phero.male = 5;
+            phero.reine = 3 + (rand() % 5);
         }
         else if (EvnmtExt.type == 1) // Tempête
         {
             EvnmtExt.impact = 1 + (rand() % 3); // Impact entre 1 et 3
-            if (EvnmtExt.impact == 1)
-            {
-                phero.alarme = 2;
-                phero.reine = 4;
-                phero.male = 4;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero.alarme = 3;
-                phero.reine = 3;
-                phero.male = 3;
+            if (EvnmtExt.impact == 1 || EvnmtExt.impact == 2) // reste une période de forte reproduction malgré even ext d'ou regrouper
+            {   
+                phero.reine = 3 + (rand() % 5);
+                phero.male = 2 + (rand() % 3);
+                phero.alarme = EvnmtExt.impact;
             }
             else if (EvnmtExt.impact == 3)
-            {
-                phero.alarme = 4;
-                phero.reine = 2;
-                phero.male = 2;
+            {   
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
+                phero.alarme = EvnmtExt.impact;
             }
-        }
+        } 
         else if (EvnmtExt.type == 3) // Invasion
         {
             EvnmtExt.impact = 1 + (rand() % 3); // Impact entre 1 et 3
-            if (EvnmtExt.impact == 1)
+            if (EvnmtExt.impact == 1 || EvnmtExt.impact == 2) // reste une période de forte reproduction malgré even ext d'ou regrouper
             {
-                phero.alarme = 3;
-                phero.reine = 3;
-                phero.male = 3;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero.alarme = 4;
-                phero.reine = 2;
-                phero.male = 2;
+                phero.reine = 3 + (rand() % 5);
+                phero.male = 1 + (rand() % 2);
+                phero.alarme = EvnmtExt.impact;
             }
             else if (EvnmtExt.impact == 3)
             {
-                phero.alarme = 5;
-                phero.reine = 1;
-                phero.male = 1;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
+                phero.alarme = EvnmtExt.impact;
             }
         }
     }
     else if (saisonActuel == 3)
-    {                                          // AUTOMNE
-        int Aut[8] = {0, 0, 1, 1, 2, 3, 3, 3}; // 0 = rien ; 1 = tempête ; 2 = inondation ; 3 = invasion
+    {  // AUTOMNE
+        int Aut[8] = {0, 0, 1, 1, 2, 3, 3, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
         // Les invasions (3) et inondations (2) sont plus probables en automne.
 
         int index = rand() % 8;     // Génère un index aléatoire entre 0 et 7
         EvnmtExt.type = Aut[index]; // Sélectionne une valeur du tableau
 
-        if (EvnmtExt.type == 0) // Rien
+        if (EvnmtExt.type == 0) // aucun 
         {
             EvnmtExt.impact = 0;
-            phero.alarme = 0;
+            phero.alarme = EvnmtExt.impact;
             phero.reine = 4;
             phero.male = 4;
         }
@@ -647,21 +606,15 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             EvnmtExt.impact = 1 + (rand() % 3); // Impact entre 1 et 3
             if (EvnmtExt.impact == 1)
             {
-                phero.alarme = 2;
-                phero.reine = 3;
-                phero.male = 3;
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
             }
-            else if (EvnmtExt.impact == 2)
+            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de reproduction de tte façon => even ext rend encore + bas
             {
-                phero.alarme = 3;
-                phero.reine = 2;
-                phero.male = 2;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero.alarme = 4;
-                phero.reine = 1;
-                phero.male = 1;
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
             }
         }
         else if (EvnmtExt.type == 2) // Inondation
@@ -669,21 +622,21 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             EvnmtExt.impact = 1 + (rand() % 3); // Impact entre 1 et 3
             if (EvnmtExt.impact == 1)
             {
-                phero.alarme = 3;
-                phero.reine = 4;
-                phero.male = 4;
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
             }
-            else if (EvnmtExt.impact == 2)
+            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de reproduction de tte façon => even ext rend encore + bas
             {
-                phero.alarme = 4;
-                phero.reine = 3;
-                phero.male = 3;
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
             }
             else if (EvnmtExt.impact == 3)
             {
-                phero.alarme = 5;
-                phero.reine = 2;
-                phero.male = 2;
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 1 + (rand() % 2);
+                phero.male = 1 + (rand() % 2);
             }
         }
         else if (EvnmtExt.type == 3) // Invasion
@@ -691,21 +644,15 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             EvnmtExt.impact = 1 + (rand() % 3); // Impact entre 1 et 3
             if (EvnmtExt.impact == 1)
             {
-                phero.alarme = 4;
-                phero.reine = 3;
-                phero.male = 3;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero.alarme = 5;
-                phero.reine = 2;
-                phero.male = 2;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero.alarme = 5;
+                phero.alarme = EvnmtExt.impact;
                 phero.reine = 1;
-                phero.male = 1;
+                phero.male = (EvnmtExt.impact == 3) ? 0 : 1; // Impact fort peut affecter les mâles
+            }
+            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3)
+            {
+                phero.alarme = EvnmtExt.impact;
+                phero.reine = 0;
+                phero.male = 0;
             }
         }
     }
@@ -720,13 +667,20 @@ void reproduction(Pheromone phero)
     {
         climat = 1 + (rand() % 3); // le climat est de 1-3/10
     }
-    else if
+    else
     {
         int pheroGlobal = phero.reine + phero.male ;
-        if (pheroGlobal >= 2)
+        if (pheroGlobal >= 4)
         {
             climat = 4 + (rand() % 8);
-            // augmentation de la population
+            if (climat = 4 || climat = 5 || climat = 6){
+                // augmentation de la population des femelles de 20% et baisse de celle des males de 10%
+            } else if (climat = 7 || climat = 8){
+                // augmentation de la population des femelles 30% et baisse de celle des males de 15%
+            }
+            
         }
     }
 }
+
+// à faire : augmentation de la population en fct des pheromones et faire en sorte que saisonActuel soit prit en entree 
