@@ -9,7 +9,7 @@ int main()
     int climat;            // le climat qui regne dans la fourmilliere
     EvenementExterne EvnmtExt;
     Pheromone phero;
-    Colonie *colo = creerColonie(1, 5); // a changer prochainement avec le cycle de vie
+    Colonie *colo = creerColonie(20, 5); // a changer prochainement avec le cycle de vie
     SystemeAgricole agriculture = {100, 50};
     SystemeElevage elevage = {10};
     Hygiène hyg = {100, 0};

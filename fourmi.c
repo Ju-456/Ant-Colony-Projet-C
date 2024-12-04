@@ -696,9 +696,5 @@ void reproduction(Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, 
     affichageCycleSaison(colo, agriculture, elevage, climat);
 }
 
-// à faire : baisse de la pop en fonction des pheromones en hiver, voir reproduction
+// à faire : baisse de la pop en fonction des pheromones en hiver, voir reproduction, particulièrement pour les fourmis males !
 // utiliser les piles à la place de l'ajout ou les 2
-
-/* gerer les appels de fct entre, normalement :
-simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> reproduction -> affichageCycleSaison
-*/
