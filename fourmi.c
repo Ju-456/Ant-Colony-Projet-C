@@ -26,6 +26,56 @@ void ajouterFourmiMale(FourmiMale **tete, int id, int age, int role)
     *tete = nouveau;
 }
 
+// lors des intempéries, les fourmis les plus fragiles (plus agées meurent)
+void supprimerFourmi(Fourmi **tete, int id, int age, int role)
+{
+    Fourmi *courant = *tete;
+    Fourmi *precedent = NULL;
+    int epargnerReine = 0;
+
+    while (courant != NULL) { 
+        // les 5 premières sont les reines de la colonnie, donc on commance après n=6
+        if (epargnerReine >= 5 && courant->id == id && courant->age == age && courant->role == role) {
+            if (precedent == NULL) {
+                // Si la fourmi à supprimer est en tête (au-delà des 5 premières)
+                *tete = courant->suivante;
+            } else {
+                // Si la fourmi est ailleurs dans la liste
+                precedent->suivante = courant->suivante;
+            }
+            free(courant);
+            return;
+        }
+        precedent = courant;
+        courant = courant->suivante;
+        epargnerReine++;
+    }
+}
+
+// lors de la reproduction, le mâle meurt très peu de temps après
+void supprimerFourmiMale(FourmiMale **tete, int id, int age, int role)
+{
+    FourmiMale *courant = *tete;
+    FourmiMale *precedent = NULL;
+
+    // On tue la fourmi la plus vielle 
+    while (courant != NULL) {
+        if (courant->id == id && courant->age == age && courant->role == role) {
+            if (precedent == NULL) {
+                // tete de liste
+                *tete = courant->suivante;
+            } else {
+                //la fourmi mâle est ailleurs dans la liste
+                precedent->suivante = courant->suivante;
+            }
+            free(courant);
+            return;
+        }
+        precedent = courant;
+        courant = courant->suivante;
+    }
+}
+
 // Créer une colonie
 Colonie *creerColonie(int id, int nombreReines)
 {
@@ -210,7 +260,7 @@ void afficherArbre(Noeud *racine)
     }
 }
 
-void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage,int climat)
+void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage, const int climat)
 {
     saisonActuel = 0;
     agriculture->quantitéDeNourriture += 10; // Simule une faible production alimentaire en hiver
@@ -219,7 +269,7 @@ void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne Evnm
     GestionEvenementExterne(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, climat);
 }
 
-void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage,EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo,int climat)
+void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat)
 {
     saisonActuel = 1;
     agriculture->quantitéDeNourriture += 25; // Production accrue au printemps
@@ -229,7 +279,7 @@ void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *e
     GestionEvenementExterne(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, climat);
 }
 
-void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage,EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, int climat)
+void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat)
 {
     saisonActuel = 2;
     agriculture->quantitéDeNourriture += 30; // Production stable en été
@@ -239,7 +289,7 @@ void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage
     GestionEvenementExterne(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, climat);
 }
 
-void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, int climat)
+void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat)
 {
     saisonActuel = 3;
     agriculture->quantitéDeNourriture += 15; // Production décroissante en automne
@@ -250,7 +300,7 @@ void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *ele
 }
 
 // appeler après reproduction
-void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat)
+void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, const int climat)
 {
     int totalOuvrieres = 0;
     int totalSoldats = 0;
@@ -322,7 +372,7 @@ void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeEl
     sleep(3);
 }
 
-void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, int climat)
+void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, const int climat)
 {
     for (int i = 0; i < nbSaison; ++i)
     {
@@ -384,7 +434,7 @@ void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage
 }
 
 // impact le taux de pheromones des fourmis qui impact la reproduction
-void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat)
+void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, const int climat)
 {
     if (saisonActuel == 0) // HIVER
     {
@@ -646,10 +696,9 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
 // utiliser les pheromones changés dans GestionEvenementExterne pour la reproduction
 void reproduction(Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat)
 {
-    if (phero.alarme >= 3) // le danger est trop grand, pas de reproduction, baisse de la pop
+    if (phero.alarme <= 3) // le danger est trop grand, pas de reproduction, baisse de la pop
     {
-        climat = 1 + (rand() % 4); // le climat est de 1-4/10, generalement l'hiver
-
+        climat = 1 + (rand() % 4);                 // le climat est de 1-4/10, generalement l'hiver
         for (int j = 0; j < rand() % 16 + 25; ++j) // baisse de la population des femelles 15 - 25%
         {
             // *depile(Pile *p); faut qu'on puisse supprimer des fourmis !!!
@@ -665,13 +714,13 @@ void reproduction(Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, 
         int pheroGlobal = phero.reine + phero.male;
         if (pheroGlobal >= 4)
         {
-            climat = 5 + (rand() % 8);
+            climat = (5 + (rand() % 4));
 
             if (climat == 5 || climat == 6) // concerne generalement l'automne
-            {
+            {                       // recuperer la valeur du rand pour creer ensuite
                 for (int j = 0; j < rand() % 6 + 15; ++j) // augmentation de la population des femelles 15 - 20%
                 {
-                    ajouterFourmi(&colo->ouvrieres, rand(), 0, ROLE_OUVRIERE);
+                    ajouterFourmi(&colo->ouvrieres, rand() % 6 + 15, 0, ROLE_OUVRIERE);
                 }
 
                 for (int j = 0; j < rand() % 6 + 10; ++j) // baisse de celle des males de 5 - 10%
@@ -697,4 +746,3 @@ void reproduction(Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, 
 }
 
 // à faire : baisse de la pop en fonction des pheromones en hiver, voir reproduction, particulièrement pour les fourmis males !
-// utiliser les piles à la place de l'ajout ou les 2

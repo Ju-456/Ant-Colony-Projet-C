@@ -11,7 +11,7 @@
 #define ROLE_POT_DE_MIEL 4
 
 // Structure pour une fourmi
-typedef struct Fourmi 
+typedef struct Fourmi
 {
     int id;
     int age;
@@ -20,7 +20,7 @@ typedef struct Fourmi
 } Fourmi;
 
 // Structure pour une fourmi mâle
-typedef struct FourmiMale 
+typedef struct FourmiMale
 {
     int id;
     int age;
@@ -29,7 +29,7 @@ typedef struct FourmiMale
 } FourmiMale;
 
 // Structure pour une colonie
-typedef struct Colonie 
+typedef struct Colonie
 {
     int id;
     int nombreReines;
@@ -39,48 +39,48 @@ typedef struct Colonie
 } Colonie;
 
 // Structures pour les systèmes agricoles et d'élevage
-typedef struct SystemeAgricole 
+typedef struct SystemeAgricole
 {
     int quantitéDeNourriture;
     int quantitéChampignons;
 } SystemeAgricole;
 
-typedef struct SystemeElevage 
+typedef struct SystemeElevage
 {
     int nombrePucerons;
 } SystemeElevage;
 
 // Structures pour l'hygiène et la sécurité
-typedef struct Hygiène 
+typedef struct Hygiène
 {
     int niveauProprete;
     int maladies;
 } Hygiène;
 
-typedef struct Sécurité 
+typedef struct Sécurité
 {
     int niveauProtection;
     int attaquesReçues;
 } Sécurité;
 
 // Structure pour l'architecture de la fourmilière
-typedef struct Architecture 
+typedef struct Architecture
 {
     int salles;
 } Architecture;
 
 // Structure pour l'environnement extérieur
-typedef struct Environnement 
+typedef struct Environnement
 {
     int exploration;
     int ressourcesNourriture;
 } Environnement;
 
 // Structure pour gérer les événements externes
-typedef struct EvenementExterne 
+typedef struct EvenementExterne
 {
-    int type; // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial 
-    int impact; // impact allant de 1 à 3, 3 étant la plus grosse échelle de gravité 
+    int type;   // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
+    int impact; // impact allant de 1 à 3, 3 étant la plus grosse échelle de gravité
 } EvenementExterne;
 
 // Structure pour gérer les pheromones des fourmis reines et mâles
@@ -92,21 +92,21 @@ typedef struct
 } Pheromone;
 
 // Structure pour gérer les files de fourmis
-typedef struct Queue 
+typedef struct Queue
 {
     Fourmi *tete;
     Fourmi *queue;
 } Queue;
 
 // Structure pour gérer les piles de fourmis
-typedef struct Pile 
+typedef struct Pile
 {
     Fourmi *elements[100];
     int sommet;
 } Pile;
 
 // Structure pour gérer un arbre (pour l'architecture)
-typedef struct Noeud 
+typedef struct Noeud
 {
     char *nom;
     struct Noeud *gauche;
@@ -120,18 +120,18 @@ void evoluerAge(Fourmi *fou);
 void ajouterNectar(Fourmi *fou);
 
 // --- Gestion de la Colonie ---
-Colonie* creerColonie(int id, int nombreReines);
+Colonie *creerColonie(int id, int nombreReines);
 void reproduction(Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat);
 
 // --- Gestion des Saisons ---
-void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison,int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, int climat);
+void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, const int climat);
 
-void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage, int climat);
-void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage,EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, int climat);
-void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, int climat);
-void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, int climat);
+void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage, const int climat);
+void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat);
+void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat);
+void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, const int climat);
 
-void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat);
+void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, const int climat);
 
 // --- Systèmes Agricoles et d'Élevage ---
 void cultiverChampignons(SystemeAgricole *agriculture);
@@ -144,7 +144,7 @@ void gererSecurite(Sécurité *secu);
 
 // --- Exploration et Environnement ---
 void explorer(Environnement *enviro);
-void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int climat);
+void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, const int climat);
 
 // --- Gestion des Files ---
 void enfile(Queue *q, Fourmi *fou);
