@@ -184,21 +184,21 @@ void gererSecurite(Sécurité *securite)
 // Ajouter du nectar
 void ajouterNectar(Fourmi *fourmi)
 {
-    printf("La fourmi %d a collecté du nectar.\n", fourmi->id);
+    //printf("La fourmi %d a collecté du nectar.\n", fourmi->id);
 }
 
 // Construire une salle
 void construireSalle(Architecture *archi)
 {
     archi->salles++;
-    printf("Construction d'une salle. Nombre de salles : %d\n", archi->salles);
+    //printf("Construction d'une salle. Nombre de salles : %d\n", archi->salles);
 }
 
 // Explorer l'environnement
 void explorer(Environnement *enviro)
 {
     enviro->exploration++;
-    printf("Exploration de l'environnement. Exploration actuelle : %d\n", enviro->exploration);
+    //printf("Exploration de l'environnement. Exploration actuelle : %d\n", enviro->exploration);
 }
 
 // Faire évoluer l'âge d'une fourmi
@@ -343,7 +343,7 @@ void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage
             hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
             printf(
                 "***********************************************************************\n"
-                "*                      --- Fin de l'HIVERS ---                        *\n");
+                "*                       --- Fin de l'HIVER ---                       *\n");
             break;
 
         case 1: // PRINTEMPS
