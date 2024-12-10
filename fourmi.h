@@ -42,7 +42,7 @@ typedef struct Colonie
 typedef struct SystemeAgricole
 {
     int quantitéDeNourriture;
-    int quantitéChampignons;
+    int quantitéGraines;
 } SystemeAgricole;
 
 typedef struct SystemeElevage
@@ -86,7 +86,7 @@ typedef struct EvenementExterne
 // Structure pour gérer les pheromones des fourmis reines et mâles
 typedef struct
 {
-    int climat;
+    int ambiance;
     char reine;
     char male;
     char alarme;
@@ -140,7 +140,7 @@ void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *ele
 void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
 
 // --- Systèmes Agricoles et d'Élevage ---
-void cultiverChampignons(SystemeAgricole *agriculture);
+void cultiverGraines(SystemeAgricole *agriculture);
 void elevagePucerons(SystemeElevage *elevage);
 
 // --- Infrastructure et Organisation ---

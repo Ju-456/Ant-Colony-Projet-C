@@ -188,3 +188,30 @@ void Sale3bis() {
         "             ------------------------------\n"
     );
 }
+
+//ancien affichage :
+printf(
+        "*                                                                     *\n"
+        "*                 === Statistiques de la Colonie ===                  *\n"
+        "*                                                                     *\n"
+        "*       *******************              *****************            *\n"
+        "*       * Ouvrière :  %d  *             *  Reine :  %d   *            *\n"
+        "*       * Soldats :   %d  ******          *               *            *\n"
+        "*       *                      *         *               *            *\n"
+        "*       *****           ********         *************************    *\n"
+        "*           *            *                          * Mâle : %d   *    *\n"
+        "*           **************                          *            *    *\n"
+        "*                                                   **************    *\n"
+        "*                 === Statistiques des Systèmes ===                   *\n"
+        "*                                                                     *\n"
+        "*       ********************                                          *\n"
+        "*       * Nourriture : %d  *             *****************           *\n"
+        "*       *                   *******      * pucerons :  %d *           *\n"
+        "*       * Graines : %d        *      *                *           *\n"
+        "*       *****                ******      ********************         *\n"
+        "*           *                **                     *       *         *\n"
+        "*           *ambiance : %d /10 *                      *********         *\n"
+        "*           *****************                                         *\n"
+        "*                                                                     *\n"
+        "***********************************************************************\n",
+        totalOuvrieres, colo->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons, agriculture->quantitéGraines, phero.ambiance);*/
