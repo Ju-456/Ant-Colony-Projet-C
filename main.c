@@ -20,6 +20,7 @@ int main()
     Environnement enviro = {0, 200};
 
     // Gérer la colonie
+    FourmiliereEnEvolution(colo);
     simuleUneSaison(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero);
     //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
     
@@ -29,9 +30,6 @@ int main()
     gererSecurite(&secu);
     construireSalle(&archi);
     explorer(&enviro);
-
-    // Affichage des résultats
-    printf("La colonie a %d reines.\n", colo->nombreReines);
 
     return 0;
 }
