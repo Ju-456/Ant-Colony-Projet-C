@@ -217,7 +217,7 @@ printf(
         totalOuvrieres, colo->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons, agriculture->quantitéGraines, phero.ambiance);
 
         // Affichage de verification
-    
+    /*
     printf("GrainesReste1: %d   max: 60)\n", GrainesReste1);
     printf("GrainesReste2: %d (Quantité de graines dans la seconde salle)\n", GrainesReste2);
     printf("totalSoldats: %d (Nombre total de soldats)\n", totalSoldats);
@@ -230,3 +230,40 @@ printf(
     printf("totalMales: %d (Nombre total de mâles)\n", totalMales);
     printf("nombreReines: %d (Nombre total de reines)\n", colo->nombreReines);
     printf("ambiance: %d (Niveau de phéromones d'ambiance)\n", phero.ambiance);
+*/
+/*
+    // Affichage
+printf(
+        "                                       - Fourmilière -\n"
+        "                             --------------------------------\n"
+        "                    --------                                  -------\n"
+        "                ----                       Graines                    ----\n"
+        "            ----                   ------------------                       ----\n"
+        "        ----                       -  %d -          -                          ----\n"
+        "      ----       Soldats           -------    %d    -                              ----\n"
+        "    -----       ---------                -          -------                          -----\n"
+        "  ------        -       -                ------------- %d -         Ouvrières         ------\n"
+        " ------         -   %d  -                            ------        ------------        ------\n"
+        "------    ---------------                                          -          -          ------\n"
+        "------    - %d -                          Nourriture               -    %d    -           ------\n"
+        "------    ------                      -----------------            -          -           ------\n"
+        "------           Pucerons             -               -            ------------------     ------\n"
+        " -----         ------------           -      %d       -                        - %d -    -----\n"
+        "  -----        -          -           -               -                  ------------   -----\n"
+        "   -----       -    %d    -           -----------------                  - %d -        -----\n"
+        "    -----      -          -    Mâles                                     ------       -----\n"
+        "      ----     ------------   ------                    AMBIANCE                     ----\n"
+        "        -----                 - %d -       Reines         %d/10                    -----\n"
+        "            -----             ------       ------                           -----\n"
+        "                -----                      - %d -                   -----\n"
+        "                    --------               ------             ------\n"
+        "                             --------------------------------\n",
+        agriculture->quantitéGraines,GrainesReste, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2,totalMales, phero.ambiance, colo->nombreReines);
+    printf("\n");
+    sleep(3);
+}
+*/
+
+//\x1b[48;2;115;71;60m----\x1b[0m marron #73473C (contour foncé)
+//\x1b[48;2;180;140;131m----\x1b[0m  beige claire #945B4E(couleur int case)
+// \x1b[48;2;148;91;78m ----\x1b[0m beige foncé #945B4E (couleur de fond)
