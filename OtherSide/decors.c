@@ -214,4 +214,19 @@ printf(
         "*           *****************                                         *\n"
         "*                                                                     *\n"
         "***********************************************************************\n",
-        totalOuvrieres, colo->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons, agriculture->quantitéGraines, phero.ambiance);*/
+        totalOuvrieres, colo->nombreReines, totalSoldats, totalMales, agriculture->quantitéDeNourriture, elevage->nombrePucerons, agriculture->quantitéGraines, phero.ambiance);
+
+        // Affichage de verification
+    
+    printf("GrainesReste1: %d   max: 60)\n", GrainesReste1);
+    printf("GrainesReste2: %d (Quantité de graines dans la seconde salle)\n", GrainesReste2);
+    printf("totalSoldats: %d (Nombre total de soldats)\n", totalSoldats);
+    printf("SoldatsReste1: %d (Nombre de soldats dans la première salle, max: 100)\n", SoldatsReste);
+    printf("totalOuvrieres: %d (Nombre total d'ouvrières)\n", totalOuvrieres);
+    printf("OuvrieresReste1: %d (Nombre d'ouvrières dans la première salle, max: 100)\n", OuvrieresReste);
+    printf("OuvrieresReste2: %d (Nombre d'ouvrières dans la seconde salle)\n", OuvrieresReste2);
+    printf("Nourriture: %d (Quantité de nourriture disponible)\n", agriculture->quantitéDeNourriture);
+    printf("PuceronsReste: %d (Nombre total de pucerons)\n", elevage->nombrePucerons);
+    printf("totalMales: %d (Nombre total de mâles)\n", totalMales);
+    printf("nombreReines: %d (Nombre total de reines)\n", colo->nombreReines);
+    printf("ambiance: %d (Niveau de phéromones d'ambiance)\n", phero.ambiance);

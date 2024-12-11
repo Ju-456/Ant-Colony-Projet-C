@@ -969,7 +969,8 @@ void ReproductionEtMortalite(Pheromone phero, Colonie *colo, void *agriculture, 
 
 // appeler après ReproductionEtMortalite
 void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero)
-{
+{   
+    colo->nombreReines = 4;
     int totalOuvrieres = 0;
     int totalSoldats = 0;
     int totalMales = 0;
@@ -998,38 +999,47 @@ void affichageCycleSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeEl
         currentMale = currentMale->suivante;
     }
 
-    int max = 30;
-    int GrainesReste1 = abs(60 - agriculture->quantitéGraines);
+    int GrainesReste = 0;
     int GrainesReste2 = 0;
-    if (GrainesReste1 > 60)
+    agriculture->quantitéGraines = 136;
+    if (agriculture->quantitéGraines > 30)
     {
-        GrainesReste2 = 60 - GrainesReste1;
+        GrainesReste = abs(30 - agriculture->quantitéGraines);
+        agriculture->quantitéGraines = 30;
+    }
+    if (GrainesReste > 100){
+        GrainesReste2 = abs(100 - GrainesReste);
+        GrainesReste = 100;
     }
 
     int SoldatsReste = 0;
     if (totalSoldats > 100)
     {
-        SoldatsReste = 100 - totalSoldats;
+        SoldatsReste = abs(100 - totalSoldats);
+        totalSoldats = 100;
     }
     else
     {
-        SoldatsReste = totalSoldats;
+        SoldatsReste = 0;
     }
 
+
     int OuvrieresReste = 0;
-    if (totalOuvrieres > 100)
-    {
-        OuvrieresReste = 100 - totalOuvrieres;
+    if (totalOuvrieres > 200)
+    {   
+        OuvrieresReste = abs(200 - totalOuvrieres);
+        totalOuvrieres = 200;
     }
     else
     {
-        OuvrieresReste = totalOuvrieres;
+        OuvrieresReste = 0;
     }
 
     int OuvrieresReste2 = 0;
     if (OuvrieresReste > 30)
     {
-        OuvrieresReste2 = 30 - OuvrieresReste;
+        OuvrieresReste2 = abs(30 - OuvrieresReste);
+        OuvrieresReste = 30;
     }
 
     // Affichage
@@ -1058,21 +1068,7 @@ printf(
         "                -----                      - %d -                   -----\n"
         "                    --------               ------             ------\n"
         "                             --------------------------------\n",
-        max,GrainesReste1, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2,totalMales, phero.ambiance, colo->nombreReines);
+        agriculture->quantitéGraines,GrainesReste, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2,totalMales, phero.ambiance, colo->nombreReines);
     printf("\n");
-    // Affichage
-    printf("GrainesReste1: %d   max: 60)\n", GrainesReste1);
-    printf("GrainesReste2: %d (Quantité de graines dans la seconde salle)\n", GrainesReste2);
-    printf("totalSoldats: %d (Nombre total de soldats)\n", totalSoldats);
-    printf("SoldatsReste1: %d (Nombre de soldats dans la première salle, max: 100)\n", SoldatsReste);
-    printf("totalOuvrieres: %d (Nombre total d'ouvrières)\n", totalOuvrieres);
-    printf("OuvrieresReste1: %d (Nombre d'ouvrières dans la première salle, max: 100)\n", OuvrieresReste);
-    printf("OuvrieresReste2: %d (Nombre d'ouvrières dans la seconde salle)\n", OuvrieresReste2);
-    printf("Nourriture: %d (Quantité de nourriture disponible)\n", agriculture->quantitéDeNourriture);
-    printf("PuceronsReste: %d (Nombre total de pucerons)\n", elevage->nombrePucerons);
-    printf("totalMales: %d (Nombre total de mâles)\n", totalMales);
-    printf("nombreReines: %d (Nombre total de reines)\n", colo->nombreReines);
-    printf("ambiance: %d (Niveau de phéromones d'ambiance)\n", phero.ambiance);
-
     sleep(3);
 }
