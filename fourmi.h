@@ -125,12 +125,15 @@ void supprimerFourmiMale(FourmiMale **tete);
 void evoluerAge(Fourmi *fou);
 void ajouterNectar(Fourmi *fou);
 
-// --- Gestion de la Colonie ---
+
+// Fonctionnement de la colonie
+int FourmiliereEnEvolution(Colonie *colo);
 int RandomColonie(Colonie *colo);
-void ReproductionEtMortalite(Pheromone phero, Colonie *colo, void *agriculture, void *elevage);
 
 // --- Gestion des Saisons ---
+//simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
 void simuleUneSaison(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero);
+void ReproductionEtMortalite(Pheromone phero, Colonie *colo, void *agriculture, void *elevage);
 
 void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage);
 void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);

@@ -19,8 +19,8 @@ int main()
     Architecture archi = {0};
     Environnement enviro = {0, 200};
 
-    // Gérer la colonie
-    //FourmiliereEnEvolution(colo);
+    // Fonctionnement de la colonie
+    FourmiliereEnEvolution(colo);
     simuleUneSaison(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero);
     //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
     
