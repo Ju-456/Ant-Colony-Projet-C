@@ -361,7 +361,7 @@ printf(
         total);
     printf("1,5 mois plus tard...");
     printf("\n");
-    sleep(3);
+    sleep(2);
 
     // ouverture de la salle 1 bis = fin de saison 1
     // total fourmis : 100-130
@@ -403,7 +403,7 @@ printf(
     printf("Une nouvelle reine est apparue !\n");
     printf("1,5 mois plus tard...");
     printf("\n");
-    sleep(3);
+    sleep(2);
     // ouverture de la salle 2 = debut saison 2
     // total fourmis : 130-230
     for (int i = 0; i < rand() % 51 + 30; ++i) // Augmente les ouvrières de 30 à 80
@@ -438,7 +438,7 @@ printf(
         max, colo->nombreReines, max2, totalbis);
     printf("1,5 mois plus tard...");
     printf("\n");
-    sleep(3);
+    sleep(2);
 
     // ouverture de la salle 2 bis = fin saison 2
     // total fourmis : 230-260
@@ -477,7 +477,7 @@ printf(
     printf("Une nouvelle reine est apparue !\n");
     printf("1,5 mois plus tard...");
     printf("\n");
-    sleep(3);
+    sleep(2);
 
     // ouverture de la salle 3 = debut saison 3
     // total fourmis : 260-360
@@ -516,7 +516,7 @@ printf(
         max, colo->nombreReines, max2, max, totalbis, max2);
     printf("1,5 mois plus tard...");
     printf("\n");
-    sleep(3);
+    sleep(2);
 
     // ouverture de la salle 3 bis = fin saison 3
     // total fourmis : 360-390
@@ -1068,5 +1068,5 @@ printf(
     "                             \x1b[48;2;115;71;60m--------------------------------\n"
     ,agriculture->quantitéGraines,GrainesReste, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2,totalMales, phero.ambiance, colo->nombreReines);
 printf("\n");
-sleep(3);
+sleep(2);
 } 
