@@ -668,6 +668,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             phero.alarme = EvnmtExt.impact;
             phero.reine = 1 + (rand() % 2);
             phero.male = 1 + (rand() % 2);
+            printf("Tout va bien dans la fourmilière cet hiver,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis\n!");
         }
         else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
         {
@@ -690,6 +691,17 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 2);
                 phero.alarme = EvnmtExt.impact;
             }
+            if ( EvnmtExt.type == 1){
+                    printf("La fourmilière subit une tempête d'impact %d,\n" 
+                           "c'est un hiver compliqué pour la fourmilière..\n", EvnmtExt.impact);
+                    printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
+        
+                } else 
+                {
+                    printf("La fourmilière subit une inondation d'impact %d,\n" 
+                           "c'est un hiver compliqué pour la fourmilière..\n", EvnmtExt.impact);
+                           printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                }
         }
         else if (EvnmtExt.type == 3) // INVASION
         {
@@ -712,27 +724,38 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 2);
                 phero.alarme = EvnmtExt.impact;
             }
+            printf("La fourmilière subit une invasion d'impact %d,\n" 
+                   "c'est un hiver TRES compliqué pour la fourmilière..\n", EvnmtExt.impact);
+                   printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
         }
         if (EvnmtExt.type == 4) // HIVER GLACIAL
         {
             EvnmtExt.impact = 1 + (rand() % 3); // valeur aleatoire entre 1,2 et 3 pour determiner l'impact de l'even ext
             if (EvnmtExt.impact == 1)
             {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
+                phero.reine = phero.male = 0;
+                phero.alarme = EvnmtExt.impact + (rand() % 2);
             }
             else if (EvnmtExt.impact == 2)
             {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
+                phero.reine = phero.male = 0;
+                phero.alarme = EvnmtExt.impact + (rand() % 2);
             }
             else if (EvnmtExt.impact == 3)
             {
-                phero.reine = 1 + (rand() % 2);
-                phero.male = 1 + (rand() % 2);
-                phero.alarme = EvnmtExt.impact;
+                phero.reine = phero.male = 0;
+                phero.alarme = EvnmtExt.impact + (rand() % 2);
+            }
+            if (EvnmtExt.impact == 1 || EvnmtExt.impact == 2){
+                printf("La fourmilière subit un hiver glacial d'impact %d,\n" 
+                       "c'est un hiver est EXTREMEMENT compliqué pour la fourmilière..\n", EvnmtExt.impact);
+                       printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+            } else // cad si EvnmtExt.impact == 3
+            {
+                printf("La fourmilière subit un hiver glacial d'impact %d,\n" 
+                       "c'est un hiver est FATAL pour la fourmilière.\nL'aventure s'arrête ici...\n", EvnmtExt.impact);
+                       printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                exit(0);
             }
         }
     }
@@ -750,6 +773,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             phero.alarme = EvnmtExt.impact;
             phero.reine = 3 + (rand() % 5);
             phero.male = 2 + (rand() % 3);
+            printf("Tout va bien dans la fourmilière ce printemps,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
         }
         else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
         {
@@ -766,6 +790,16 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 3);
                 phero.alarme = EvnmtExt.impact;
             }
+            if ( EvnmtExt.impact == 1){
+                    printf("La fourmilière subit une tempête d'impact %d,\n" 
+                           "nous pensons qu'elle s'en sortira, on est au printemps quand même !\n", EvnmtExt.impact);
+                           printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                } else // ( EvnmtExt.type == 2)
+                {
+                    printf("La fourmilière subit une inondation d'impact %d,\n" 
+                           "nous pensons qu'elle s'en sortira, on est au printemps quand même !\n", EvnmtExt.impact);
+                           printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
+                }
         }
         else if (EvnmtExt.type == 3) // INVASION
         {
@@ -788,6 +822,9 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 2);
                 phero.alarme = EvnmtExt.impact;
             }
+            printf("La fourmilière subit une invasion d'impact %d,\n" 
+                    "c'est un printemps compliqué !\n", EvnmtExt.impact);
+                    printf("La probabilité que cet événement survienne en hiver est de 50%%\n");
         }
     }
     else if (saisonActuel == 2) // ETE
@@ -804,6 +841,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             phero.alarme = EvnmtExt.impact;
             phero.reine = 5;
             phero.reine = 3 + (rand() % 5);
+            printf("Tout va bien dans la fourmilière cet été,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
         }
         else if (EvnmtExt.type == 1) // Tempête
         {
@@ -820,6 +858,9 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 2);
                 phero.alarme = EvnmtExt.impact;
             }
+            printf("La fourmilière subit une tempête d'impact %d,\n" 
+                    "elle s'en sortira !\n", EvnmtExt.impact);
+                    printf("La probabilité que cet événement survienne en été est de 37,5%%\n");
         }
         else if (EvnmtExt.type == 3) // Invasion
         {
@@ -836,6 +877,8 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.male = 1 + (rand() % 2);
                 phero.alarme = EvnmtExt.impact;
             }
+            printf("La fourmilière subit une invasion d'impact %d.\n", EvnmtExt.impact);
+            printf("La probabilité que cet événement survienne en été est de 50%%\n");
         }
     }
     else if (saisonActuel == 3) // AUTOMNE
@@ -852,6 +895,7 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
             phero.alarme = EvnmtExt.impact;
             phero.reine = 4;
             phero.male = 4;
+            printf("Tout va bien dans la fourmilière cet automne,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
         }
         else if (EvnmtExt.type == 1) // Tempête
         {
@@ -868,6 +912,9 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.reine = 1 + (rand() % 2);
                 phero.male = 1 + (rand() % 2);
             }
+            printf("La fourmilière subit une tempête d'impact %d,\n" 
+                    "un peu cocasse mais habituel, ça devrait aller pour un automne !\n", EvnmtExt.impact);
+            printf("La probabilité que cet événement survienne en hiver est de 50%%\n");
         }
         else if (EvnmtExt.type == 2) // Inondation
         {
@@ -890,6 +937,8 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.reine = 1 + (rand() % 2);
                 phero.male = 1 + (rand() % 2);
             }
+            printf("La fourmilière subit une inondation d'impact %d\n", EvnmtExt.impact);
+            printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
         }
         else if (EvnmtExt.type == 3) // Invasion
         {
@@ -906,6 +955,9 @@ void GestionEvenementExterne(int saisonActuel, EvenementExterne EvnmtExt, Pherom
                 phero.reine = 0;
                 phero.male = 0;
             }
+            printf("La fourmilière subit une invasion d'impact %d,\n" 
+                    "un peu cocasse mais gérable!", EvnmtExt.impact);
+            printf("La probabilité que cet événement survienne en hiver est de 37,5%%\n");
         }
     }
     ReproductionEtMortalite(phero, colo, agriculture, elevage);

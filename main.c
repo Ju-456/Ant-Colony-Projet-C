@@ -20,7 +20,7 @@ int main()
     Environnement enviro = {0, 200};
 
     // Fonctionnement de la colonie
-    FourmiliereEnEvolution(colo);
+    //FourmiliereEnEvolution(colo);
     simuleUneSaison(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero);
     //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
     
