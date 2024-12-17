@@ -38,6 +38,23 @@ typedef struct Colonie
     Fourmi *soldats;
 } Colonie;
 
+/* Structure pour gérer les pheromones 
+des fourmis reines et mâles */
+typedef struct
+{
+    int ambiance;
+    char reine;
+    char male;
+    char alarme;
+} Pheromone; // je ne sais pas pq ce sont des chars ???
+
+// Structure pour gérer les événements externes
+typedef struct EvenementExterne
+{
+    int type;   // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
+    int impact; // impact allant de 1 à 3, 3 étant la plus grosse échelle de gravité
+} EvenementExterne;
+
 // Structures pour les systèmes agricoles et d'élevage
 typedef struct SystemeAgricole
 {
@@ -76,22 +93,6 @@ typedef struct Environnement
     int ressourcesNourriture;
 } Environnement;
 
-// Structure pour gérer les événements externes
-typedef struct EvenementExterne
-{
-    int type;   // 0 = rien ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
-    int impact; // impact allant de 1 à 3, 3 étant la plus grosse échelle de gravité
-} EvenementExterne;
-
-// Structure pour gérer les pheromones des fourmis reines et mâles
-typedef struct
-{
-    int ambiance;
-    char reine;
-    char male;
-    char alarme;
-} Pheromone;
-
 // Structure pour gérer les files de fourmis
 typedef struct Queue
 {
@@ -126,9 +127,12 @@ void evoluerAge(Fourmi *fou);
 void ajouterNectar(Fourmi *fou);
 
 
-// Fonctionnement de la colonie
+// Fonctionnement de la colonie en Random
 int FourmiliereEnEvolution(Colonie *colo);
 int RandomColonie(Colonie *colo);
+
+// Fonctionnement de la colonie en entrée utilisateur
+int ChosenColonie(Colonie *colo);
 
 // --- Gestion des Saisons ---
 //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
