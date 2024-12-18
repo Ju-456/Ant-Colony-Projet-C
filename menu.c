@@ -41,18 +41,18 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
         construireSalle(&archi);
         explorer(&enviro);
         
-        //FourmiliereEnEvolution(colo); // Départ de la colonie
-        // simuleUneSaisonRandom (appeler une saison) -> ex : hiver -> GestionEvenementExterneRandom -> ReproductionEtMortalite -> affichageCycleSaison
+        FourmiliereEnEvolution(colo); // Départ de la colonie
+        
         while(colo->nombreReines != 0){
             simuleUneSaisonRandom(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-        }
+        }// simuleUneSaisonRandom (appeler une saison) -> ex : hiver -> GestionEvenementExterneRandom -> ReproductionEtMortalite -> affichageCycleSaison
         break;
     case 2:
         ChosenColonie(saisonChoice, colo, &agriculture, &elevage, &hyg, &secu, &archi);
 
         while(colo->nombreReines != 0){
             simuleUneSaisonChosen(saisonChoice, colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-        }
+        }// idem que simuleUneSaisonRandom
     }
 }
 
