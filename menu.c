@@ -10,20 +10,21 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int saisonChoice)
 {
-    printf("Souhaitez vous une simulation aléatoire (1) ou avec des valeurs choisies (2) ?");
+    printf("Souhaitez vous une simulation aléatoire (1) ou choisir les valeurs (2) ?");
 
     int choice = 0;
     printf(
         "\n1. Valeurs aléatoires\n"
-        "2. Valeurs choisies \n"
+        "2. Valeurs à choisir \n"
         "Entrer votre choix :");
     scanf("%d", &choice);
-
+    
     switch (choice)
     {
     case 1:
+
         RandomColonie(colo);
 
         SystemeAgricole agriculture = {100, 50};
@@ -39,163 +40,19 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
         gererSecurite(&secu);
         construireSalle(&archi);
         explorer(&enviro);
-
-        FourmiliereEnEvolution(colo); // Départ de la colonie
+        
+        //FourmiliereEnEvolution(colo); // Départ de la colonie
         // simuleUneSaisonRandom (appeler une saison) -> ex : hiver -> GestionEvenementExterneRandom -> ReproductionEtMortalite -> affichageCycleSaison
-        simuleUneSaisonRandom(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-
-        // les nouveautés en commentaire ont besoin d'être faites, notamment implémenter en aléatoire
+        while(colo->nombreReines != 0){
+            simuleUneSaisonRandom(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
+        }
         break;
     case 2:
-        ChosenColonie(colo);
+        ChosenColonie(saisonChoice, colo, &agriculture, &elevage, &hyg, &secu, &archi);
 
-        // SystemeAgricole
-        printf("=== Systeme Agricole ===\n");
-        printf("Entrez la quantité de nourriture (100 - 400):");
-        scanf("%d", &agriculture.quantitéDeNourriture);
-        printf("Entrez la quantité de graines (60 - 160): ");
-        scanf("%d", &agriculture.quantitéGraines);
-
-        // SystemeElevage
-        printf("\n=== Systeme Elevage ===\n");
-        printf("Entrez le nombre de pucerons (100 - 300):");
-        scanf("%d", &elevage.nombrePucerons);
-
-        // Hygiène
-        printf("\n=== Hygiène ===\n");
-        printf("Entrez le niveau de propreté (1 à 5): ");
-        scanf("%d", &hyg.niveauProprete);
-        printf("Entrez le type de maladies (1, 2 ou 3): "); // definir 2/3 maladies possibles
-        scanf("%d", &hyg.maladies);
-
-        // Sécurité
-        printf("\n=== Sécurité ===\n");
-        printf("Entrez le niveau de protection (1 - 5): "); // le niveau de protection allant de 0 à 5
-        scanf("%d", &secu.niveauProtection);
-        printf("Entrez le nombre d'attaques reçues (1 - 10): "); // une attaque = - 1 à 10 soldats
-        scanf("%d", &secu.attaquesReçues);
-
-        // Architecture
-        printf("\n=== Architecture ===\n");
-        printf("Entrez le type de configuration de la fourmilière : ");
-        printf(
-            "\n       === Architecture ===\n"
-            "Type de configuration de la fourmilière : "
-            "*****************************************\n"
-            "*          Gestion des Salles           *\n"
-            "*****************************************\n\n"
-            ">>> Salles Obligatoires :\n"
-            " - Graines, Nourriture, Pucerons, Mâles, Reines, Ouvrières, Soldats\n\n"
-            ">>> Salles Complémentaires Disponibles :\n"
-            " - +2 Ouvrières, +2 Soldats\n\n"
-            "=== Choix des Configurations ===\n"
-            " 1. Configuration **Minimale** :\n"
-            "    - Salles obligatoires uniquement (7 salles)\n\n"
-            " 2. Configuration **Moyenne** :\n"
-            "    - Salles obligatoires +1 Ouvrières +1 Soldats (9 salles)\n\n"
-            " 3. Configuration **Maximale** :\n"
-            "    - Salles obligatoires +2 Ouvrières +2 Soldats (12 salles)\n\n"
-            "*****************************************\n"
-            ">>> Veuillez entrer 1, 2 ou 3 selon la configuration choisie : ");
-        int choice = 0;
-        scanf("%d", &archi.salles);
-        switch (archi.salles)
-        {
-        case 1:
-            printf("Voici à quoi ressemblera la configuration minimale (7 salles):\n");
-            printf(
-                "                                       - Fourmilière -\n"
-                "                             --------------------------------\n"
-                "                    --------                                  -------\n"
-                "                ----                       Graines                    ----\n"
-                "            ----                         ------------                       ----\n"
-                "        ----                             -          -                          ----\n"
-                "      ----       Soldats                 -     ?    -                              ----\n"
-                "    -----       ---------                -          -                               -----\n"
-                "  ------        -       -                ------------               Ouvrières         ------\n"
-                " ------         -   ?   -                                          ------------        ------\n"
-                "------          ---------                                          -          -          ------\n"
-                "------                                    Nourriture               -     ?    -           ------\n"
-                "------                                -----------------            -          -           ------\n"
-                "------           Pucerons             -               -            ------------           ------\n"
-                " -----         ------------           -       ?       -                                  -----\n"
-                "  -----        -          -           -               -                                 -----\n"
-                "   -----       -     ?    -           -----------------                                -----\n"
-                "    -----      -          -    Mâles                                                  -----\n"
-                "      ----     ------------   ------                    AMBIANCE                     ----\n"
-                "        -----                 -  ? -       Reines         ?/10                    -----\n"
-                "            -----             ------       ------                           -----\n"
-                "                -----                      -  ? -                   -----\n"
-                "                    --------               ------             ------\n"
-                "                             --------------------------------\n");
-            archi.salles = 7;
-            break;
-        case 2:
-            printf("Voici à quoi ressemblera la configuration moyenne (7 + 2 salles):\n");
-            printf(
-                "                                       - Fourmilière -\n"
-                "                             --------------------------------\n"
-                "                    --------                                  -------\n"
-                "                ----                       Graines                    ----\n"
-                "            ----                   ------------------                       ----\n"
-                "        ----                       -  +1 -          -                          ----\n"
-                "      ----       Soldats           -------     ?    -                              ----\n"
-                "    -----       ---------                -          -                               -----\n"
-                "  ------        -       -                ------------               Ouvrières         ------\n"
-                " ------         -   ?   -                                          ------------        ------\n"
-                "------          ---------                                          -          -          ------\n"
-                "------                                    Nourriture               -     ?    -           ------\n"
-                "------                                -----------------            -          -           ------\n"
-                "------           Pucerons             -               -            ------------------     ------\n"
-                " -----         ------------           -       ?       -                        - +1 -    -----\n"
-                "  -----        -          -           -               -                        ------   -----\n"
-                "   -----       -     ?    -           -----------------                                -----\n"
-                "    -----      -          -    Mâles                                                  -----\n"
-                "      ----     ------------   ------                    AMBIANCE                     ----\n"
-                "        -----                 -  ? -       Reines         ?/10                    -----\n"
-                "            -----             ------       ------                           -----\n"
-                "                -----                      -  ? -                   -----\n"
-                "                    --------               ------             ------\n"
-                "                             --------------------------------\n");
-            archi.salles = 9;
-            break;
-        case 3:
-            printf("Voici à quoi ressemblera la configuration maximale (7 + 5 salles):\n");
-            printf(
-                "                                       - Fourmilière -\n"
-                "                             --------------------------------\n"
-                "                    --------                                  -------\n"
-                "                ----                       Graines                    ----\n"
-                "            ----                   ------------------                       ----\n"
-                "        ----                       - +1  -          -                          ----\n"
-                "      ----       Soldats           -------     ?    -                              ----\n"
-                "    -----       ---------                -          -------                          -----\n"
-                "  ------        -       -                ------------- +1 -         Ouvrières         ------\n"
-                " ------         -   ?   -                            ------        ------------        ------\n"
-                "------    ---------------                                          -          -          ------\n"
-                "------    - +1 -                          Nourriture               -     ?    -           ------\n"
-                "------    ------                      -----------------            -          -           ------\n"
-                "------           Pucerons             -               -            ------------------     ------\n"
-                " -----         ------------           -       ?       -                        - +1 -    -----\n"
-                "  -----        -          -           -               -                  ------------   -----\n"
-                "   -----       -     ?    -           -----------------                  - +1 -        -----\n"
-                "    -----      -          -    Mâles                                     ------       -----\n"
-                "      ----     ------------   ------                    AMBIANCE                     ----\n"
-                "        -----                 -  ? -       Reines         ?/10                    -----\n"
-                "            -----             ------       ------                           -----\n"
-                "                -----                      -  ? -                   -----\n"
-                "                    --------               ------             ------\n"
-                "                             --------------------------------\n");
-            archi.salles = 13;
-            printf("\n");
-
-            break;
-        default:
-            printf("Invalid choice.\n");
+        while(colo->nombreReines != 0){
+            simuleUneSaisonChosen(saisonChoice, colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
         }
-        simuleUneSaisonChosen(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, &agriculture, &elevage);
-        ReproductionEtMortaliteChosen(phero, colo, &agriculture, &elevage, archi);
     }
 }
 

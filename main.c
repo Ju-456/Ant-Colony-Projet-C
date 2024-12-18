@@ -5,10 +5,11 @@
 
 int main() 
 {
-    int nbSaison;
-    int saisonActuel;        // le climat qui regne dans la fourmilliere
+    int nbSaison = 4;
+    int saisonActuel;        
     EvenementExterne EvnmtExt;
     Pheromone phero;
+    int saisonChoice;
 
     Colonie *colo = (Colonie *)malloc(sizeof(Colonie)); // = creerColonie(0, 5); creation de colonie aleatoir à la place
 
@@ -19,6 +20,6 @@ int main()
     Architecture archi;
     Environnement enviro;
 
-    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero, archi);
+    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero, archi, saisonChoice);
     return 0;
 }

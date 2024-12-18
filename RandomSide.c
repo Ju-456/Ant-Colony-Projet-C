@@ -6,40 +6,78 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+// Initialisation aléatoire de la colonie
+int RandomColonie(Colonie *colo)
 {
-        for (int i = 0; i < nbSaison; ++i)
-        {
-            switch (i % 4)
-            { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
+    if (!colo)
+    {
+        fprintf(stderr, "Erreur d'allocation de mémoire pour la colonie\n");
+        return -1;
+    }
 
-            case 0: // HIVER
-                hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-                GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-                printf("                                   --- Fin de l'HIVER ---                       \n");
-                break;
+    colo->ouvrieres = NULL;
+    colo->males = NULL;
+    colo->soldats = NULL;
 
-            case 1: // PRINTEMPS
-                printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-                GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-                printf("                                   --- Fin du PRINTEMPS ---                       \n");
-                break;
+    for (int i = 0; i < (rand() % 61 + 150); ++i) // Ajout d'ouvrières
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
+    }
 
-            case 2: // ETE
-                ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-                GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-                printf("                                   --- Fin de l'ÉTÉ ---                        \n");
-                break;
+    for (int i = 0; i < (rand() % 9 + 15); ++i) // Ajout de mâles
+    {
+        ajouterFourmiMale(&colo->males);
+    }
 
-            case 3: // AUTOMNE
-                automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-                GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-                printf("                                   --- Fin de l'AUTOMNE ---                       \n");
-                break;
+    for (int i = 0; i < (rand() % 41 + 80); ++i) // Ajout de soldats
+    {
+        ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
+    }
 
-            default:
-                break;
-            }
+    for (int i = 0; i < 5; ++i) // Ajout des reines
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
+    }
+
+    colo->nombreReines = 4;
+    
+    return 0;
+}
+
+void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+{   
+    for (int i = 0; i < nbSaison; ++i)
+    {
+        switch (i % 4)
+        { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
+
+        case 0: // HIVER
+            hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+            printf("                                   --- Fin de l'HIVER ---                       \n");
+            break;
+
+        case 1: // PRINTEMPS
+            printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+            printf("                                   --- Fin du PRINTEMPS ---                       \n");
+            break;
+
+        case 2: // ETE
+            ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+            printf("                                   --- Fin de l'ÉTÉ ---                        \n");
+            break;
+
+        case 3: // AUTOMNE
+            automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+            printf("                                   --- Fin de l'AUTOMNE ---                       \n");
+            break;
+
+        default:
+            break;
+        }
 
         // Simuler le vieillissement des fourmis
         Fourmi *current = colo->ouvrieres;
@@ -175,7 +213,7 @@ void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, 
                        "c'est un hiver est FATAL pour la fourmilière.\nL'aventure s'arrête ici...\n",
                        EvnmtExt.impact);
                 printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
-                exit(0);
+                colo->nombreReines - 2; // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
             }
         }
     }
@@ -441,12 +479,7 @@ void ReproductionEtMortaliteRandom(Pheromone phero, Colonie *colo, void *agricul
                 }
             }
         }
-    }
-    if (archi.salles = 13){ // pas besoin d'une fonction à part vu que c'est déjà la config de base
-                affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
-            }else {
-                affichageCycleSaisonChosen(colo, agriculture, elevage, phero, archi);
-            }
+    }affichageCycleSaisonRandom(colo,agriculture,elevage,phero);
 }
 
 // appeler après ReproductionEtMortalite
