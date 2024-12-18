@@ -14,67 +14,70 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
         return -1;
     }
 
-       int nOuvrieres, nSoldats, nMales;
-       printf("=== Colonie ===\n");
-       printf("Choisissez le nombre de de fourmis ouvrières de départ (0-200):");
-       scanf("%d", &nOuvrieres);
+    int nOuvrieres, nSoldats, nMales;
+    printf("=== Colonie ===\n");
+    printf("Choisissez le nombre de de fourmis ouvrières de départ (0-200):");
+    scanf("%d", &nOuvrieres);
 
-       printf("Choisissez le nombre de de fourmis soldats de départ (0-150):");
-       scanf("%d", &nSoldats);
+    printf("Choisissez le nombre de de fourmis soldats de départ (0-150):");
+    scanf("%d", &nSoldats);
 
-       printf("Choisissez le nombre de de fourmis mâles de départ (0-130):");
-       scanf("%d", &nMales);
-       printf("\n");
+    printf("Choisissez le nombre de de fourmis mâles de départ (0-130):");
+    scanf("%d", &nMales);
+    printf("\n");
 
-       colo->ouvrieres = NULL;
-       colo->males = NULL;
-       colo->soldats = NULL;
+    colo->ouvrieres = NULL;
+    colo->males = NULL;
+    colo->soldats = NULL;
 
-       for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
-       {
-           ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
-       }
+    for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
+    }
 
-       for (int i = 0; i < nSoldats; ++i) // Ajout de mâles
-       {
-           ajouterFourmiMale(&colo->males);
-       }
+    for (int i = 0; i < nSoldats; ++i) // Ajout de mâles
+    {
+        ajouterFourmiMale(&colo->males);
+    }
 
-       for (int i = 0; i < nMales; ++i) // Ajout de soldats
-       {
-           ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
-       }
+    for (int i = 0; i < nMales; ++i) // Ajout de soldats
+    {
+        ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
+    }
 
-       for (int i = 0; i < 5; ++i) // Ajout des reines
-       {
-           ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
-       }
+    for (int i = 0; i < 5; ++i) // Ajout des reines
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
+    }
 
-       printf("=== Systeme Agricole ===\n");
-       printf("Entrez la quantité de nourriture (100 - 400):");
-       scanf("%d", &agriculture->quantitéDeNourriture);
-       printf("Entrez la quantité de graines (60 - 160): ");
-       scanf("%d", &agriculture->quantitéGraines);
-       printf("\n");
+    printf("=== Systeme Agricole ===\n");
+    printf("Entrez la quantité de nourriture (100 - 400):");
+    scanf("%d", &agriculture->quantitéDeNourriture);
+    printf("Entrez la quantité de graines (60 - 160): ");
+    scanf("%d", &agriculture->quantitéGraines);
+    printf("\n");
 
-       printf("\n=== Systeme Elevage ===\n");
-       printf("Entrez le nombre de pucerons (100 - 300):");
-       scanf("%d", &elevage->nombrePucerons);
-       printf("\n");
-       // partie à faire
-           printf("\n=== Hygiène ===\n");
-           printf("Entrez le niveau de propreté (1 à 5): ");
-           scanf("%d", &hyg->niveauProprete);
-           printf("Entrez le type de maladies (1, 2 ou 3): "); // definir 2/3 maladies possibles
-           scanf("%d", &hyg->maladies);
-           printf("\n");
+    printf("\n=== Systeme Elevage ===\n");
+    printf("Entrez le nombre de pucerons (100 - 300):");
+    scanf("%d", &elevage->nombrePucerons);
+    printf("\n");
 
-           printf("\n=== Sécurité ===\n");
-           printf("Entrez le niveau de protection (1 - 5): "); // le niveau de protection allant de 0 à 5
-           scanf("%d", &secu->niveauProtection);
-           printf("Entrez le nombre d'attaques reçues (1 - 10): "); // une attaque = - 1 à 10 soldats
-           scanf("%d", &secu->attaquesReçues);
-           printf("\n");
+    // partie à faire
+    // faire sys tableau doubles entrer 
+    printf("\n=== Hygiène ===\n");
+    printf("Entrez le niveau de propreté (1 à 5): ");
+    scanf("%d", &hyg->niveauProprete);
+    printf("Entrez le type de maladies (1, 2 ou 3): "); // definir 2/3 maladies possibles
+    scanf("%d", &hyg->maladies);
+    printf("\n");
+
+    // faire sys tableau doubles entrer 
+    printf("\n=== Sécurité ===\n");
+    printf("Entrez le niveau de protection (1 - 5): "); // le niveau de protection allant de 0 à 5
+    scanf("%d", &secu->niveauProtection);
+    printf("Entrez le nombre d'attaques reçues (1 - 10): "); // une attaque = - 1 à 10 soldats
+    scanf("%d", &secu->attaquesReçues);
+    printf("\n");
 
     printf("\n=== Architecture ===\n");
     printf(
@@ -208,7 +211,7 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
 // et la valeur de saisonChoice n'est pas celle prise en entrée
 void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
 {
-    //printf("Débogage : saisonChoice avant switch : %d\n", saisonChoice);
+    // printf("Débogage : saisonChoice avant switch : %d\n", saisonChoice);
     switch (saisonChoice)
     { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
 
@@ -227,8 +230,8 @@ void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agr
         printf("                                   --- Fin de l'ÉTÉ ---                        \n");
         break;
 
-    case 3:                               // AUTOMNE
-        //printf("la fonction est entrée"); // ici la fonction ne rentre pas
+    case 3: // AUTOMNE
+        // printf("la fonction est entrée"); // ici la fonction ne rentre pas
         automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
         printf("Débogage : saisonChoice dans switch : %d\n", saisonChoice);
         printf("                                   --- Fin de l'AUTOMNE ---                       \n");
@@ -237,7 +240,7 @@ void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agr
         break;
 
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-        
+
         saisonChoice++;
         if (saisonChoice == 4)
         {
