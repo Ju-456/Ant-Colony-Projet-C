@@ -9,7 +9,12 @@
 void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero)
 {
     int choice;
-    printf("Choisissez une saison de départ :\n0.Hiver\n1.Printemps\n2.Ete\n3.Automne");
+    printf("Choisissez une saison de départ :\n"
+            "0.Hiver\n"
+            "1.Printemps\n"
+            "2.Ete\n"
+            "3.Automne\n"
+            "Entrer votre choix :");
     scanf("%d", &choice);
 
     switch (choice)

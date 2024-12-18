@@ -16,8 +16,8 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
 
     int choice = 0;
     printf(
-        "\n1. Random Value\n"
-        "2. Chosen Value \n"
+        "\n1. Valeurs aléatoires\n"
+        "2. Valeurs choisies \n"
         "Entrer votre choix :");
     scanf("%d", &choice);
 
