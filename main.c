@@ -1,5 +1,6 @@
 #include "fourmi.h"
-#include "fourmi.c"
+#include "menu.c"
+
 #include <stdio.h>
 
 int main() 
@@ -18,6 +19,6 @@ int main()
     Architecture archi;
     Environnement enviro;
 
-    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero);
+    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero, archi);
     return 0;
 }

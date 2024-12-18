@@ -5,44 +5,34 @@ TARGET = main
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 
+# Répertoires
+SRC_DIR = src        # Répertoire contenant les sources .c
+OBJ_DIR = build      # Répertoire contenant les objets .o
+
 # Liste des fichiers sources
-SRCS = main.c 
+SRCS := $(wildcard $(SRC_DIR)/*.c)
 
-# Génère une liste des fichiers objets correspondants
-OBJS = $(SRCS:.c=.o)
+# Générer la liste des fichiers objets correspondants
+OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-# Répertoire pour les objets
-OBJ_DIR = build
-
-# Répertoire pour les sources
-SRC_DIR = src
-
-# Ajoute les répertoires aux chemins
-SRCS := $(addprefix $(SRC_DIR)/, $(SRCS))
-OBJS := $(addprefix $(OBJ_DIR)/, $(notdir $(OBJS)))
-
-# Règle par défaut : compile le programme
+# Règle par défaut pour compiler le programme
 all: $(TARGET)
 
-# Règle pour générer l'exécutable en liant les objets
+# Règle pour générer l'exécutable à partir des objets
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-# Règle de compilation pour chaque fichier .c en un fichier .o
+# Règle pour compiler chaque fichier .c en un fichier .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Règle pour nettoyer les fichiers générés (.o et l'exécutable)
+# Règle pour nettoyer les fichiers objets et l'exécutable
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
-# Règle pour tout nettoyer, y compris les fichiers temporaires
-veryclean: clean
-	rm -f *~ *.bak
-
-# Règle pour recompiler en nettoyant d'abord
+# Règle pour forcer une recompilation complète
 rebuild: clean all
 
-# Indique au Makefile que 'clean', 'veryclean' et 'rebuild' ne sont pas des fichiers
-.PHONY: all clean veryclean rebuild
+# Indique au Makefile que les règles suivantes ne sont pas des fichiers
+.PHONY: all clean rebuild
