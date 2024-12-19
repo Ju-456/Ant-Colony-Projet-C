@@ -29,7 +29,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     colo->ouvrieres = NULL;
     colo->males = NULL;
     colo->soldats = NULL;
-    colo->nombreReines = 4;
+    
 
     for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
     {
@@ -49,8 +49,10 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     for (int i = 0; i < 5; ++i) // Ajout des reines
     {
         ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
-    }
+    }// les reines sont des sortes d'ouvrieres speciales, elles sont dans la même liste chainee avec un rôle différent
 
+    colo->nombreReines = 4;
+/*
     printf("=== Systeme Agricole ===\n");
     printf("Entrez la quantité de nourriture (100 - 400):");
     scanf("%d", &agriculture->quantitéDeNourriture);
@@ -62,7 +64,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     printf("Entrez le nombre de pucerons (100 - 300):");
     scanf("%d", &elevage->nombrePucerons);
     printf("\n");
-    /*
+    
     // partie à faire
     // faire sys tableau doubles entrer 
     printf("\n=== Hygiène ===\n");
@@ -193,12 +195,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     default:
         printf("Invalid choice.\n");
     }
-    printf("Choisissez une saison de départ :\n"
-           "0. Hiver\n"
-           "1. Printemps\n"
-           "2. Ete\n"
-           "3. Automne\n"
-           "Entrez votre choix : ");
+    
 }
 // ça ne rentre pas dans GestionEvenementExterneChosen !!!
 int recup(int nb)
@@ -208,11 +205,20 @@ int recup(int nb)
         nb = 0;
     return nb;
 }
-void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
-{
-    
-    scanf("%d", &saisonChoice);
-    while (saisonChoice < 0 || saisonChoice > 3)
+
+void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+{   
+    int saisonChoice = -1;
+        printf("Choisissez une saison de départ :\n"
+           "0. Hiver\n"
+           "1. Printemps\n"
+           "2. Ete\n"
+           "3. Automne\n"
+           "Entrez votre choix : ");
+    if (saisonChoice = -1){
+        scanf("%d", &saisonChoice);
+    }
+    if (saisonChoice < 0 || saisonChoice > 3)
     {
         printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
         scanf("%d", &saisonChoice);
@@ -247,13 +253,12 @@ void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agr
         break;
     default:
         break;
-/*
-        saisonChoice++;
-        if (saisonChoice == 4)
-        {
-            saisonChoice = 0; // Réinitialisation à Hiver après Automne
-        }*/
-       saisonChoice = recup(scanf("%d", &saisonChoice));
+
+       saisonChoice ++;
+       if (saisonChoice > 4){
+        saisonChoice = 0;
+       }
+
     }
     // Simuler le vieillissement des fourmis
     Fourmi *current = colo->ouvrieres;

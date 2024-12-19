@@ -37,7 +37,7 @@ int RandomColonie(Colonie *colo)
     for (int i = 0; i < 5; ++i) // Ajout des reines
     {
         ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
-    }
+    } // les reines sont des sortes d'ouvrieres speciales, elles sont dans la même liste chainee avec un rôle différent
 
     colo->nombreReines = 4;
     

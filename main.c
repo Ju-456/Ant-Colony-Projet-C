@@ -9,7 +9,6 @@ int main()
     int saisonActuel;        
     EvenementExterne EvnmtExt;
     Pheromone phero;
-    int saisonChoice;
 
     Colonie *colo = (Colonie *)malloc(sizeof(Colonie)); // = creerColonie(0, 5); creation de colonie aleatoir à la place
 
@@ -20,6 +19,6 @@ int main()
     Architecture archi;
     Environnement enviro;
 
-    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero, archi, saisonChoice);
+    menu(colo, nbSaison, saisonActuel, EvnmtExt, phero, archi);
     return 0;
 }

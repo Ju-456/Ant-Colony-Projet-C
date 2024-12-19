@@ -10,7 +10,7 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int saisonChoice)
+void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
 {
     printf("Souhaitez vous une simulation aléatoire (1) ou choisir les valeurs (2) ?");
 
@@ -51,8 +51,7 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
         ChosenColonie(colo, &agriculture, &elevage, &hyg, &secu, &archi);
 
         while(colo->nombreReines != 0){
-            simuleUneSaisonChosen(saisonChoice, colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            saisonChoice = recup(saisonChoice);
+            simuleUneSaisonChosen(colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
         }// idem que simuleUneSaisonRandom
     }
 }
