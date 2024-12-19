@@ -48,10 +48,11 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
         }// simuleUneSaisonRandom (appeler une saison) -> ex : hiver -> GestionEvenementExterneRandom -> ReproductionEtMortalite -> affichageCycleSaison
         break;
     case 2:
-        ChosenColonie(saisonChoice, colo, &agriculture, &elevage, &hyg, &secu, &archi);
+        ChosenColonie(colo, &agriculture, &elevage, &hyg, &secu, &archi);
 
         while(colo->nombreReines != 0){
             simuleUneSaisonChosen(saisonChoice, colo, &agriculture, &elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
+            saisonChoice = recup(saisonChoice);
         }// idem que simuleUneSaisonRandom
     }
 }
@@ -313,8 +314,9 @@ int FourmiliereEnEvolution(Colonie *colo)
 void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage)
 {
     saisonActuel = 0;
-    agriculture->quantitéDeNourriture += 10; // Simule une faible production alimentaire en hiver
-    agriculture->quantitéGraines += 5;
+    agriculture->quantitéGraines -= 50;
+    elevage->nombrePucerons -= 20;
+    agriculture->quantitéDeNourriture = -elevage->nombrePucerons +100; // les pucerons necessitent bcp plus de ressources en hiver
 }
 
 void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
@@ -322,7 +324,7 @@ void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *e
     saisonActuel = 1;
     agriculture->quantitéDeNourriture += 25; // Production accrue au printemps
     agriculture->quantitéGraines += 15;
-    elevage->nombrePucerons += 20;
+    elevage->nombrePucerons += 25;
 }
 
 void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
@@ -338,5 +340,5 @@ void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *ele
     saisonActuel = 3;
     agriculture->quantitéDeNourriture += 15; // Production décroissante en automne
     agriculture->quantitéGraines += 10;
-    elevage->nombrePucerons += 10;
+    elevage->nombrePucerons -= 5;
 }

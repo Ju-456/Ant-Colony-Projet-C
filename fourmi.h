@@ -128,6 +128,7 @@ void ajouterNectar(Fourmi *fou);
 
 // Menu afin de choisir si gestion automatique ou pas
 void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi,int saisonChoice );
+int recup(int nb);
 
 // Fonctionnement de la colonie en Random
 int FourmiliereEnEvolution(Colonie *colo);
@@ -135,7 +136,7 @@ int RandomColonie(Colonie *colo);
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
 
 // Fonctionnement de la colonie en entrée utilisateur
-int ChosenColonie(int saisonChoice ,Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu, Architecture *archi);
+void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu, Architecture *archi);
 void affichageCycleSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero, Architecture archi);
 
 // --- Gestion des Saisons ---

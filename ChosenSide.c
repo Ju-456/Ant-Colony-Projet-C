@@ -6,12 +6,12 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu, Architecture *archi)
+void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu, Architecture *archi)
 {
     if (!colo)
     {
         fprintf(stderr, "Erreur d'allocation de mémoire pour la colonie\n");
-        return -1;
+        exit(0);
     }
 
     int nOuvrieres, nSoldats, nMales;
@@ -29,6 +29,7 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
     colo->ouvrieres = NULL;
     colo->males = NULL;
     colo->soldats = NULL;
+    colo->nombreReines = 4;
 
     for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
     {
@@ -61,7 +62,7 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
     printf("Entrez le nombre de pucerons (100 - 300):");
     scanf("%d", &elevage->nombrePucerons);
     printf("\n");
-
+    /*
     // partie à faire
     // faire sys tableau doubles entrer 
     printf("\n=== Hygiène ===\n");
@@ -78,7 +79,7 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
     printf("Entrez le nombre d'attaques reçues (1 - 10): "); // une attaque = - 1 à 10 soldats
     scanf("%d", &secu->attaquesReçues);
     printf("\n");
-
+*/
     printf("\n=== Architecture ===\n");
     printf(
         "\n=== Gestion des Salles ===\n"
@@ -192,60 +193,67 @@ int ChosenColonie(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture,
     default:
         printf("Invalid choice.\n");
     }
-
     printf("Choisissez une saison de départ :\n"
            "0. Hiver\n"
            "1. Printemps\n"
            "2. Ete\n"
            "3. Automne\n"
            "Entrez votre choix : ");
+}
+// ça ne rentre pas dans GestionEvenementExterneChosen !!!
+int recup(int nb)
+{
+    nb++;
+    if( nb > 4)
+        nb = 0;
+    return nb;
+}
+void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+{
+    
     scanf("%d", &saisonChoice);
     while (saisonChoice < 0 || saisonChoice > 3)
     {
         printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
         scanf("%d", &saisonChoice);
     }
-    return 0;
-}
-// ça ne rentre pas dans GestionEvenementExterneChosen !!!
-// et la valeur de saisonChoice n'est pas celle prise en entrée
-void simuleUneSaisonChosen(int saisonChoice, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
-{
-    // printf("Débogage : saisonChoice avant switch : %d\n", saisonChoice);
+
     switch (saisonChoice)
     { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
 
     case 0: // HIVER
         hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("                                   --- Fin de l'HIVER ---                       \n");
         break;
 
     case 1: // PRINTEMPS
         printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("                                   --- Fin du PRINTEMPS ---                       \n");
         break;
 
     case 2: // ETE
         ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("                                   --- Fin de l'ÉTÉ ---                        \n");
         break;
 
     case 3: // AUTOMNE
         // printf("la fonction est entrée"); // ici la fonction ne rentre pas
         automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        printf("Débogage : saisonChoice dans switch : %d\n", saisonChoice);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("                                   --- Fin de l'AUTOMNE ---                       \n");
         break;
     default:
         break;
-
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-
+/*
         saisonChoice++;
         if (saisonChoice == 4)
         {
             saisonChoice = 0; // Réinitialisation à Hiver après Automne
-        }
+        }*/
+       saisonChoice = recup(scanf("%d", &saisonChoice));
     }
     // Simuler le vieillissement des fourmis
     Fourmi *current = colo->ouvrieres;
@@ -637,7 +645,7 @@ void ReproductionEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agricul
         phero.ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
 
         for (int j = 0; j < rand() % 16 + 25; ++j)
-        {                                                //  "5" sont les 5 reines, on appelle cela le seuil d'exclusion, ce sont des fourmis protégés
+        {                                                //  "5" = seuil d'exclusion, ce sont des fourmis protégés
             supprimerFourmiVieille(&colo->ouvrieres, 5); // reduction des ouvrieres
         }
         for (int j = 0; j < rand() % 11 + 15; ++j)
@@ -678,7 +686,7 @@ void ReproductionEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agricul
                 }
             }
         }
-    }
+    }// test : affichageCycleSaisonChosen(colo, agriculture, elevage, phero, archi);
     if (archi.salles = 13)
     { // pas besoin d'une fonction à part vu que c'est déjà la config de base
         affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
