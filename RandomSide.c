@@ -213,7 +213,7 @@ void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, 
                        "c'est un hiver est FATAL pour la fourmilière.\nL'aventure s'arrête ici...\n",
                        EvnmtExt.impact);
                 printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
-                colo->nombreReines - 2; // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
+                colo->nombreReines = colo->nombreReines - 2; // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
             }
         }
     }

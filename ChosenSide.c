@@ -52,7 +52,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     }// les reines sont des sortes d'ouvrieres speciales, elles sont dans la même liste chainee avec un rôle différent
 
     colo->nombreReines = 4;
-/*
+
     printf("=== Systeme Agricole ===\n");
     printf("Entrez la quantité de nourriture (100 - 400):");
     scanf("%d", &agriculture->quantitéDeNourriture);
@@ -81,7 +81,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
     printf("Entrez le nombre d'attaques reçues (1 - 10): "); // une attaque = - 1 à 10 soldats
     scanf("%d", &secu->attaquesReçues);
     printf("\n");
-*/
+
     printf("\n=== Architecture ===\n");
     printf(
         "\n=== Gestion des Salles ===\n"
@@ -99,7 +99,7 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
         "*****************************************\n"
         ">>> Veuillez entrer 1, 2 ou 3 selon la configuration choisie : ");
 
-    int choice = 0;
+    //int choice = 0;
     scanf("%d", &archi->salles);
     switch (archi->salles)
     {
@@ -215,7 +215,7 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
            "2. Ete\n"
            "3. Automne\n"
            "Entrez votre choix : ");
-    if (saisonChoice = -1){
+    if (saisonChoice == -1){
         scanf("%d", &saisonChoice);
     }
     if (saisonChoice < 0 || saisonChoice > 3)
@@ -285,7 +285,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
 {
     if (saisonActuel == 0) // HIVER
     {
-        int Hiv[5] = {0, 1, 2, 3, 4}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
+        // Hiv[5] = {0, 1, 2, 3, 4}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
         // le 4 (hiver glacial) ne parait qu'en hiver
 
         printf("Voici le tableau des événement disponible en hiver :\n"
@@ -401,13 +401,13 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
                        "c'est un hiver est FATAL pour la fourmilière.\nL'aventure s'arrête ici...\n",
                        EvnmtExt.impact);
                 printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
-                colo->nombreReines - 2; // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
+                colo->nombreReines = colo->nombreReines - 2; // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
             }
         }
     }
     else if (saisonActuel == 1) // PRINTEMPS
     {
-        int Print[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
+        // Print[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
         // les risques de 3 (invasion) sont plus eleves pdt le printemps
 
         printf("Voici le tableau des événement disponible pour le printemps :\n"
@@ -488,7 +488,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
     }
     else if (saisonActuel == 2) // ETE
     {
-        int Ete[3] = {0, 1, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
+        // Ete[3] = {0, 1, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
         // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
 
         printf("Voici le tableau des événement disponible pour l'été' :\n"
@@ -550,7 +550,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
     }
     else if (saisonActuel == 3) // AUTOMNE
     {
-        int Aut[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
+        // Aut[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
         // Les invasions (3) et inondations (2) sont plus probables en automne.
 
         printf("Voici le tableau des événement disponible pour l'automne' :\n"
@@ -692,7 +692,7 @@ void ReproductionEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agricul
             }
         }
     }// test : affichageCycleSaisonChosen(colo, agriculture, elevage, phero, archi);
-    if (archi.salles = 13)
+    if (archi.salles == 13)
     { // pas besoin d'une fonction à part vu que c'est déjà la config de base
         affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
     }
@@ -806,7 +806,7 @@ void affichageCycleSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, Sys
             agriculture->quantitéGraines, totalSoldats, totalOuvrieres, agriculture->quantitéDeNourriture, elevage->nombrePucerons, totalMales, phero.ambiance, colo->nombreReines);
     }
 
-    else if (archi.salles = 9)
+    else if (archi.salles == 9)
     {
         printf(
             "                                       - Fourmilière -\n"

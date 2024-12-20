@@ -56,7 +56,7 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
     }
 }
 
-int FourmiliereEnEvolution(Colonie *colo)
+void FourmiliereEnEvolution(Colonie *colo)
 {
 
     srand(time(NULL));
@@ -64,7 +64,8 @@ int FourmiliereEnEvolution(Colonie *colo)
     if (!colo)
     {
         fprintf(stderr, "Erreur d'allocation de mémoire pour la colonie\n");
-        return -1;
+        printf("-1");
+        exit(0);
     }
 
     colo->ouvrieres = NULL;
