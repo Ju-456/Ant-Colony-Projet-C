@@ -271,3 +271,18 @@ int compterFourmis(Fourmi *tete)
     }
     return count;
 }
+
+// Fonction pour libérer la mémoire de la colonie
+void libererColonie(Colonie *colo) {
+    // Implémentez la libération de chaque liste de fourmis
+    // Exemple :
+    while (colo->ouvrieres) {
+        supprimerFourmi(&colo->ouvrieres, colo->ouvrieres);
+    }
+    while (colo->soldats) {
+        supprimerFourmi(&colo->soldats, colo->soldats);
+    }
+    while (colo->males) {
+        supprimerFourmiMale(&colo->males);
+    }
+}

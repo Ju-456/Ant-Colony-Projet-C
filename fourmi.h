@@ -184,8 +184,6 @@ Noeud *creerNoeud(char *nom);
 void insererNoeud(Noeud **racine, char *nom);
 void afficherArbre(Noeud *racine);
 
-
-
 void libererColonie(Colonie *colo);
 
 #endif
