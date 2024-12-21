@@ -207,23 +207,29 @@ int recup(int nb)
 }
 
 void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
-{   
-    int saisonChoice = -1;
-        printf("Choisissez une saison de départ :\n"
-           "0. Hiver\n"
-           "1. Printemps\n"
-           "2. Ete\n"
-           "3. Automne\n"
-           "Entrez votre choix : ");
-    if (saisonChoice == -1){
-        scanf("%d", &saisonChoice);
-    }
-    if (saisonChoice < 0 || saisonChoice > 3)
+{
+    static int saisonChoice = -1;
+
+    // Demande initiale de la saison de départ
+    if (saisonChoice == -1)
     {
-        printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
+        printf("Choisissez une saison de départ :\n"
+               "0. Hiver\n"
+               "1. Printemps\n"
+               "2. Ete\n"
+               "3. Automne\n"
+               "Entrez votre choix : ");
+
         scanf("%d", &saisonChoice);
+
+        while (saisonChoice < 0 || saisonChoice > 3)
+        {
+            printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
+            scanf("%d", &saisonChoice);
+        }
     }
 
+    // Simulation d'une saison
     switch (saisonChoice)
     { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
 
@@ -246,20 +252,22 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         break;
 
     case 3: // AUTOMNE
-        // printf("la fonction est entrée"); // ici la fonction ne rentre pas
         automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("                                   --- Fin de l'AUTOMNE ---                       \n");
         break;
+
     default:
         break;
-
-       saisonChoice ++;
-       if (saisonChoice > 4){
-        saisonChoice = 0;
-       }
-
     }
+
+    // Passer à la saison suivante
+    saisonChoice++;
+    if (saisonChoice > 3)
+    {
+        saisonChoice = 0;
+    }
+
     // Simuler le vieillissement des fourmis
     Fourmi *current = colo->ouvrieres;
     while (current != NULL)
