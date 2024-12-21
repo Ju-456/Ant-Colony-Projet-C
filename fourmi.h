@@ -131,7 +131,7 @@ void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtE
 int recup(int nb);
 
 // Fonctionnement de la colonie en Random
-int FourmiliereEnEvolution(Colonie *colo);
+void FourmiliereEnEvolution(Colonie *colo);
 int RandomColonie(Colonie *colo);
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
 
