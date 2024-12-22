@@ -220,10 +220,12 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
         printf("Entrez le nombre d'attaques reçues (1 - 3): "); // une attaque = - 1 à 10 soldats
         scanf("%d", &secu->attaquesReçues);
         printf("\n");
+
+        printf("Voici votre fourmilière de départ avant les changements");
 }
 
-void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int nMales, int nSoldats)
-{
+void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int nMales,int nSoldats)
+{   
     static int saisonChoice = -1;
 
     // Demande initiale de la saison de départ
@@ -243,6 +245,10 @@ void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agric
             printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
             scanf("%d", &saisonChoice);
         }
+
+        /*if (saisonChoice == 1){
+            printf("Nous sommes au printemps, il y a donc des mâles dans la colonie.\n Choississez un nombre de mâles ()")
+        }*/
     }
 
     // Simulation d'une saison
@@ -252,25 +258,25 @@ void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agric
     case 0: // HIVER
         hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
-        printf("                                   --- Fin de l'HIVER ---                       \n");
+        printf("************************************** Fin de l'HIVER ****************************\n");
         break;
 
     case 1: // PRINTEMPS
         printemps(nOuvrieres, saisonActuel, agriculture, nMales, elevage, EvnmtExt, phero, colo);
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
-        printf("                                   --- Fin du PRINTEMPS ---                       \n");
+        printf("************************************** Fin du PRINTEMPS **************************\n");
         break;
 
     case 2: // ETE
         ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
-        printf("                                   --- Fin de l'ÉTÉ ---                        \n");
+        printf("************************************** Fin de l'ÉTÉ ******************************\n");
         break;
 
     case 3: // AUTOMNE
         automne(nOuvrieres, saisonActuel, agriculture, nMales, elevage, EvnmtExt, phero, colo);
         GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
-        printf("                                   --- Fin de l'AUTOMNE ---                       \n");
+        printf("************************************** Fin de l'AUTOMNE ******************************\n");
         break;
 
     default:

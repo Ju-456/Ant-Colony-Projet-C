@@ -42,6 +42,7 @@ void menu(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agricult
 
     case 2:
         ChosenColonie(colo, nOuvrieres, nSoldats, agriculture, elevage, &archi, hyg, secu);
+        affichageCycleSaisonChosen(archi, nSoldats, nOuvrieres, agriculture, elevage, nMales, phero);
 
         while (colo->nombreReines != 0)
         {
