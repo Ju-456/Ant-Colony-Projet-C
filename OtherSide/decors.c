@@ -853,3 +853,8 @@ printf(
         "                -----                      - %d -                   -----\n"
         "                    --------               ------             ------\n"
         "                             --------------------------------\n");
+
+    for (int i = 0; i < nSoldats; ++i) // Ajout de mâles
+    {
+        ajouterFourmiMale(&colo->males);
+    }

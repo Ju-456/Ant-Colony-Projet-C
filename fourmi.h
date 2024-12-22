@@ -44,7 +44,7 @@ typedef struct
 {
     int ambiance;
     char reine;
-    char male;
+    char cohesion;
     char alarme;
 } Pheromone; // je ne sais pas pq ce sont des chars ???
 
@@ -127,35 +127,37 @@ void evoluerAge(Fourmi *fou);
 void ajouterNectar(Fourmi *fou);
 
 // Menu afin de choisir si gestion automatique ou pas
-void menu(Colonie *colo, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
-int recup(int nb);
-
+void menu(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, int nMales, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro);
 // Fonctionnement de la colonie en Random
 void FourmiliereEnEvolution(Colonie *colo);
-int RandomColonie(Colonie *colo);
-void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
+int RandomColonie(Colonie *colo, int nOuvrieres);
 
 // Fonctionnement de la colonie en entrée utilisateur
-void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu, Architecture *archi);
-void affichageCycleSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero, Architecture archi);
+void ChosenColonie(Colonie *colo,int nOuvrieres,int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture *archi, Hygiène *hyg, Sécurité *secu);
+
+void Configuration1(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu);
+void Configuration2(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu);
+void Configuration3(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu);
+
+void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu);
 
 // --- Gestion des Saisons ---
-//simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> ReproductionEtMortalite -> affichageCycleSaison
-void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
-void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
+//simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> PonteEtMortalite -> affichageCycleSaison
+void simuleUneSaisonRandom(int nOuvrieres, Colonie *colo, SystemeAgricole *agriculture, int nMales, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
+void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int nMales, int nSoldats);
 
-void ReproductionEtMortaliteRandom(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi);
-void ReproductionEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi);
+void PonteEtMortaliteRandom(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi);
+void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi, int nSoldats, int nOuvrieres, int nMales);
 
 //GestionEvenementExterneRandom*2
 
 void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage);
-void printemps(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
+void printemps(int nOuvrieres, int saisonActuel, SystemeAgricole *agriculture,int nMales, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
 void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
-void automne(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
+void automne(int nOuvrieres,int saisonActuel, SystemeAgricole *agriculture,int nMales, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
 
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
-void affichageCycleSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero, Architecture archi);
+void affichageCycleSaisonChosen(Architecture archi, int nSoldats, int nOuvrieres, SystemeAgricole *agriculture, SystemeElevage *elevage, int nMales, Pheromone phero);
 
 // --- Systèmes Agricoles et d'Élevage ---
 void cultiverGraines(SystemeAgricole *agriculture);
@@ -169,7 +171,7 @@ void gererSecurite(Sécurité *secu);
 // --- Exploration et Environnement ---
 void explorer(Environnement *enviro);
 void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi);
-void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi);
+void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi, int nSoldats, int nOuvrieres, int nMales);
 
 // --- Gestion des Files ---
 void enfile(Queue *q, Fourmi *fou);

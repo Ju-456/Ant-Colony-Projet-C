@@ -107,11 +107,11 @@ void supprimerFourmiVieille(Fourmi **tete, int ignorerReines)
     }
 }
 
-// Suppression d'un mâle (après ReproductionEtMortalite)
+// Suppression d'un mâle (après PonteEtMortalite)
 void supprimerFourmiMale(FourmiMale **tete)
 {
     if (!tete || !*tete)
-        return;
+    return;
 
     FourmiMale *aSupprimer = *tete;
     *tete = aSupprimer->suivante;
