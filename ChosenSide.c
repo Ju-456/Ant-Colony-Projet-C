@@ -164,6 +164,12 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
 {
 
         scanf("%d", &nOuvrieres);
+
+        if (nOuvrieres < 100 || nOuvrieres > 400){
+            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
+            scanf("%d", &nOuvrieres);
+        }
+
         int nReines = colo->nombreReines;
         nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
         printf("Le nombre de soldats: %d\n", nSoldats);
@@ -209,16 +215,40 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
         printf("\n=== Hygiène ===\n");
         printf("Entrez le niveau de propreté (1 - 3): ");
         scanf("%d", &hyg->niveauProprete);
+
+        if (hyg->niveauProprete < 1 || hyg->niveauProprete > 3){
+            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
+            scanf("%d", &hyg->niveauProprete);
+        }
+
         printf("Entrez le niveau de maladie (1 - 3): "); 
         scanf("%d", &hyg->maladies);
+
+        if (hyg->maladies < 1 || hyg->maladies > 3){
+            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
+            scanf("%d", &hyg->maladies);
+        }
+
         printf("\n");
 
         // faire sys tableau doubles entrer
         printf("\n=== Sécurité ===\n");
         printf("Entrez le niveau de protection (1 - 3): "); // le niveau de protection allant de 0 à 3
         scanf("%d", &secu->niveauProtection);
+
+        if (secu->niveauProtection < 1 || secu->niveauProtection > 3){
+            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
+            scanf("%d", &secu->niveauProtection);
+        }
+
         printf("Entrez le nombre d'attaques reçues (1 - 3): "); // une attaque = - 1 à 10 soldats
         scanf("%d", &secu->attaquesReçues);
+
+        if (secu->attaquesReçues < 1 || secu->attaquesReçues > 3){
+            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
+            scanf("%d", &secu->attaquesReçues);
+        }
+
         printf("\n");
 
         printf("Voici votre fourmilière de départ avant les changements");
@@ -773,7 +803,6 @@ void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, v
 // a revoir !!!
 void affichageCycleSaisonChosen(Architecture archi, int nSoldats, int nOuvrieres, SystemeAgricole *agriculture, SystemeElevage *elevage, int nMales, Pheromone phero)
 {
-// \x1b[48;2;210;160;135m-       -\x1b[48;2;139;93;78m
     if (archi.salles == 7)
     {
         // colonie monogène
