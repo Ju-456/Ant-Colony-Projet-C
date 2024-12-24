@@ -205,7 +205,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
         }
 
         
-        for (int i = 0; i ; ++i) // Ajout de soldats
+        for (int i = 0; i < nSoldats ; ++i) // Ajout de soldats
         {
             ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
         }
@@ -862,7 +862,7 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
             "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  1 -\x1b[48;2;139;93;78m                   \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            agriculture->quantitéGraines, compterFourmis(colo->soldats), compterFourmis(colo->ouvrieres), agriculture->quantitéDeNourriture, elevage->nombrePucerons, compterFourmisMales(colo->males), phero.ambiance);
+            agriculture->quantitéGraines, compterFourmis(colo->soldats), compterFourmis(colo->ouvrieres)-1, agriculture->quantitéDeNourriture, elevage->nombrePucerons, compterFourmisMales(colo->males), phero.ambiance);
         printf("\n");
         sleep(2);
     }
