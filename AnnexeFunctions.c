@@ -272,6 +272,16 @@ int compterFourmis(Fourmi *tete)
     return count;
 }
 
+int compterFourmisMales(FourmiMale *tete) {
+    int count = 0;
+    while (tete) {
+        count++;
+        tete = tete->suivante;
+    }
+    return count;
+}
+
+
 // Fonction pour libérer la mémoire de la colonie
 void libererColonie(Colonie *colo) {
     // Implémentez la libération de chaque liste de fourmis

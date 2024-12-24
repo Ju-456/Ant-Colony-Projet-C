@@ -7,7 +7,7 @@
 #include <time.h>   // Pour srand(time(NULL));
 
 // Initialisation aléatoire de la colonie
-int RandomColonie(Colonie *colo, int nOuvrieres)
+int RandomColonie(Colonie *colo)
 {
     if (!colo)
     {
@@ -21,7 +21,7 @@ int RandomColonie(Colonie *colo, int nOuvrieres)
     colo->soldats = NULL;
 
     // Ajout aléatoire d'ouvrières
-    nOuvrieres = rand() % 61 + 150; // Nombre entre 150 et 210
+    int nOuvrieres = rand() % 61 + 150; // Nombre entre 150 et 210
     for (int i = 0; i < nOuvrieres; ++i)
     {
         ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
@@ -54,8 +54,7 @@ int RandomColonie(Colonie *colo, int nOuvrieres)
     return 0; // Succès
 }
 
-
-void simuleUneSaisonRandom(int nOuvrieres,Colonie *colo, SystemeAgricole *agriculture, int nMales, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
+void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
 {   
     for (int i = 0; i < nbSaison; ++i)
     {
@@ -63,32 +62,32 @@ void simuleUneSaisonRandom(int nOuvrieres,Colonie *colo, SystemeAgricole *agricu
         { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
 
         case 0: // HIVER
-            hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-            printf("                                   --- Fin de l'HIVER ---                       \n");
-            break;
+        hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+        printf("************************************** Fin de l'HIVER ****************************\n");
+        break;
 
-        case 1: // PRINTEMPS
-            printemps(nOuvrieres,saisonActuel, agriculture,nMales, elevage, EvnmtExt, phero, colo);
-            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-            printf("                                   --- Fin du PRINTEMPS ---                       \n");
-            break;
+    case 1: // PRINTEMPS
+        printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+        printf("************************************** Fin du PRINTEMPS **************************\n");
+        break;
 
-        case 2: // ETE
-            ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-            printf("                                   --- Fin de l'ÉTÉ ---                        \n");
-            break;
+    case 2: // ETE
+        ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+        printf("************************************** Fin de l'ÉTÉ ******************************\n");
+        break;
 
-        case 3: // AUTOMNE
-            automne(nOuvrieres, saisonActuel, agriculture,nMales, elevage, EvnmtExt, phero, colo);
-            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-            printf("                                   --- Fin de l'AUTOMNE ---                       \n");
-            break;
+    case 3: // AUTOMNE
+        automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
+        printf("************************************** Fin de l'AUTOMNE ******************************\n");
+        break;
 
-        default:
-            break;
-        }
+    default:
+        break;
+    }
 
         // Simuler le vieillissement des fourmis
         Fourmi *current = colo->ouvrieres;

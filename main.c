@@ -24,9 +24,7 @@ int main()
     Architecture archi;
     Environnement enviro;
 
-    int nOuvrieres = 0, nSoldats = 0, nMales= 0;
-
-    menu(colo, nOuvrieres, nSoldats, agriculture, elevage, nMales, nbSaison, saisonActuel, EvnmtExt, phero, &hyg, &secu, archi, enviro);
+    menu(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, &hyg, &secu, archi, enviro);
     libererColonie(colo);
     free(colo);
     

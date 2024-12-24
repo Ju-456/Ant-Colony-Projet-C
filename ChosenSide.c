@@ -6,7 +6,7 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-void ChosenColonie(Colonie *colo,int nOuvrieres,int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture *archi, Hygiène *hyg, Sécurité *secu)
+void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture *archi, Hygiène *hyg, Sécurité *secu)
 {
     if (!colo)
     {
@@ -35,15 +35,15 @@ void ChosenColonie(Colonie *colo,int nOuvrieres,int nSoldats, SystemeAgricole *a
     switch (archi->salles)
     {
     case 1:
-        Configuration1(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+        Configuration1(colo, agriculture, elevage, hyg, secu);
         archi->salles = 7;
         break;
     case 2:
-        Configuration2(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+        Configuration2(colo, agriculture, elevage, hyg, secu);
         archi->salles = 9;
         break;
     case 3:
-        Configuration3(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+        Configuration3(colo, agriculture, elevage, hyg, secu);
         archi->salles = 13;
         break;
     default:
@@ -51,7 +51,7 @@ void ChosenColonie(Colonie *colo,int nOuvrieres,int nSoldats, SystemeAgricole *a
     }
 }
 
-void Configuration1(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
+void Configuration1(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
 {
     printf("Voici à quoi ressemblera la configuration minimale (7 salles):\n");
     printf(
@@ -83,10 +83,10 @@ void Configuration1(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole 
     printf("=== Colonie ===\n");
     printf("Choisissez le nombre de de fourmis ouvrières de départ (100-200):");
     colo->nombreReines = 1; // colonie monogène
-    RandomCalculAfterChosen(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+    RandomCalculAfterChosen(colo, agriculture, elevage, hyg, secu);
 }
 
-void Configuration2(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
+void Configuration2(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
 {
     printf("Voici à quoi ressemblera la configuration moyenne (7 + 2 salles):\n");
     printf(
@@ -119,11 +119,11 @@ void Configuration2(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole 
     printf("=== Colonie ===\n");
     printf("Choisissez le nombre de de fourmis ouvrières de départ (300-400):");
     colo->nombreReines = 2; // colonie polygène
-    RandomCalculAfterChosen(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+    RandomCalculAfterChosen(colo, agriculture, elevage, hyg, secu);
 
 }
 
-void Configuration3(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
+void Configuration3(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
 {
 
     printf("Voici à quoi ressemblera la configuration maximale (7 + 5 salles):\n");
@@ -157,12 +157,12 @@ void Configuration3(Colonie *colo,int nOuvrieres, int nSoldats, SystemeAgricole 
     printf("=== Colonie ===\n");
     printf("Choisissez le nombre de de fourmis ouvrières de départ (300-400):");
     colo->nombreReines = 4; // colonie polygène
-    RandomCalculAfterChosen(colo, nOuvrieres, nSoldats, agriculture, elevage, hyg, secu);
+    RandomCalculAfterChosen(colo, agriculture, elevage, hyg, secu);
 }
 
-void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
+void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
 {
-
+        int nOuvrieres = 0;
         scanf("%d", &nOuvrieres);
 
         if (nOuvrieres < 100 || nOuvrieres > 400){
@@ -171,7 +171,7 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
         }
 
         int nReines = colo->nombreReines;
-        nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
+        int nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
         printf("Le nombre de soldats: %d\n", nSoldats);
         printf("Le nombre de reines: %d\n", nReines);
         printf("(Le nombre de mâles dépendra de la saison)\n");
@@ -205,7 +205,7 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
         }
 
         
-        for (int i = 0; i < nSoldats; ++i) // Ajout de soldats
+        for (int i = 0; i ; ++i) // Ajout de soldats
         {
             ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
         }
@@ -253,8 +253,35 @@ void RandomCalculAfterChosen(Colonie *colo, int nOuvrieres, int nSoldats, System
 
         printf("Voici votre fourmilière de départ avant les changements");
 }
+/* affichage simple pour test
+void afficherEtatColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu) {
+    printf("=== État de la Colonie ===\n");
+    printf("Nombre de reines: %d\n", colo->nombreReines);
+    printf("Nombre de soldats: %d\n", compterFourmis(colo->soldats));
+    printf("Nombre d'ouvrières: %d\n", compterFourmis(colo->ouvrieres));
+    printf("\n");
 
-void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi, int nMales,int nSoldats)
+    printf("=== Système Agricole ===\n");
+    printf("Quantité de nourriture: %d\n", agriculture->quantitéDeNourriture);
+    printf("Quantité de graines: %d\n", agriculture->quantitéGraines);
+    printf("\n");
+
+    printf("=== Système Élevage ===\n");
+    printf("Nombre de pucerons: %d\n", elevage->nombrePucerons);
+    printf("\n");
+
+    printf("=== Hygiène ===\n");
+    printf("Niveau de propreté: %d\n", hyg->niveauProprete);
+    printf("Niveau de maladies: %d\n", hyg->maladies);
+    printf("\n");
+
+    printf("=== Sécurité ===\n");
+    printf("Niveau de protection: %d\n", secu->niveauProtection);
+    printf("Nombre d'attaques reçues: %d\n", secu->attaquesReçues);
+    printf("\n");
+}
+*/
+void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
 {   
     static int saisonChoice = -1;
 
@@ -276,9 +303,7 @@ void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agric
             scanf("%d", &saisonChoice);
         }
 
-        /*if (saisonChoice == 1){
-            printf("Nous sommes au printemps, il y a donc des mâles dans la colonie.\n Choississez un nombre de mâles ()")
-        }*/
+        
     }
 
     // Simulation d'une saison
@@ -287,25 +312,31 @@ void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agric
 
     case 0: // HIVER
         hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("************************************** Fin de l'HIVER ****************************\n");
         break;
 
-    case 1: // PRINTEMPS
-        printemps(nOuvrieres, saisonActuel, agriculture, nMales, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
+    case 1: 
+        /*
+        int nMales;
+        printf("Nous sommes au printemps, saison des fleurs et de la reproduction ! Il y a donc des mâles dans la colonie.\nIndications : mâles = 15% de la pop des ouvrières.\nChoississez un nombre de mâles :")
+        scanf("%d", &nMales);
+        compterFourmis(colo->males)
+        */
+        printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("************************************** Fin du PRINTEMPS **************************\n");
         break;
 
     case 2: // ETE
         ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("************************************** Fin de l'ÉTÉ ******************************\n");
         break;
 
     case 3: // AUTOMNE
-        automne(nOuvrieres, saisonActuel, agriculture, nMales, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi, nSoldats, nOuvrieres, nMales);
+        automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
         printf("************************************** Fin de l'AUTOMNE ******************************\n");
         break;
 
@@ -341,7 +372,7 @@ void simuleUneSaisonChosen(int nOuvrieres, Colonie *colo, SystemeAgricole *agric
     }
 }
 
-void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi, int nSoldats, int nOuvrieres, int nMales)
+void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi)
 {
     static int EvnmtChoice = -1;
 
@@ -742,11 +773,11 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
         }
     }
     EvnmtChoice++;
-    PonteEtMortaliteChosen(phero, colo, &agriculture, &elevage, archi, nSoldats, nOuvrieres, nMales);
+    PonteEtMortaliteChosen(phero, colo, &agriculture, &elevage, archi);
 }
 
 // Gestion de la Ponte et de la mortalité
-void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi, int nSoldats, int nOuvrieres, int nMales)
+void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi)
 {
     srand(time(NULL)); // générateur de nombres aléatoires
 
@@ -797,11 +828,11 @@ void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, v
             }
         }
     } // test : affichageCycleSaisonChosen(colo, agriculture, elevage, phero, archi);
-    affichageCycleSaisonChosen(archi, nSoldats, nOuvrieres, agriculture, elevage, nMales, phero);
+    affichageCycleSaisonChosen(archi,colo,  agriculture, elevage, phero);
 }
 
 // a revoir !!!
-void affichageCycleSaisonChosen(Architecture archi, int nSoldats, int nOuvrieres, SystemeAgricole *agriculture, SystemeElevage *elevage, int nMales, Pheromone phero)
+void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero)
 {
     if (archi.salles == 7)
     {
@@ -831,7 +862,7 @@ void affichageCycleSaisonChosen(Architecture archi, int nSoldats, int nOuvrieres
             "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  1 -\x1b[48;2;139;93;78m                   \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            agriculture->quantitéGraines, nSoldats, nOuvrieres, agriculture->quantitéDeNourriture, elevage->nombrePucerons, nMales, phero.ambiance);
+            agriculture->quantitéGraines, compterFourmis(colo->soldats), compterFourmis(colo->ouvrieres), agriculture->quantitéDeNourriture, elevage->nombrePucerons, compterFourmisMales(colo->males), phero.ambiance);
         printf("\n");
         sleep(2);
     }
