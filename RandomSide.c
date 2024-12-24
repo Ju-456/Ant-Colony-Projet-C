@@ -7,7 +7,7 @@
 #include <time.h>   // Pour srand(time(NULL));
 
 // Initialisation aléatoire de la colonie
-int RandomColonie(Colonie *colo)
+int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agriculture)
 {
     if (!colo)
     {
@@ -19,75 +19,71 @@ int RandomColonie(Colonie *colo)
     colo->ouvrieres = NULL;
     colo->males = NULL;
     colo->soldats = NULL;
+    colo->nombreReines = 5;
+    
+    // Ajout fixe de reines
+    int nReines = 5; // Nombre de reines
+    for (int i = 0; i < nReines; ++i)
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_REINE); // les reines sont dans la même liste chainée que les ouvrières mais elles sont en tête de listes
+    }
 
     // Ajout aléatoire d'ouvrières
-    int nOuvrieres = rand() % 61 + 150; // Nombre entre 150 et 210
+    int nOuvrieres = rand() % 301 + 150; // Nombre entre 150 et 210
     for (int i = 0; i < nOuvrieres; ++i)
     {
         ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
     }
-
-    // Ajout aléatoire de mâles
-    int nMales = rand() % 9 + 15; // Nombre entre 15 et 23
-    for (int i = 0; i < nMales; ++i)
-    {
-        ajouterFourmiMale(&colo->males);
-    }
+    nOuvrieres = compterFourmis(colo->ouvrieres);
 
     // Ajout aléatoire de soldats
-    int nSoldats = rand() % 41 + 80; // Nombre entre 80 et 120
+    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100; // les soldats representent 5 - 10% de la fourmilière
     for (int i = 0; i < nSoldats; ++i)
     {
         ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
     }
 
-    // Ajout fixe de reines
-    int nReines = 5; // Nombre de reines
-    for (int i = 0; i < nReines; ++i)
-    {
-        ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
-    }
-
-    // Mise à jour du nombre de reines dans la colonie
-    colo->nombreReines = nReines;
+    elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
+    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 3); // 2 - 4 * de la proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 6);      // 2 - 7 * de la proportion d'ouvrières
 
     return 0; // Succès
 }
 
 void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
-{   
+{
     for (int i = 0; i < nbSaison; ++i)
     {
         switch (i % 4)
         { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
 
         case 0: // HIVER
-        hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-        printf("************************************** Fin de l'HIVER ****************************\n");
-        break;
+            hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
+            printf("************************************** Fin de l'HIVER ****************************\n\n");
+            break;
 
-    case 1: // PRINTEMPS
-        printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-        printf("************************************** Fin du PRINTEMPS **************************\n");
-        break;
+        case 1: // PRINTEMPS
+            printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
+            printf("************************************** Fin du PRINTEMPS **************************\n\n");
+            break;
 
-    case 2: // ETE
-        ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-        printf("************************************** Fin de l'ÉTÉ ******************************\n");
-        break;
+        case 2: // ETE
+            ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
+            printf("************************************** Fin de l'ÉTÉ ******************************\n\n");
+            break;
 
-    case 3: // AUTOMNE
-        automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo, agriculture, elevage, archi);
-        printf("************************************** Fin de l'AUTOMNE ******************************\n");
-        break;
+        case 3: // AUTOMNE
+            automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
+            printf("************************************** Fin de l'AUTOMNE ******************************\n\n");
+            break;
 
-    default:
-        break;
-    }
+        default:
+            break;
+        }
 
         // Simuler le vieillissement des fourmis
         Fourmi *current = colo->ouvrieres;
@@ -112,7 +108,7 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 }
 
 // impact le taux de pheromones des fourmis qui impact la PonteEtMortalite
-void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi)
+void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
 {
     if (saisonActuel == 0) // HIVER
     {
@@ -215,7 +211,7 @@ void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, 
                 printf("La fourmilière subit un hiver glacial d'impact %d,\n"
                        "c'est un hiver est EXTREMEMENT compliqué pour la fourmilière..\n",
                        EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                printf("La probabilité que cet événement survienne en hiver est de 6,25%%\n");
             }
             else // cad si EvnmtExt.impact == 3
             {
@@ -436,136 +432,67 @@ void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, 
             printf("La probabilité que cet événement survienne en hiver est de 37,5%%\n");
         }
     }
-    PonteEtMortaliteRandom(phero, colo, agriculture, elevage, archi);
-}
-// Gestion de la Ponte et de la mortalité
-void PonteEtMortaliteRandom(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi)
-{
-    srand(time(NULL)); // générateur de nombres aléatoires
-
-    if (phero.alarme <= 2)
-    {
-        phero.ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
-
-        for (int j = 0; j < rand() % 16 + 25; ++j)
-        {                                                //  "5" sont les 5 reines, on appelle cela le seuil d'exclusion, ce sont des fourmis protégés
-            supprimerFourmiVieille(&colo->ouvrieres, 5); // reduction des ouvrieres
-        }
-        for (int j = 0; j < rand() % 11 + 15; ++j)
-        {
-            supprimerFourmiVieille(&colo->soldats, 5); // reduction des soldats
-        }
-    }
-    else
-    {
-        int pheroGlobal = phero.reine + phero.cohesion;
-
-        if (pheroGlobal >= 3)
-        {
-            phero.ambiance = 5 + (rand() % 4); // ambiance automne ou printemps (5 à 8)
-
-            if (phero.ambiance == 5 || phero.ambiance == 6)
-            {
-                for (int j = 0; j < rand() % 6 + 15; ++j) // Ajouter de nouvelles ouvrières si le ambiance est favorable (printemps/automne)
-                {
-                    ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE); // Augmentation des ouvrières
-                    ajouterFourmi(&colo->soldats, ROLE_SOLDAT);     // Augmentation des soldats
-                }
-
-                for (int j = 0; j < rand() % 6 + 10; ++j)
-                {
-                    supprimerFourmiMale(&colo->males); // Réduit les mâles
-                }
-            }
-            else if (phero.ambiance == 7 || phero.ambiance == 8)
-            {
-                for (int j = 0; j < rand() % 11 + 30; ++j) // Ajouter encore plus d'ouvrières si le ambiance est plus favorable (printemps/automne)
-                {
-                    ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE); // Augmentation des ouvrières
-                }
-                for (int j = 0; j < rand() % 16 + 20; ++j)
-                {
-                    supprimerFourmiMale(&colo->males); // Réduit les mâles
-                }
-            }
-        }
-    }affichageCycleSaisonRandom(colo,agriculture,elevage,phero);
 }
 
-// appeler après PonteEtMortalite
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero)
 {
-    colo->nombreReines = 4;
-    int totalOuvrieres = 0;
-    int totalSoldats = 0;
-    int totalMales = 0;
+    colo->nombreReines = 5;
+/*
+    int GrainesReste = 0, GrainesReste1, GrainesReste2 = 0, SoldatsReste = 0, OuvrieresReste = 0, OuvrieresReste2 = 0;
 
-    // Compter les ouvrières
-    Fourmi *current = colo->ouvrieres;
-    while (current != NULL)
+    int tempGraines = agriculture->quantitéGraines;
+    if (tempGraines > 4000)
     {
-        totalOuvrieres++;
-        current = current->suivante;
+        tempGraines = 3999;
     }
+    else if (tempGraines > 3000)
+    {
+        GrainesReste2 = 3000 - tempGraines;
+        tempGraines = 1000;
+        GrainesReste1 = 2000;
+        
+    }
+    else if (tempGraines > 2000)
+    {   
+        GrainesReste1 = 1000 - tempGraines;
+        tempGraines = 1000;
+        GrainesReste2 = 0;
+    }
+    agriculture->quantitéGraines = tempGraines;
 
-    // Compter les soldats
-    current = colo->soldats;
-    while (current != NULL)
+    int tempNourriture = agriculture->quantitéDeNourriture;
+    if (tempNourriture > 400000)
     {
-        totalSoldats++;
-        current = current->suivante;
+        tempNourriture = 399999;
     }
+    agriculture->quantitéDeNourriture = tempNourriture;
 
-    // Compter les mâles
-    FourmiMale *currentMale = colo->males;
-    while (currentMale != NULL)
+    int tempOuvrieres = colo->ouvrieres;
+    if (tempOuvrieres > 200)
     {
-        totalMales++;
-        currentMale = currentMale->suivante;
+        tempOuvrieres = 199;
     }
+    else if (tempOuvrieres > 150)
+    {
+        OuvrieresReste2 = 150 - tempOuvrieres;
+        tempOuvrieres = 100;
+        OuvrieresReste = 50;
+    } 
 
-    int GrainesReste = 0;
-    int GrainesReste2 = 0;
-    agriculture->quantitéGraines = 136;
-    if (agriculture->quantitéGraines > 30)
-    {
-        GrainesReste = abs(30 - agriculture->quantitéGraines);
-        agriculture->quantitéGraines = 30;
-    }
-    if (GrainesReste > 100)
-    {
-        GrainesReste2 = abs(100 - GrainesReste);
-        GrainesReste = 100;
-    }
+    int tempPucerons = elevage->nombrePucerons;
+    int tempMales = colo->males;
 
-    int SoldatsReste = 0;
-    if (totalSoldats > 100)
+    int tempSoldats = compterFourmis(colo->soldats);
+    if (tempSoldats > 150) // le max que la reserve peut supporter
     {
-        SoldatsReste = abs(100 - totalSoldats);
-        totalSoldats = 100;
+        SoldatsReste = 100;
+        tempSoldats = 49;
     }
-    else
+    else if (tempSoldats > 100) // le max que la reserve peut supporter
     {
-        SoldatsReste = 0;
+        SoldatsReste = 100 - tempSoldats;
     }
-
-    int OuvrieresReste = 0;
-    if (totalOuvrieres > 200)
-    {
-        OuvrieresReste = abs(200 - totalOuvrieres);
-        totalOuvrieres = 200;
-    }
-    else
-    {
-        OuvrieresReste = 0;
-    }
-
-    int OuvrieresReste2 = 0;
-    if (OuvrieresReste > 30)
-    {
-        OuvrieresReste2 = abs(30 - OuvrieresReste);
-        OuvrieresReste = 30;
-    }
+    tempSoldats = compterFourmis(colo->soldats);
 
     printf(
         "                                       - Fourmilière -\n"
@@ -592,7 +519,16 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
         "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  %d -\x1b[48;2;139;93;78m                   \x1b\x1b[0m\x1b[48;2;115;71;60m-----\n"
         "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b\x1b[0m\x1b[48;2;115;71;60m------\n"
         "                             \x1b[48;2;115;71;60m--------------------------------\n",
-        agriculture->quantitéGraines, GrainesReste, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2, totalMales, phero.ambiance, colo->nombreReines);
-    printf("\n");
+        agriculture->quantitéGraines, GrainesReste, GrainesReste2, compterFourmis(colo->soldats), SoldatsReste, compterFourmis(colo->ouvrieres) - 5, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2, compterFourmisMales(colo->males), phero.ambiance, colo->nombreReines);
+  */   
+    printf("\n--- DEBUG INFO ---\n");
+    printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
+    printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
+    printf("Agriculture - Quantité de Graines : %d\n", ((SystemeAgricole *)agriculture)->quantitéGraines);
+    printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
+    printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
+    printf("Nombre de reines : %d\n", colo->nombreReines);
+    printf("-------------------\n");
+
     sleep(2);
 }

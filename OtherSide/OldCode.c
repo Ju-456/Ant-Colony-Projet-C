@@ -162,3 +162,74 @@ void ajouterFourmiMale(FourmiMale **tete, FourmiMale *nouveau)
     nouveau->suivante = *tete;
     *tete = nouveau;
 }
+
+int totalOuvrieres = 0;
+    int totalSoldats = 0;
+  /*  int totalMales = 0;
+
+    // Compter les ouvrières
+    Fourmi *current = colo->ouvrieres;
+    while (current != NULL)
+    {
+        totalOuvrieres++;
+        current = current->suivante;
+    }
+
+    // Compter les soldats
+    current = colo->soldats;
+    while (current != NULL)
+    {
+        totalSoldats++;
+        current = current->suivante;
+    }
+
+    // Compter les mâles
+    FourmiMale *currentMale = colo->males;
+    while (currentMale != NULL)
+    {
+        totalMales++;
+        currentMale = currentMale->suivante;
+    } 
+
+    int GrainesReste = 0;
+    int GrainesReste2 = 0;
+    agriculture->quantitéGraines = 136;
+    if (agriculture->quantitéGraines > 30)
+    {
+        GrainesReste = abs(30 - agriculture->quantitéGraines);
+        agriculture->quantitéGraines = 30;
+    }
+    if (GrainesReste > 100)
+    {
+        GrainesReste2 = abs(100 - GrainesReste);
+        GrainesReste = 100;
+    }
+
+    int SoldatsReste = 0;
+    if (totalSoldats > 100)
+    {
+        SoldatsReste = abs(100 - totalSoldats);
+        totalSoldats = 100;
+    }
+    else
+    {
+        SoldatsReste = 0;
+    }
+
+    int OuvrieresReste = 0;
+    if (totalOuvrieres > 200)
+    {
+        OuvrieresReste = abs(200 - totalOuvrieres);
+        totalOuvrieres = 200;
+    }
+    else
+    {
+        OuvrieresReste = 0;
+    }
+
+    int OuvrieresReste2 = 0;
+    if (OuvrieresReste > 30)
+    {
+        OuvrieresReste2 = abs(30 - OuvrieresReste);
+        OuvrieresReste = 30;
+    }

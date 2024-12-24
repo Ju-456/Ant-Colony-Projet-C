@@ -132,7 +132,7 @@ void ajouterNectar(Fourmi *fou);
 void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro);
 // Fonctionnement de la colonie en Random
 void FourmiliereEnEvolution(Colonie *colo);
-int RandomColonie(Colonie *colo);
+int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agriculture);
 
 // Fonctionnement de la colonie en entrée utilisateur
 void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture *archi, Hygiène *hyg, Sécurité *secu);
@@ -146,11 +146,10 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
 
 // --- Gestion des Saisons ---
 //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> PonteEtMortalite -> affichageCycleSaison
-void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
+//void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
 void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
 
-void PonteEtMortaliteRandom(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi);
-void PonteEtMortaliteChosen(Pheromone phero, Colonie *colo, void *agriculture, void *elevage, Architecture archi);
+void PonteEtMortalite(Pheromone phero, Colonie *colo);
 
 //GestionEvenementExterneRandom*2
 
@@ -173,8 +172,8 @@ void gererSecurite(Sécurité *secu);
 
 // --- Exploration et Environnement ---
 void explorer(Environnement *enviro);
-void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi);
-void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture archi);
+void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
+void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
 
 // --- Gestion des Files ---
 void enfile(Queue *q, Fourmi *fou);

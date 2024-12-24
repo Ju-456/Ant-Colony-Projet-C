@@ -24,7 +24,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
     switch (choice)
     {
     case 1:
-        RandomColonie(colo);
+        RandomColonie(colo, elevage, agriculture);
 
         // Utilisation des pointeurs passés en argument
         cultiverGraines(agriculture);
@@ -37,17 +37,23 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
+            GestionEvenementExterneRandom(saisonActuel,EvnmtExt,phero,colo);
+            PonteEtMortalite(phero,colo);
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
         }
         break;
 
     case 2:
         ChosenColonie(colo, agriculture, elevage, &archi, hyg, secu);
-        //afficherEtatColonie(colo,agriculture,elevage, hyg, secu);
+        //afficherEtatColonie(colo,agriculture,elevage, hyg, secu); // pour un affichage plus simple
         affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
+            GestionEvenementExterneChosen(saisonActuel,EvnmtExt,phero,colo);
+            PonteEtMortalite(phero,colo);
+            affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
         }
         break;
     }
@@ -309,6 +315,59 @@ void FourmiliereEnEvolution(Colonie *colo)
     sleep(3);
 }
 
+void PonteEtMortalite(Pheromone phero, Colonie *colo)
+{   
+    srand(time(NULL)); // générateur de nombres aléatoires
+
+    if (phero.alarme <= 2)
+    {
+        phero.ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
+
+        for (int j = 0; j < rand() % 16 + 25; ++j)
+        {                                                //  "5" = seuil d'exclusion, ce sont des fourmis protégés
+            supprimerFourmiVieille(&colo->ouvrieres, 5); // reduction des ouvrieres
+        }
+        for (int j = 0; j < rand() % 11 + 15; ++j)
+        {
+            supprimerFourmiVieille(&colo->soldats, 5); // reduction des soldats
+        }
+    }
+    else
+    {
+        int pheroGlobal = phero.reine + phero.cohesion;
+
+        if (pheroGlobal >= 3)
+        {
+            phero.ambiance = 5 + (rand() % 4); // ambiance automne ou printemps (5 à 8)
+
+            if (phero.ambiance == 5 || phero.ambiance == 6)
+            {
+                for (int j = 0; j < rand() % 6 + 15; ++j) // Ajouter de nouvelles ouvrières si le ambiance est favorable (printemps/automne)
+                {
+                    ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE); // Augmentation des ouvrières
+                    ajouterFourmi(&colo->soldats, ROLE_SOLDAT);     // Augmentation des soldats
+                }
+
+                for (int j = 0; j < rand() % 6 + 10; ++j)
+                {
+                    supprimerFourmiMale(&colo->males); // Réduit les mâles
+                }
+            }
+            else if (phero.ambiance == 7 || phero.ambiance == 8)
+            {
+                for (int j = 0; j < rand() % 11 + 30; ++j) // Ajouter encore plus d'ouvrières si le ambiance est plus favorable (printemps/automne)
+                {
+                    ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE); // Augmentation des ouvrières
+                }
+                for (int j = 0; j < rand() % 16 + 20; ++j)
+                {
+                    supprimerFourmiMale(&colo->males); // Réduit les mâles
+                }
+            }
+        }
+    } 
+}
+
 void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage)
 {
     saisonActuel = 0;
@@ -318,7 +377,7 @@ void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne Evnm
 
     colo->males = NULL;
     
-    int hiverVariation = -30 + rand() % 21; // Variation entre -30 % et -50 %
+    int hiverVariation = -60 + rand() % 21; // Variation negatives des pucerons (de -40% à -60%)
     elevage->nombrePucerons += elevage->nombrePucerons * hiverVariation / 100;
 
      
@@ -331,18 +390,22 @@ void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *
     agriculture->quantitéDeNourriture += agriculture->quantitéDeNourriture * (20 + rand() % 11) / 100;
 
     int nOuvrieres = compterFourmis(colo->ouvrieres);
-    //int nMalesExistants = compterFourmisMales(colo->males);
+    
     int nMalesAjoutes  = nOuvrieres * (10 + rand() % 11) / 100;
-
     for (int j = 0; j < nMalesAjoutes ; ++j) {// Ajout des fourmis mâles
         ajouterFourmiMale(&colo->males);
     }
-    
+
+    int nSoldatsAjoutes = nOuvrieres * (5 + rand() % 11) / 100; //ajout de 5 - 10%
+    for (int j = 0; j < nSoldatsAjoutes ; ++j) {// Ajout des fourmis mâles
+        ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
+    }
+
     int printempsVariation = 50 + rand() % 51;// Variation des pucerons (augmentation de 50% à 100%)
     elevage->nombrePucerons += elevage->nombrePucerons * printempsVariation / 100;
 
-    printf("Printemps terminé : %d mâles ajoutés, nouvelles graines : %d, nouvelle nourriture : %d\n",
-           nMalesAjoutes , agriculture->quantitéGraines, agriculture->quantitéDeNourriture);
+    printf("Printemps terminé : %d mâles ajoutés,nouveaux soldats : %d, nouvelles graines : %d, nouvelle nourriture : %d\n",
+           nMalesAjoutes ,nSoldatsAjoutes, agriculture->quantitéGraines, agriculture->quantitéDeNourriture);
 }
 
 void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
@@ -371,7 +434,7 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
         supprimerFourmiMale(&colo->males);
     }
 
-    int automneVariation = -10 + rand() % 21;// Variation des pucerons (de -10% à -30%)
+    int automneVariation = -20 + rand() % 21;// Variation negatives des pucerons (de -20% à -40%)
     elevage->nombrePucerons += elevage->nombrePucerons * automneVariation / 100;
 
     printf("Automne terminé : %d mâles supprimés, nouvelles graines : %d, nouvelle nourriture : %d\n",
