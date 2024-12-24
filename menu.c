@@ -24,9 +24,11 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
     switch (choice)
     {
     case 1:
+
+        // FourmiliereEnEvolution(colo);
+
         RandomColonie(colo, elevage, agriculture);
 
-        // Utilisation des pointeurs passés en argument
         cultiverGraines(agriculture);
         elevagePucerons(elevage);
         gererHygiene(hyg);
