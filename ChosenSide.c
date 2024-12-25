@@ -222,12 +222,12 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     }
 
     printf("Entrez le niveau de maladie (1 - 3): ");
-    scanf("%d", &hyg->maladies);
+    scanf("%d", &hyg->niveauMaladie);
 
-    if (hyg->maladies < 1 || hyg->maladies > 3)
+    if (hyg->niveauMaladie < 1 || hyg->niveauMaladie > 3)
     {
         printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-        scanf("%d", &hyg->maladies);
+        scanf("%d", &hyg->niveauMaladie);
     }
 
     printf("\n");
@@ -243,7 +243,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
         scanf("%d", &secu->niveauProtection);
     }
 
-    printf("Entrez le nombre d'attaques reçues (1 - 3): "); // une attaque = - 1 à 10 soldats
+    printf("Entrez le nombre d'attaques reçues (1 - 3): "); 
     scanf("%d", &secu->attaquesReçues);
 
     if (secu->attaquesReçues < 1 || secu->attaquesReçues > 3)

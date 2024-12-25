@@ -7,7 +7,7 @@
 #include <time.h>   // Pour srand(time(NULL));
 
 // Initialisation aléatoire de la colonie
-int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agriculture)
+int RandomColonie(Colonie *colo, Hygiène *hyg, Sécurité *secu, SystemeElevage *elevage, SystemeAgricole *agriculture)
 {
     if (!colo)
     {
@@ -20,6 +20,12 @@ int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agric
     colo->males = NULL;
     colo->soldats = NULL;
     colo->nombreReines = 5;
+
+    //Genere aleaatoirement des valeurs entre 1 à 3
+    hyg->niveauProprete = rand() % 3 + 1; 
+    hyg->niveauMaladie = rand() % 3 + 1; 
+    secu->niveauProtection = rand() % 3 + 1; 
+    secu->attaquesReçues = rand() % 3 + 1; 
 
     // Ajout fixe de reines
     int nReines = 5; // Nombre de reines
@@ -50,7 +56,7 @@ int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agric
     return 0; // Succès
 }
 
-void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Architecture archi)
+void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, Hygiène *hyg, Sécurité *secu, EvenementExterne EvnmtExt, Pheromone *phero, Architecture archi)
 {
     for (int i = 0; i < nbSaison; ++i)
     {
@@ -60,7 +66,9 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         case 0: // HIVER
             hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
-            //PonteEtMortalite(phero,colo);
+            PonteEtMortalite(phero,colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
             printf("\n************************************** Fin de l'HIVER ****************************\n");
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
@@ -68,7 +76,9 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         case 1: // PRINTEMPS
             printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
-            //PonteEtMortalite(phero,colo);
+            PonteEtMortalite(phero,colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
             printf("\n************************************** Fin du PRINTEMPS **************************\n");
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
@@ -76,7 +86,9 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         case 2: // ETE
             ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
-            //PonteEtMortalite(phero,colo);
+            PonteEtMortalite(phero,colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
             printf("\n************************************** Fin de l'ÉTÉ ******************************\n");
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
@@ -84,7 +96,9 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         case 3: // AUTOMNE
             automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
-            //PonteEtMortalite(phero,colo);
+            PonteEtMortalite(phero,colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
             printf("\n************************************** Fin de l'AUTOMNE ******************************\n");
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;

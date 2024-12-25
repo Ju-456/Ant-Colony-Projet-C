@@ -19,12 +19,12 @@ int main()
 
     EvenementExterne EvnmtExt;
     Pheromone *phero = malloc(sizeof(Pheromone));
-    Hygiène hyg;
-    Sécurité secu;
+    Hygiène *hyg = malloc(sizeof(Hygiène));
+    Sécurité *secu = malloc(sizeof(Sécurité));
     Architecture archi;
     Environnement enviro;
 
-    menu(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, &hyg, &secu, archi, enviro);
+    menu(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, hyg, secu, archi, enviro);
     libererColonie(colo);
     free(colo);
     

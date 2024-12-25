@@ -136,7 +136,7 @@ void elevagePucerons(SystemeElevage *elevage)
 void gererHygiene(Hygiène *hyg)
 {
     hyg->niveauProprete = 100;
-    hyg->maladies = 0;
+    hyg->niveauMaladie = 0;
     // printf("Hygiène gérée. Niveau de propreté : %d, Maladies : %d\n", hyg->niveauProprete, hyg->maladies);
 }
 
@@ -280,7 +280,6 @@ int compterFourmisMales(FourmiMale *tete) {
     }
     return count;
 }
-
 
 // Fonction pour libérer la mémoire de la colonie
 void libererColonie(Colonie *colo) {

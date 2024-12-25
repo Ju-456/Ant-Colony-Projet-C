@@ -59,7 +59,7 @@ typedef struct
     char reine;
     char cohesion;
     char alarme;
-} Pheromone; // je ne sais pas pq ce sont des chars ???
+} Pheromone; 
 
 // Structure pour gérer les événements externes
 typedef struct EvenementExterne
@@ -84,7 +84,7 @@ typedef struct SystemeElevage
 typedef struct Hygiène
 {
     int niveauProprete;
-    int maladies;
+    int niveauMaladie;
 } Hygiène;
 
 typedef struct Sécurité
@@ -132,7 +132,7 @@ void ajouterNectar(Fourmi *fou);
 void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro);
 // Fonctionnement de la colonie en Random
 void FourmiliereEnEvolution(Colonie *colo);
-int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agriculture);
+int RandomColonie(Colonie *colo, Hygiène *hyg, Sécurité *secu, SystemeElevage *elevage, SystemeAgricole *agriculture);
 
 // Fonctionnement de la colonie en entrée utilisateur
 void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Architecture *archi, Hygiène *hyg, Sécurité *secu);
@@ -146,10 +146,12 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
 
 // --- Gestion des Saisons ---
 //simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> PonteEtMortalite -> affichageCycleSaison
-//void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi);
+void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, Hygiène *hyg, Sécurité *secu, EvenementExterne EvnmtExt, Pheromone *phero, Architecture archi);
 void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Architecture archi);
 
 void PonteEtMortalite(Pheromone *phero, Colonie *colo);
+void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo);
+void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo);
 
 //GestionEvenementExterneRandom*2
 

@@ -27,7 +27,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
 
         // FourmiliereEnEvolution(colo);
 
-        RandomColonie(colo, elevage, agriculture);
+        RandomColonie(colo, hyg, secu, elevage, agriculture);
 
         cultiverGraines(agriculture);
         elevagePucerons(elevage);
@@ -38,24 +38,28 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
 
         while (colo->nombreReines != 0)
         {
-            simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            GestionEvenementExterneRandom(saisonActuel,EvnmtExt,phero,colo);
-            PonteEtMortalite(phero,colo);
+            simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, hyg, secu, EvnmtExt, phero, archi);
+            GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
+            PonteEtMortalite(phero, colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
         }
         break;
 
     case 2:
         ChosenColonie(colo, agriculture, elevage, &archi, hyg, secu);
-        //afficherEtatColonie(colo,agriculture,elevage, hyg, secu); // pour un affichage plus simple
-        affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
+        // afficherEtatColonie(colo,agriculture,elevage, hyg, secu); // pour un affichage plus simple
+        affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            GestionEvenementExterneChosen(saisonActuel,EvnmtExt,phero,colo);
-            PonteEtMortalite(phero,colo);
-            affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
+            GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
+            PonteEtMortalite(phero, colo);
+            NiveauPropreteEtMaladie(hyg, colo);
+            NiveauSecuritéEtProtection(secu, colo);
+            affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
         }
         break;
     }
@@ -317,7 +321,7 @@ void FourmiliereEnEvolution(Colonie *colo)
 }
 
 void PonteEtMortalite(Pheromone *phero, Colonie *colo)
-{   
+{
     srand(time(NULL)); // générateur de nombres aléatoires
 
     if (phero->alarme >= 2)
@@ -330,7 +334,7 @@ void PonteEtMortalite(Pheromone *phero, Colonie *colo)
         }
         for (int j = 0; j < rand() % 11 + 15; ++j)
         {
-            supprimerFourmiVieille(&colo->soldats, 5); // reduction des soldats
+            supprimerFourmiVieille(&colo->soldats, 9); // reduction des soldats, min = 9
         }
     }
     else
@@ -366,44 +370,44 @@ void PonteEtMortalite(Pheromone *phero, Colonie *colo)
                 }
             }
         }
-    } 
+    }
 }
-
 
 void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo, SystemeElevage *elevage)
 {
     saisonActuel = 0;
 
-    agriculture->quantitéGraines += agriculture->quantitéGraines * (-40 + rand() % 21) / 100; // Réduction entre -40% et -20%
+    agriculture->quantitéGraines += agriculture->quantitéGraines * (-40 + rand() % 21) / 100;           // Réduction entre -40% et -20%
     agriculture->quantitéDeNourriture += agriculture->quantitéDeNourriture * (-40 + rand() % 21) / 100; // Réduction entre -40% et -20%
 
     colo->males = NULL;
-    
+
     int hiverVariation = -60 + rand() % 21; // Variation negatives des pucerons (de -40% à -60%)
     elevage->nombrePucerons += elevage->nombrePucerons * hiverVariation / 100;
-
-     
 }
 
-void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo) {
+void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo)
+{
     *saisonActuel = 1;
 
     agriculture->quantitéGraines += agriculture->quantitéGraines * (25 + rand() % 11) / 100; // augmentation entre 25% et 35%
     agriculture->quantitéDeNourriture += agriculture->quantitéDeNourriture * (30 + rand() % 11) / 100;
 
     int nOuvrieres = compterFourmis(colo->ouvrieres);
-    
-    int nMalesAjoutes  = nOuvrieres * (20 + rand() % 11) / 100; //augmentation entre 20% et 30%
-    for (int j = 0; j < nMalesAjoutes ; ++j) {// Ajout des fourmis mâles
+
+    int nMalesAjoutes = nOuvrieres * (20 + rand() % 11) / 100; // augmentation entre 20% et 30%
+    for (int j = 0; j < nMalesAjoutes; ++j)
+    { // Ajout des fourmis mâles
         ajouterFourmiMale(&colo->males);
     }
 
-    int nSoldatsAjoutes = nOuvrieres * (10 + rand() % 6) / 100; //ajout entre 10% et 15%
-    for (int j = 0; j < nSoldatsAjoutes ; ++j) {// Ajout des soldats
+    int nSoldatsAjoutes = nOuvrieres * (10 + rand() % 6) / 100; // ajout entre 10% et 15%
+    for (int j = 0; j < nSoldatsAjoutes; ++j)
+    { // Ajout des soldats
         ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
     }
 
-    int printempsVariation = 50 + rand() % 51;// Variation des pucerons (augmentation de 50% à 100%)
+    int printempsVariation = 50 + rand() % 51; // Variation des pucerons (augmentation de 50% à 100%)
     elevage->nombrePucerons += elevage->nombrePucerons * printempsVariation / 100;
 /*
     printf("Printemps terminé : %d mâles ajoutés,nouveaux soldats : %d, nouvelles graines : %d, nouvelle nourriture : %d\n",
@@ -419,24 +423,25 @@ void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage
 
     int eteVariation = 30 + rand() % 41; // Variation entre +30 % et +70 %
     elevage->nombrePucerons += elevage->nombrePucerons * eteVariation / 100;
-
 }
 
-void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo) {
+void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo)
+{
     *saisonActuel = 3;
 
     agriculture->quantitéGraines -= agriculture->quantitéGraines * (30 + rand() % 21) / 100;
     agriculture->quantitéDeNourriture -= agriculture->quantitéDeNourriture * (30 + rand() % 11) / 100;
 
     int nOuvrieres = compterFourmis(colo->ouvrieres);
-    //int nMalesExistants = compterFourmisMales(colo->males);
+    // int nMalesExistants = compterFourmisMales(colo->males);
     int nMalesSupprimer = nOuvrieres * (10 + rand() % 11) / 100;
-    
-    for (int j = 0; j < nMalesSupprimer; ++j) { // Suppression des fourmis mâles à l'approche de l'hiver
+
+    for (int j = 0; j < nMalesSupprimer; ++j)
+    { // Suppression des fourmis mâles à l'approche de l'hiver
         supprimerFourmiMale(&colo->males);
     }
 
-    int automneVariation = -20 + rand() % 21;// Variation negatives des pucerons (de -20% à -40%)
+    int automneVariation = -20 + rand() % 21; // Variation negatives des pucerons (de -20% à -40%)
     elevage->nombrePucerons += elevage->nombrePucerons * automneVariation / 100;
 
     /*printf("Automne terminé : %d mâles supprimés, nouvelles graines : %d, nouvelle nourriture : %d\n",
@@ -444,149 +449,65 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
 */
 }
 
-/*
-// Fonction pour calculer les pertes en soldats et les appliquer directement
-void calculer_pertes_Securite_Protection(Sécurité *securite, Colonie *colo)
-{
-    float pertes = 0.0;
-
-    // Vérification des niveaux de sécurité et de protection
-    if (securite->niveauProtection < 1 || securite->niveauProtection > 3)
+void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
+{   
+    int pertes = 0;
+    int impact = secu->attaquesReçues - secu->niveauProtection;
+    if (impact <= 0)
     {
-        printf("Erreur: niveau de protection invalide.\n");
-        return; // Sortir de la fonction pour les cas invalides
+        pertes = 0; // La protection compense les attaques ou les dépasse
     }
-
-    // Calcul des pertes en fonction des niveaux de sécurité et de protection
-    if (securite->niveauProtection == 1)
+    else
     {
-        if (securite->niveauProtection == 1)
+        pertes = impact * 3; // Les pertes augmentent avec la différence, mais sont limitées à un maximum de 10
+        if (pertes > 10)
         {
-            pertes = 15.0; // Sécurité faible, protection faible
-        }
-        else if (securite->niveauProtection == 2)
-        {
-            pertes = 8.0; // Sécurité faible, protection moyenne
-        }
-        else if (securite->niveauProtection == 3)
-        {
-            pertes = 10.0; // Sécurité faible, protection élevée
-        }
-    }
-    else if (securite->niveauProtection == 2)
-    {
-        if (securite->niveauProtection == 1)
-        {
-            pertes = 5.0; // Sécurité moyenne, protection faible
-        }
-        else if (securite->niveauProtection == 2)
-        {
-            pertes = 0.0; // Sécurité moyenne, protection moyenne
-        }
-        else if (securite->niveauProtection == 3)
-        {
-            pertes = 5.0; // Sécurité moyenne, protection élevée
-        }
-    }
-    else if (securite->niveauProtection == 3)
-    {
-        if (securite->niveauProtection == 1)
-        {
-            pertes = 15.0; // Sécurité élevée, protection faible
-        }
-        else if (securite->niveauProtection == 2)
-        {
-            pertes = 5.0; // Sécurité élevée, protection moyenne
-        }
-        else if (securite->niveauProtection == 3)
-        {
-            pertes = 0.0; // Sécurité élevée, protection élevée
+            pertes = 10;
         }
     }
 
-    // Appliquer les pertes aux soldats de la colonie
-    int nombreSoldats = compterFourmis(colo->soldats);
-    int pertesSoldats = (int)(nombreSoldats * (pertes / 100));
-
-    // Supprimer les soldats en fonction des pertes calculées
-    for (int i = 0; i < pertesSoldats; i++)
+    int nombreSoldats = compterFourmis(colo->soldats);// Calculer le nombre actuel de soldats dans la colonie
+    if (pertes > nombreSoldats) // Vérification des seuils (les pertes ne dépassent pas le nombre total de soldats)
     {
-        supprimerFourmi(&colo->soldats, colo->soldats); // Suppression de la première fourmi soldat
+        pertes = nombreSoldats;
     }
 
-    printf("Pourcentage de pertes en soldats: %.2f%%\n", pertes);
+    for (int i = 0; i < pertes; i++) // Appliquer les pertes
+    {
+        supprimerFourmiVieille(&colo->soldats, 9); // Suppression des fourmis soldats les plus anciennes mais un minimum de 9
+    }
+
+    printf("Nombre de pertes en soldats (causé par protection/attaques): %d\n", pertes);
 }
 
-
-// Fonction pour calculer les pertes en ouvrières et les appliquer directement
-void calculer_pertes_Hygiene_Maladie(Hygiène *hygiene, Colonie *colo)
-{
-    float pertes = 0.0;
-
-    // Vérification des niveaux d'hygiène et de maladie
-    if (hygiene->niveauHygiene < 1 || hygiene->niveauHygiene > 3 || hygiene->niveauMaladie < 1 || hygiene->niveauMaladie > 3)
+void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo)
+{  
+    int pertes = 0;
+    int impact = hyg->niveauMaladie - hyg->niveauProprete;
+    if (impact <= 0)
     {
-        printf("Erreur : niveaux d'hygiène ou de maladie invalides.\n");
-        return; // Sortie en cas d'erreur
+        pertes = 0; // L'hygiène compense ou dépasse le niveau de maladie
     }
-
-    // Calcul des pertes en fonction des niveaux d'hygiène et de maladie
-    if (hygiene->niveauHygiene == 1)
+    else
     {
-        if (hygiene->niveauMaladie == 1)
+        
+        pertes = impact * 4; // Les pertes augmentent avec la différence, mais sont limitées à un maximum de 12
+        if (pertes > 12)
         {
-            pertes = 10.0; // Hygiène faible, maladie faible
-        }
-        else if (hygiene->niveauMaladie == 2)
-        {
-            pertes = 8.0; // Hygiène faible, maladie moyenne
-        }
-        else if (hygiene->niveauMaladie == 3)
-        {
-            pertes = 15.0; // Hygiène faible, maladie élevée
-        }
-    }
-    else if (hygiene->niveauHygiene == 2)
-    {
-        if (hygiene->niveauMaladie == 1)
-        {
-            pertes = 5.0; // Hygiène moyenne, maladie faible
-        }
-        else if (hygiene->niveauMaladie == 2)
-        {
-            pertes = 0.0; // Hygiène moyenne, maladie moyenne
-        }
-        else if (hygiene->niveauMaladie == 3)
-        {
-            pertes = 3.0; // Hygiène moyenne, maladie élevée
-        }
-    }
-    else if (hygiene->niveauHygiene == 3)
-    {
-        if (hygiene->niveauMaladie == 1)
-        {
-            pertes = 0.0; // Hygiène élevée, maladie faible
-        }
-        else if (hygiene->niveauMaladie == 2)
-        {
-            pertes = 5.0; // Hygiène élevée, maladie moyenne
-        }
-        else if (hygiene->niveauMaladie == 3)
-        {
-            pertes = 15.0; // Hygiène élevée, maladie élevée
+            pertes = 12;
         }
     }
 
-    // Calculer et appliquer les pertes aux ouvrières de la colonie
     int nombreOuvrieres = compterFourmis(colo->ouvrieres);
-    int pertesOuvrieres = (int)(nombreOuvrieres * (pertes / 100));
-
-    // Supprimer les ouvrières en fonction des pertes calculées
-    for (int i = 0; i < pertesOuvrieres; i++)
+    if (pertes > nombreOuvrieres)
     {
-        supprimerFourmi(&colo->ouvrieres, colo->ouvrieres); // Suppression de la première ouvrière
+        pertes = nombreOuvrieres;
     }
 
-    printf("Pourcentage de pertes en ouvrières : %.2f%%\n", pertes);
+    for (int i = 0; i < pertes; i++)
+    {
+        supprimerFourmiVieille(&colo->ouvrieres, 5); // Suppression des fourmis soldats les plus anciennes mais protection des reines donc 5 est le seuil d'exclusion
+    }
+
+    printf("Nombre de pertes en ouvrières (causé par hyg/maladie): %d\n", pertes);
 }
-*/
