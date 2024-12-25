@@ -39,7 +39,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            GestionEvenementExterneRandom(saisonActuel,EvnmtExt,phero,colo);
+            //GestionEvenementExterneRandom(saisonActuel,EvnmtExt,phero,colo);
             PonteEtMortalite(phero,colo);
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
         }
@@ -53,7 +53,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            GestionEvenementExterneChosen(saisonActuel,EvnmtExt,phero,colo);
+            //GestionEvenementExterneChosen(saisonActuel,EvnmtExt,phero,colo);
             PonteEtMortalite(phero,colo);
             affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
         }

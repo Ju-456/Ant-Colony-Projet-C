@@ -120,7 +120,6 @@ void Configuration2(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage 
     printf("Choisissez le nombre de de fourmis ouvrières de départ (300-400):");
     colo->nombreReines = 2; // colonie polygène
     RandomCalculAfterChosen(colo, agriculture, elevage, hyg, secu);
-
 }
 
 void Configuration3(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
@@ -155,103 +154,107 @@ void Configuration3(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage 
     printf("\n");
 
     printf("=== Colonie ===\n");
-    printf("Choisissez le nombre de de fourmis ouvrières de départ (300-400):");
+    printf("Choisissez le nombre de de fourmis ouvrières de départ (500-600):");
     colo->nombreReines = 4; // colonie polygène
     RandomCalculAfterChosen(colo, agriculture, elevage, hyg, secu);
 }
 
 void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Hygiène *hyg, Sécurité *secu)
 {
-        int nOuvrieres = 0;
+    int nOuvrieres = 0;
+    scanf("%d", &nOuvrieres);
+
+    if (nOuvrieres < 100 || nOuvrieres > 600)
+    {
+        printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
         scanf("%d", &nOuvrieres);
+    }
 
-        if (nOuvrieres < 100 || nOuvrieres > 400){
-            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-            scanf("%d", &nOuvrieres);
-        }
+    int nReines = colo->nombreReines;
+    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
+    printf("Le nombre de soldats: %d\n", nSoldats);
+    printf("Le nombre de reines: %d\n", nReines);
+    printf("(Le nombre de mâles dépendra de la saison)\n");
 
-        int nReines = colo->nombreReines;
-        int nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
-        printf("Le nombre de soldats: %d\n", nSoldats);
-        printf("Le nombre de reines: %d\n", nReines);
-        printf("(Le nombre de mâles dépendra de la saison)\n");
+    colo->ouvrieres = NULL;
+    colo->males = NULL;
+    colo->soldats = NULL;
 
-        colo->ouvrieres = NULL;
-        colo->males = NULL;
-        colo->soldats = NULL;
+    elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
+    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 3); // 2 - 4 * de la proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 6);      // 2 - 7 * de la proportion d'ouvrières
 
-        elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
-        agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 3); // 2 - 4 * de la proportion d'ouvrières
-        agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 6); // 2 - 7 * de la proportion d'ouvrières
+    printf("=== Systeme Agricole ===\n");
+    printf("La quantité de nourriture : %d\n", agriculture->quantitéDeNourriture);
+    printf("La quantité de graines : %d\n", agriculture->quantitéGraines);
 
-        printf("=== Systeme Agricole ===\n");
-        printf("La quantité de nourriture : %d\n", agriculture->quantitéDeNourriture);
-        printf("La quantité de graines : %d\n", agriculture->quantitéGraines);
+    printf("\n");
 
-        printf("\n");
+    printf("\n=== Systeme Elevage ===\n");
+    printf("Le nombre de pucerons: %d\n", elevage->nombrePucerons);
+    printf("\n");
 
-        printf("\n=== Systeme Elevage ===\n");
-        printf("Le nombre de pucerons: %d\n", elevage->nombrePucerons);
-        printf("\n");
+    for (int i = 0; i < nReines; ++i) // Ajout des reines à la liste chaînee
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
+    } // les reines sont des sortes d'ouvrieres speciales, elles sont dans la même liste chainee avec un rôle différent
 
-        for (int i = 0; i < nReines; ++i) // Ajout des reines à la liste chaînee
-        {
-            ajouterFourmi(&colo->ouvrieres, ROLE_REINE);
-        } // les reines sont des sortes d'ouvrieres speciales, elles sont dans la même liste chainee avec un rôle différent
+    for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
+    {
+        ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
+    }
 
-        for (int i = 0; i < nOuvrieres; ++i) // Ajout d'ouvrières
-        {
-            ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
-        }
+    for (int i = 0; i < nSoldats; ++i) // Ajout de soldats
+    {
+        ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
+    }
 
-        
-        for (int i = 0; i < nSoldats ; ++i) // Ajout de soldats
-        {
-            ajouterFourmi(&colo->soldats, ROLE_SOLDAT);
-        }
-        
-        // partie à faire
-        // faire sys tableau doubles entrer
-        printf("\n=== Hygiène ===\n");
-        printf("Entrez le niveau de propreté (1 - 3): ");
+    // partie à faire
+    // faire sys tableau doubles entrer
+    printf("\n=== Hygiène ===\n");
+    printf("Entrez le niveau de propreté (1 - 3): ");
+    scanf("%d", &hyg->niveauProprete);
+
+    if (hyg->niveauProprete < 1 || hyg->niveauProprete > 3)
+    {
+        printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
         scanf("%d", &hyg->niveauProprete);
+    }
 
-        if (hyg->niveauProprete < 1 || hyg->niveauProprete > 3){
-            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-            scanf("%d", &hyg->niveauProprete);
-        }
+    printf("Entrez le niveau de maladie (1 - 3): ");
+    scanf("%d", &hyg->maladies);
 
-        printf("Entrez le niveau de maladie (1 - 3): "); 
+    if (hyg->maladies < 1 || hyg->maladies > 3)
+    {
+        printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
         scanf("%d", &hyg->maladies);
+    }
 
-        if (hyg->maladies < 1 || hyg->maladies > 3){
-            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-            scanf("%d", &hyg->maladies);
-        }
+    printf("\n");
 
-        printf("\n");
+    // faire sys tableau doubles entrer
+    printf("\n=== Sécurité ===\n");
+    printf("Entrez le niveau de protection (1 - 3): "); // le niveau de protection allant de 0 à 3
+    scanf("%d", &secu->niveauProtection);
 
-        // faire sys tableau doubles entrer
-        printf("\n=== Sécurité ===\n");
-        printf("Entrez le niveau de protection (1 - 3): "); // le niveau de protection allant de 0 à 3
+    if (secu->niveauProtection < 1 || secu->niveauProtection > 3)
+    {
+        printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
         scanf("%d", &secu->niveauProtection);
+    }
 
-        if (secu->niveauProtection < 1 || secu->niveauProtection > 3){
-            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-            scanf("%d", &secu->niveauProtection);
-        }
+    printf("Entrez le nombre d'attaques reçues (1 - 3): "); // une attaque = - 1 à 10 soldats
+    scanf("%d", &secu->attaquesReçues);
 
-        printf("Entrez le nombre d'attaques reçues (1 - 3): "); // une attaque = - 1 à 10 soldats
+    if (secu->attaquesReçues < 1 || secu->attaquesReçues > 3)
+    {
+        printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
         scanf("%d", &secu->attaquesReçues);
+    }
 
-        if (secu->attaquesReçues < 1 || secu->attaquesReçues > 3){
-            printf("Veuillez réessayer en respectant l'intervale de valeurs proposé : ");
-            scanf("%d", &secu->attaquesReçues);
-        }
+    printf("\n");
 
-        printf("\n");
-
-        printf("Voici votre fourmilière de départ avant les changements :\n");
+    printf("Voici votre fourmilière de départ avant les changements :\n");
 }
 
 /* affichage simple pour test
@@ -283,7 +286,7 @@ void afficherEtatColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeEle
 }
 */
 void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Architecture archi)
-{   
+{
     static int saisonChoice = -1;
 
     // Demande initiale de la saison de départ
@@ -303,8 +306,6 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
             scanf("%d", &saisonChoice);
         }
-
-        
     }
 
     // Simulation d'une saison
@@ -317,7 +318,7 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
         printf("************************************** Fin de l'HIVER ****************************\n");
         break;
 
-    case 1: 
+    case 1:
         /*
         int nMales;
         printf("Nous sommes au printemps, saison des fleurs et de la reproduction ! Il y a donc des mâles dans la colonie.\nIndications : mâles = 15% de la pop des ouvrières.\nChoississez un nombre de mâles :")
@@ -374,7 +375,7 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 }
 
 void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
-{   
+{
     static int EvnmtChoice = -1;
 
     if (saisonActuel == 0) // HIVER
@@ -382,7 +383,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
         // Hiv[5] = {0, 1, 2, 3, 4}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;  4 = hiver glacial
         // le 4 (hiver glacial) ne parait qu'en hiver
         if (EvnmtChoice == -1)
-        {   
+        {
             printf("\n");
             printf("Voici le tableau des événement disponible en hiver :\n"
                    "Hiv[5] = {0, 1, 2, 3, 4};\n Liste des types d'évènements :\n"
@@ -400,7 +401,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
                 printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
                 scanf("%d", &EvnmtExt.impact);
             }
-            else 
+            else
             {
                 EvnmtExt.impact = 0;
             }
@@ -531,7 +532,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
                 printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
                 scanf("%d", &EvnmtExt.impact);
             }
-            else 
+            else
             {
                 EvnmtExt.impact = 0;
             }
@@ -621,7 +622,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
                 printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
                 scanf("%d", &EvnmtExt.impact);
             }
-            else 
+            else
             {
                 EvnmtExt.impact = 0;
             }
@@ -694,7 +695,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
                 printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
                 scanf("%d", &EvnmtExt.impact);
             }
-            else 
+            else
             {
                 EvnmtExt.impact = 0;
             }
@@ -779,7 +780,52 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
 void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero)
 {
     if (archi.salles == 7)
-    {
+    {   
+        colo->nombreReines = 1;
+        // limite des stocks de graines
+        int tempGraines = agriculture->quantitéGraines;
+        if (tempGraines > 12000)
+        {
+            tempGraines = 11999;
+        }
+        agriculture->quantitéGraines = tempGraines;
+
+        // limite des stocks de nourriture
+        int tempNourriture = agriculture->quantitéDeNourriture;
+        if (tempNourriture > 300000)
+        {
+            tempNourriture = 299999;
+        }
+        agriculture->quantitéDeNourriture = tempNourriture;
+
+        // limite des ouvrieres
+        int tempOuvrieres = compterFourmis(colo->ouvrieres);
+        if (tempOuvrieres > 150)
+        {
+            tempOuvrieres = 149;
+        }
+
+        // limite des pucerons
+        int tempPucerons = elevage->nombrePucerons;
+        if (tempPucerons > 600)
+        {
+            tempPucerons = 599;
+        }
+        elevage->nombrePucerons = tempPucerons;
+
+        int tempMales = compterFourmisMales(colo->males);
+        if (tempMales > 50)
+        {
+            tempMales = 49;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
+        // limite des soldats
+        int tempSoldats = compterFourmis(colo->soldats);
+        if (tempSoldats > 200)
+        {
+            tempSoldats = 199;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
         // colonie monogène
         printf(
             "                                       - Fourmilière -\n"
@@ -803,23 +849,82 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
             "      \x1b[48;2;115;71;60m----\x1b[48;2;139;93;78m     \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m   \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m                    AMBIANCE                     \x1b[0m\x1b[48;2;115;71;60m----\n"
             "        \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                 \x1b[48;2;210;160;135m- %d -\x1b[48;2;139;93;78m       Reines        %d/10                    \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "            \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m             \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m       \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m                           \x1b[0m\x1b[48;2;115;71;60m-----\n"
-            "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  1 -\x1b[48;2;139;93;78m                   \x1b[0m\x1b[48;2;115;71;60m-----\n"
+            "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  %d -\x1b[48;2;139;93;78m                   \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            agriculture->quantitéGraines, compterFourmis(colo->soldats), compterFourmis(colo->ouvrieres)-1, agriculture->quantitéDeNourriture, elevage->nombrePucerons, compterFourmisMales(colo->males), phero.ambiance);
+            tempGraines, tempSoldats, tempOuvrieres - 2, tempNourriture, tempPucerons, tempMales, phero.ambiance, colo->nombreReines);
         printf("\n");
         printf("\n--- DEBUG INFO ---\n");
-    printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
-    printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
-    printf("Agriculture - Quantité de Graines : %d\n", ((SystemeAgricole *)agriculture)->quantitéGraines);
-    printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
-    printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
-    printf("-------------------\n");
+        printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
+        printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
+        printf("Agriculture - Quantité de Graines : %d\n", ((SystemeAgricole *)agriculture)->quantitéGraines);
+        printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
+        printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
+        printf("-------------------\n");
         sleep(2);
     }
-    /*
+
     else if (archi.salles == 9)
     {
+        colo->nombreReines = 2;
+
+        int GrainesReste = 0, OuvrieresReste = 0;
+
+        // limite des stocks de graines
+        int tempGraines = agriculture->quantitéGraines;
+        if (tempGraines > 15000)
+        {
+            tempGraines = 2000;
+            GrainesReste = 12999;
+        }
+        else if (tempGraines > 2000)
+        {
+            GrainesReste = tempGraines - 2000;
+            tempGraines = 2000;
+        }
+        agriculture->quantitéGraines = tempGraines;
+
+        // limite des stocks de nourriture
+        int tempNourriture = agriculture->quantitéDeNourriture;
+        if (tempNourriture > 10000000)
+        {
+            tempNourriture = 9999999;
+        }
+        agriculture->quantitéDeNourriture = tempNourriture;
+
+        // limite des ouvrieres
+        int tempOuvrieres = compterFourmis(colo->ouvrieres);
+        if (tempOuvrieres > 200)
+        {
+            tempOuvrieres = 199;
+        }
+        else if (tempOuvrieres > 150)
+        {
+            OuvrieresReste = tempOuvrieres - 150;
+            tempOuvrieres = 100;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire qui = valeur réelle décomposée en plusieurs partie pour respecter la limite de taille des cases
+
+        // limite des pucerons
+        int tempPucerons = elevage->nombrePucerons;
+        if (tempPucerons > 1000)
+        {
+            tempPucerons = 999;
+        }
+        elevage->nombrePucerons = tempPucerons;
+
+        int tempMales = compterFourmisMales(colo->males);
+        if (tempMales > 60)
+        {
+            tempMales = 59;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
+        // limite des soldats
+        int tempSoldats = compterFourmis(colo->soldats);
+        if (tempSoldats > 200)
+        {
+            tempSoldats = 199;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
         printf(
             "                                       - Fourmilière -\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n"
@@ -833,25 +938,93 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
             " \x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m         \x1b[48;2;210;160;135m-   %d  -\x1b[48;2;139;93;78m                                          \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m        \x1b[0m\x1b[48;2;115;71;60m------\n"
             "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m          \x1b[48;2;210;160;135m---------\x1b[48;2;139;93;78m                                          \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m          \x1b[0m\x1b[48;2;115;71;60m------\n"
             "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m                                    Nourriture               \x1b[48;2;210;160;135m-    %d    -\x1b[48;2;139;93;78m           \x1b[0m\x1b[48;2;115;71;60m------\n"
-            "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m                                -----------------\x1b[48;2;139;93;78m            \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m           \x1b[0m\x1b[48;2;115;71;60m------\n"
-            "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m           Pucerons             -               -\x1b[48;2;139;93;78m            \x1b[48;2;210;160;135m------------------\x1b[48;2;139;93;78m     \x1b[0m\x1b[48;2;115;71;60m------\n"
-            " \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m         \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m           -      %d       -\x1b[48;2;139;93;78m                        \x1b[48;2;210;160;135m- %d -\x1b[48;2;139;93;78m    \x1b[0m\x1b[48;2;115;71;60m-----\n"
-            "  \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m        \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m           -               -\x1b[48;2;139;93;78m                        \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m   \x1b[0m\x1b[48;2;115;71;60m-----\n"
-            "   \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m       \x1b[48;2;210;160;135m-    %d    -\x1b[48;2;139;93;78m           -----------------\x1b[48;2;139;93;78m                                \x1b[0m\x1b[48;2;115;71;60m-----\n"
+            "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m                                \x1b[48;2;210;160;135m-----------------\x1b[48;2;139;93;78m            \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m           \x1b[0m\x1b[48;2;115;71;60m------\n"
+            "\x1b[48;2;115;71;60m------\x1b[48;2;139;93;78m           Pucerons             \x1b[48;2;210;160;135m-               -\x1b[48;2;139;93;78m            \x1b[48;2;210;160;135m------------------\x1b[48;2;139;93;78m     \x1b[0m\x1b[48;2;115;71;60m------\n"
+            " \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m         \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m           \x1b[48;2;210;160;135m-      %d       -\x1b[48;2;139;93;78m                        \x1b[48;2;210;160;135m- %d -\x1b[48;2;139;93;78m    \x1b[0m\x1b[48;2;115;71;60m-----\n"
+            "  \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m        \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m           \x1b[48;2;210;160;135m-               -\x1b[48;2;139;93;78m                        \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m   \x1b[0m\x1b[48;2;115;71;60m-----\n"
+            "   \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m       \x1b[48;2;210;160;135m-    %d    -\x1b[48;2;139;93;78m           \x1b[48;2;210;160;135m-----------------\x1b[48;2;139;93;78m                                \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "    \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m      \x1b[48;2;210;160;135m-          -\x1b[48;2;139;93;78m    Mâles                                                  \x1b[0m\x1b[48;2;115;71;60m-----\n"
-            "      \x1b[48;2;115;71;60m----\x1b[48;2;139;93;78m     \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m   ------\x1b[48;2;139;93;78m                    AMBIANCE                     \x1b[0m\x1b[48;2;115;71;60m----\n"
+            "      \x1b[48;2;115;71;60m----\x1b[48;2;139;93;78m     \x1b[48;2;210;160;135m------------\x1b[48;2;139;93;78m   \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m                    AMBIANCE                     \x1b[0m\x1b[48;2;115;71;60m----\n"
             "        \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                 \x1b[48;2;210;160;135m- %d -\x1b[48;2;139;93;78m       Reines        %d/10                    \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "            \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m             \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m       \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m                           \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m- %d -\x1b[48;2;139;93;78m                   \x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            agriculture->quantitéGraines, GrainesReste, totalSoldats, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, totalMales, phero.ambiance, colo->nombreReines);
-        printf("\n");
+            tempGraines, GrainesReste, tempSoldats, tempOuvrieres - 2, tempNourriture, OuvrieresReste, tempPucerons, tempMales, phero.ambiance, colo->nombreReines);
+        printf("\n"); // tempOuvrieres - 2, car on rappelle que les reines sont dans la même liste chainees que les ouvrières
         sleep(2);
     }
 
     else if (archi.salles == 13)
     {
+
+        colo->nombreReines = 4;
+
+        int GrainesReste = 0, GrainesReste1 = 0, SoldatsReste = 0, OuvrieresReste = 0, OuvrieresReste1 = 0;
+
+        // limite des stocks de graines
+        int tempGraines = agriculture->quantitéGraines;
+        if (tempGraines > 500000)
+        {
+            tempGraines = 2000;
+            GrainesReste = 46000;
+            GrainesReste1 = 1999;
+        }
+        else if (tempGraines > 48000)
+        {
+            GrainesReste1 = tempGraines - 48000;
+            GrainesReste = 46000;
+            tempGraines = 2000;
+        }
+        else if (tempGraines > 2000)
+        {
+            GrainesReste = tempGraines - 2000;
+            tempGraines = 2000;
+            GrainesReste1 = 0;
+        }
+        agriculture->quantitéGraines = tempGraines;
+
+        // limite des stocks de nourriture
+        int tempNourriture = agriculture->quantitéDeNourriture;
+        if (tempNourriture > 10000000)
+        {
+            tempNourriture = 9999999;
+        }
+        agriculture->quantitéDeNourriture = tempNourriture;
+
+        // limite des ouvrieres
+        int tempOuvrieres = compterFourmis(colo->ouvrieres);
+        if (tempOuvrieres > 300)
+        {
+            tempOuvrieres = 299;
+        }
+        else if (tempOuvrieres > 200)
+        {
+            OuvrieresReste = tempOuvrieres - 200;
+            tempOuvrieres = 200;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire qui = valeur réelle décomposée en plusieurs partie pour respecter la limite de taille des cases
+
+        // limite des pucerons
+        int tempPucerons = elevage->nombrePucerons;
+        if (tempPucerons > 1000)
+        {
+            tempPucerons = 999;
+        }
+        elevage->nombrePucerons = tempPucerons;
+
+        int tempMales = compterFourmisMales(colo->males);
+        if (tempMales > 70)
+        {
+            tempMales = 69;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
+        // limite des soldats
+        int tempSoldats = compterFourmis(colo->soldats);
+        if (tempSoldats > 300)
+        {
+            tempSoldats = 299;
+        } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
+
         printf(
             "                                       - Fourmilière -\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n"
@@ -877,8 +1050,8 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
             "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  %d -\x1b[48;2;139;93;78m                   \x1b\x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b\x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            agriculture->quantitéGraines, GrainesReste, GrainesReste2, totalSoldats, SoldatsReste, totalOuvrieres, agriculture->quantitéDeNourriture, OuvrieresReste, elevage->nombrePucerons, OuvrieresReste2, totalMales, phero.ambiance, colo->nombreReines);
-        printf("\n");
+            tempGraines, GrainesReste, GrainesReste1, tempSoldats, SoldatsReste, tempOuvrieres - 4, tempNourriture, OuvrieresReste, tempPucerons, OuvrieresReste1, tempMales, phero.ambiance, colo->nombreReines);
+        printf("\n"); // tempOuvrieres - 4, car on rappelle que les reines sont dans la même liste chainees que les ouvrières
         sleep(2);
-    }*/
+    }
 }

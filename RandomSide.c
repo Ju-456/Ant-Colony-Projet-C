@@ -439,15 +439,6 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     colo->nombreReines = 5;
     int GrainesReste = 0, GrainesReste1 = 0, SoldatsReste = 0, OuvrieresReste = 0, OuvrieresReste1 = 0;
 
-      printf("\n--- DEBUG INFO APRES ---\n");
-    printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
-    printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
-    printf("Agriculture - Quantité de Graines : %d\n", ((SystemeAgricole *)agriculture)->quantitéGraines);
-    printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
-    printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
-    printf("Nombre de reines : %d\n", colo->nombreReines);
-    printf("-------------------\n");
-
         // limite des stocks de graines 
     int tempGraines = agriculture->quantitéGraines;
     if (tempGraines > 4000)
@@ -542,7 +533,7 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
         "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b\x1b[0m\x1b[48;2;115;71;60m------\n"
         "                             \x1b[48;2;115;71;60m--------------------------------\n",
         tempGraines, GrainesReste, GrainesReste1, tempSoldats, SoldatsReste, tempOuvrieres - 5, tempNourriture, OuvrieresReste, tempPucerons, OuvrieresReste1, tempMales, phero.ambiance, colo->nombreReines);
-  
+/*  
     printf("\n--- DEBUG INFO APRES ---\n");
     printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
     printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
@@ -550,7 +541,7 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
     printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
     printf("Nombre de reines : %d\n", colo->nombreReines);
-    printf("-------------------\n");
+    printf("-------------------\n"); */
 
     sleep(2);
 }
