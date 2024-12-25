@@ -233,3 +233,19 @@ int totalOuvrieres = 0;
         OuvrieresReste2 = abs(30 - OuvrieresReste);
         OuvrieresReste = 30;
     }
+
+    debuggage :
+
+    printf("\n--- DEBUG INFO ---\n");
+        printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));
+        printf("Nombre de soldats : %d\n", compterFourmis(colo->soldats));
+        printf("Agriculture - Quantité de Graines : %d\n", ((SystemeAgricole *)agriculture)->quantitéGraines);
+        printf("Agriculture - Quantité de Nourriture : %d\n", ((SystemeAgricole *)agriculture)->quantitéDeNourriture);
+        printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
+        printf("-------------------\n");
+
+        printf("avant fonction saison\n");
+    printf("Pheromone d'alarme ,%d\n", phero->alarme);
+    printf("Pheromone reines ,%d\n", phero->reine);
+    printf("Pheromone de cohesion ,%d\n", phero->cohesion);
+    printf("Pheromone de ambiance ,%d\n", phero->ambiance);

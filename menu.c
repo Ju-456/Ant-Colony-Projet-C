@@ -40,8 +40,8 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         {
             simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
             GestionEvenementExterneRandom(saisonActuel,EvnmtExt,phero,colo);
-            //PonteEtMortalite(phero,colo);
-            //affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
+            PonteEtMortalite(phero,colo);
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
         }
         break;
 
@@ -318,14 +318,9 @@ void FourmiliereEnEvolution(Colonie *colo)
 
 void PonteEtMortalite(Pheromone *phero, Colonie *colo)
 {   
-    printf("Début fonction\n");
-    printf("Pheromone d'alarme ,%d\n", phero->alarme);
-    printf("Pheromone reines ,%d\n", phero->reine);
-    printf("Pheromone de cohesion ,%d\n", phero->cohesion);
-
     srand(time(NULL)); // générateur de nombres aléatoires
 
-    if (phero->alarme <= 2)
+    if (phero->alarme >= 2)
     {
         phero->ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
 
@@ -372,13 +367,6 @@ void PonteEtMortalite(Pheromone *phero, Colonie *colo)
             }
         }
     } 
-    phero->reine = phero->ambiance;
-    
-    printf("Fin fonction\n");
-    printf("Pheromone d'alarme ,%d\n", phero->alarme);
-    printf("Pheromone reines ,%d\n", phero->reine);
-    printf("Pheromone de cohesion ,%d\n", phero->cohesion);
-    printf("Pheromone de ambiance ,%d\n", phero->ambiance);
 }
 
 
