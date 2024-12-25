@@ -181,8 +181,8 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     colo->soldats = NULL;
 
     elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
-    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 3); // 2 - 4 * de la proportion d'ouvrières
-    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 6);      // 2 - 7 * de la proportion d'ouvrières
+    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 3);      // 2 - 4 * proportion d'ouvrières
 
     printf("=== Systeme Agricole ===\n");
     printf("La quantité de nourriture : %d\n", agriculture->quantitéDeNourriture);

@@ -159,7 +159,7 @@ void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage
 void automne(int *saisonActuel, SystemeAgricole *agricultur, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo);
 
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
-void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
+//void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero);
 
 // --- Systèmes Agricoles et d'Élevage ---
 void cultiverGraines(SystemeAgricole *agriculture);

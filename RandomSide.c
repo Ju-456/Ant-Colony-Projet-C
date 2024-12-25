@@ -29,7 +29,7 @@ int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agric
     }
 
     // Ajout aléatoire d'ouvrières
-    int nOuvrieres = rand() % 301 + 150; // Nombre entre 150 et 210
+    int nOuvrieres = rand() % 201 + 500; // Nombre entre 500 et 700
     for (int i = 0; i < nOuvrieres; ++i)
     {
         ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
@@ -44,8 +44,8 @@ int RandomColonie(Colonie *colo, SystemeElevage *elevage, SystemeAgricole *agric
     }
 
     elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
-    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 3); // 2 - 4 * de la proportion d'ouvrières
-    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 6);      // 2 - 7 * de la proportion d'ouvrières
+    agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 3);      // 2 - 4 * proportion d'ouvrières
 
     return 0; // Succès
 }
@@ -61,24 +61,28 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
             printf("\n************************************** Fin de l'HIVER ****************************\n");
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
 
         case 1: // PRINTEMPS
             printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
             printf("\n************************************** Fin du PRINTEMPS **************************\n");
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
 
         case 2: // ETE
             ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
             printf("\n************************************** Fin de l'ÉTÉ ******************************\n");
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
 
         case 3: // AUTOMNE
             automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
             printf("\n************************************** Fin de l'AUTOMNE ******************************\n");
+            affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
 
         default:
@@ -431,7 +435,7 @@ void GestionEvenementExterneRandom(int saisonActuel, EvenementExterne EvnmtExt, 
                    EvnmtExt.impact);
             printf("La probabilité que cet événement survienne en hiver est de 37,5%%\n");
         }
-    }
+    }PonteEtMortalite(phero,colo);
 }
 
 void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone phero)
@@ -439,7 +443,7 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     colo->nombreReines = 5;
     int GrainesReste = 0, GrainesReste1 = 0, SoldatsReste = 0, OuvrieresReste = 0, OuvrieresReste1 = 0;
 
-        // limite des stocks de graines 
+    // limite des stocks de graines 
     int tempGraines = agriculture->quantitéGraines;
     if (tempGraines > 4000)
     {
@@ -497,9 +501,9 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     // limite des soldats 
     int tempSoldats = compterFourmis(colo->soldats);
     if (tempSoldats > 200) 
-    {
-        SoldatsReste = 150;
-        tempSoldats = 49;
+    {   
+        tempSoldats = 150;
+        SoldatsReste = 49;
     }
     else if (tempSoldats > 150) 
     {
@@ -542,6 +546,6 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     printf("Élevage - Nombre de Pucerons : %d\n", ((SystemeElevage *)elevage)->nombrePucerons);
     printf("Nombre de reines : %d\n", colo->nombreReines);
     printf("-------------------\n"); */
-
-    sleep(2);
+    printf("\n");//tempOuvrieres - 5, car on rappelle que les reines sont dans la même liste chainees que les ouvrières
+    sleep(2); 
 }
