@@ -12,31 +12,30 @@
 
 void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro)
 {
+    printf("\n");
     printf("Souhaitez-vous une simulation aléatoire (1) ou choisir les valeurs (2) ?");
-
+    printf("\n");
     int choice = 0;
     printf(
         "\n1. Valeurs aléatoires\n"
         "2. Valeurs à choisir \n"
         "Entrer votre choix : ");
     scanf("%d", &choice);
-
+    printf("\n");
     switch (choice)
     {
     case 1:
 
-        // FourmiliereEnEvolution(colo);
+        FourmiliereEnEvolution(colo);
 
         RandomColonie(colo, hyg, secu, elevage, agriculture);
 
         cultiverGraines(agriculture);
         elevagePucerons(elevage);
-        gererHygiene(hyg);
-        gererSecurite(secu);
         construireSalle(&archi);
         explorer(&enviro);
 
-        while (colo->nombreReines != 0)
+        while (colo->nombreReines > 0)
         {
             simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, hyg, secu, EvnmtExt, phero, archi);
             GestionEvenementExterneRandom(saisonActuel, EvnmtExt, phero, colo);
@@ -44,6 +43,12 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
             NiveauPropreteEtMaladie(hyg, colo);
             NiveauSecuritéEtProtection(secu, colo);
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
+            if (colo->nombreReines <= 0)
+            {
+                colo->nombreReines = 0;
+                affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
+                printf("Toutes les reines sont mortes, la colonie s'arrête ici..\n");
+            }
         }
         break;
 
@@ -52,7 +57,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         // afficherEtatColonie(colo,agriculture,elevage, hyg, secu); // pour un affichage plus simple
         affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
 
-        while (colo->nombreReines != 0)
+        while (colo->nombreReines > 0)
         {
             simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
             GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
@@ -60,6 +65,12 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
             NiveauPropreteEtMaladie(hyg, colo);
             NiveauSecuritéEtProtection(secu, colo);
             affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+            if (colo->nombreReines <= 0)
+            {
+                colo->nombreReines = 0;
+                affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+                printf("Toutes les reines sont mortes, la colonie s'arrête ici..\n");
+            }
         }
         break;
     }
@@ -349,7 +360,6 @@ void PonteEtMortalite(Pheromone *phero, Colonie *colo)
             {
                 for (int j = 0; j < rand() % 6 + 15; ++j) // Ajouter de nouvelles ouvrières si le ambiance est favorable (printemps/automne)
                 {
-                    ajouterFourmi(&colo->ouvrieres, ROLE_OUVRIERE); // Augmentation des ouvrières
                     ajouterFourmi(&colo->soldats, ROLE_SOLDAT);     // Augmentation des soldats
                 }
 
@@ -384,6 +394,13 @@ void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne Evnm
 
     int hiverVariation = -60 + rand() % 21; // Variation negatives des pucerons (de -40% à -60%)
     elevage->nombrePucerons += elevage->nombrePucerons * hiverVariation / 100;
+    
+    int nOuvrieres = compterFourmis(colo->ouvrieres);
+    int nOuvrièresSupprimes = nOuvrieres * (70 + rand() % 21) / 100; // suppression entre 70% et 90%
+    for (int j = 0; j < nOuvrièresSupprimes; ++j)
+    {
+        supprimerFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
+    }
 }
 
 void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo)
@@ -433,12 +450,17 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
     agriculture->quantitéDeNourriture -= agriculture->quantitéDeNourriture * (30 + rand() % 11) / 100;
 
     int nOuvrieres = compterFourmis(colo->ouvrieres);
-    // int nMalesExistants = compterFourmisMales(colo->males);
-    int nMalesSupprimer = nOuvrieres * (10 + rand() % 11) / 100;
+    int nMalesSupprimes = nOuvrieres * (10 + rand() % 11) / 100;
 
-    for (int j = 0; j < nMalesSupprimer; ++j)
-    { // Suppression des fourmis mâles à l'approche de l'hiver
+    for (int j = 0; j < nMalesSupprimes; ++j) // Suppression des fourmis mâles à l'approche de l'hiver
+    {
         supprimerFourmiMale(&colo->males);
+    }
+
+    int nOuvrièresSupprimes = nOuvrieres * (10 + rand() % 11) / 100; // suppression entre 10% et 20%
+    for (int j = 0; j < nOuvrièresSupprimes; ++j)
+    {
+        supprimerFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
     }
 
     int automneVariation = -20 + rand() % 21; // Variation negatives des pucerons (de -20% à -40%)
@@ -450,7 +472,11 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
 }
 
 void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
-{   
+{
+
+    // Genere aleaatoirement des valeurs entre 1 à 3
+    secu->niveauProtection = rand() % 3 + 1;
+    secu->attaquesReçues = rand() % 3 + 1;
     int pertes = 0;
     int impact = secu->attaquesReçues - secu->niveauProtection;
     if (impact <= 0)
@@ -466,8 +492,8 @@ void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
         }
     }
 
-    int nombreSoldats = compterFourmis(colo->soldats);// Calculer le nombre actuel de soldats dans la colonie
-    if (pertes > nombreSoldats) // Vérification des seuils (les pertes ne dépassent pas le nombre total de soldats)
+    int nombreSoldats = compterFourmis(colo->soldats); // Calculer le nombre actuel de soldats dans la colonie
+    if (pertes > nombreSoldats)                        // Vérification des seuils (les pertes ne dépassent pas le nombre total de soldats)
     {
         pertes = nombreSoldats;
     }
@@ -477,11 +503,17 @@ void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
         supprimerFourmiVieille(&colo->soldats, 9); // Suppression des fourmis soldats les plus anciennes mais un minimum de 9
     }
 
+    printf("Niveau de protection : %d, Attaques reçues : %d\n", secu->niveauProtection, secu->attaquesReçues);
     printf("Nombre de pertes en soldats (causé par protection/attaques): %d\n", pertes);
+    printf("\n");
 }
 
 void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo)
-{  
+{
+    // Genere aleaatoirement des valeurs entre 1 à 3
+    hyg->niveauProprete = rand() % 3 + 1;
+    hyg->niveauMaladie = rand() % 3 + 1;
+
     int pertes = 0;
     int impact = hyg->niveauMaladie - hyg->niveauProprete;
     if (impact <= 0)
@@ -490,7 +522,7 @@ void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo)
     }
     else
     {
-        
+
         pertes = impact * 4; // Les pertes augmentent avec la différence, mais sont limitées à un maximum de 12
         if (pertes > 12)
         {
@@ -509,5 +541,7 @@ void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo)
         supprimerFourmiVieille(&colo->ouvrieres, 5); // Suppression des fourmis soldats les plus anciennes mais protection des reines donc 5 est le seuil d'exclusion
     }
 
+    printf("Niveau de propreté : %d, Niveau de maladie : %d\n", hyg->niveauProprete, hyg->niveauMaladie);
     printf("Nombre de pertes en ouvrières (causé par hyg/maladie): %d\n", pertes);
+    printf("\n");
 }
