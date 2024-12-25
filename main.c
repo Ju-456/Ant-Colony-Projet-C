@@ -18,7 +18,7 @@ int main()
     int saisonActuel = 0;
 
     EvenementExterne EvnmtExt;
-    Pheromone phero;
+    Pheromone *phero = malloc(sizeof(Pheromone));
     Hygiène hyg;
     Sécurité secu;
     Architecture archi;

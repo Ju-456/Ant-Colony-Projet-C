@@ -10,7 +10,7 @@
 #include <stdlib.h> // Pour rand() et srand()
 #include <time.h>   // Pour srand(time(NULL));
 
-void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro)
+void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Hygiène *hyg, Sécurité *secu, Architecture archi, Environnement enviro)
 {
     printf("Souhaitez-vous une simulation aléatoire (1) ou choisir les valeurs (2) ?");
 
@@ -48,19 +48,18 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
     case 2:
         ChosenColonie(colo, agriculture, elevage, &archi, hyg, secu);
         //afficherEtatColonie(colo,agriculture,elevage, hyg, secu); // pour un affichage plus simple
-        //affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
+        affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
 
         while (colo->nombreReines != 0)
         {
             simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
             GestionEvenementExterneChosen(saisonActuel,EvnmtExt,phero,colo);
             PonteEtMortalite(phero,colo);
-            //affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
+            affichageCycleSaisonChosen(archi,colo, agriculture, elevage, phero);
         }
         break;
     }
 }
-
 
 void FourmiliereEnEvolution(Colonie *colo)
 {
@@ -317,17 +316,22 @@ void FourmiliereEnEvolution(Colonie *colo)
     sleep(3);
 }
 
-void PonteEtMortalite(Pheromone phero, Colonie *colo)
+void PonteEtMortalite(Pheromone *phero, Colonie *colo)
 {   
+    printf("Début fonction\n");
+    printf("Pheromone d'alarme ,%d\n", phero->alarme);
+    printf("Pheromone reines ,%d\n", phero->reine);
+    printf("Pheromone de cohesion ,%d\n", phero->cohesion);
+
     srand(time(NULL)); // générateur de nombres aléatoires
 
-    if (phero.alarme <= 2)
+    if (phero->alarme <= 2)
     {
-        phero.ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
+        phero->ambiance = 1 + (rand() % 4); // ambiance hivernal (1 à 4)
 
         for (int j = 0; j < rand() % 16 + 25; ++j)
         {                                                //  "5" = seuil d'exclusion, ce sont des fourmis protégés
-            supprimerFourmiVieille(&colo->ouvrieres, 5); // reduction des ouvrieres
+            supprimerFourmiVieille(&colo->ouvrieres, 5); // reduction des ouvrières
         }
         for (int j = 0; j < rand() % 11 + 15; ++j)
         {
@@ -336,13 +340,13 @@ void PonteEtMortalite(Pheromone phero, Colonie *colo)
     }
     else
     {
-        int pheroGlobal = phero.reine + phero.cohesion;
+        int pheroGlobal = phero->reine + phero->cohesion;
 
         if (pheroGlobal >= 3)
         {
-            phero.ambiance = 5 + (rand() % 4); // ambiance automne ou printemps (5 à 8)
+            phero->ambiance = 5 + (rand() % 4); // ambiance automne ou printemps (5 à 8)
 
-            if (phero.ambiance == 5 || phero.ambiance == 6)
+            if (phero->ambiance == 5 || phero->ambiance == 6)
             {
                 for (int j = 0; j < rand() % 6 + 15; ++j) // Ajouter de nouvelles ouvrières si le ambiance est favorable (printemps/automne)
                 {
@@ -355,7 +359,7 @@ void PonteEtMortalite(Pheromone phero, Colonie *colo)
                     supprimerFourmiMale(&colo->males); // Réduit les mâles
                 }
             }
-            else if (phero.ambiance == 7 || phero.ambiance == 8)
+            else if (phero->ambiance == 7 || phero->ambiance == 8)
             {
                 for (int j = 0; j < rand() % 11 + 30; ++j) // Ajouter encore plus d'ouvrières si le ambiance est plus favorable (printemps/automne)
                 {
@@ -368,9 +372,17 @@ void PonteEtMortalite(Pheromone phero, Colonie *colo)
             }
         }
     } 
+    phero->reine = phero->ambiance;
+    
+    printf("Fin fonction\n");
+    printf("Pheromone d'alarme ,%d\n", phero->alarme);
+    printf("Pheromone reines ,%d\n", phero->reine);
+    printf("Pheromone de cohesion ,%d\n", phero->cohesion);
+    printf("Pheromone de ambiance ,%d\n", phero->ambiance);
 }
 
-void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo, SystemeElevage *elevage)
+
+void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo, SystemeElevage *elevage)
 {
     saisonActuel = 0;
 
@@ -385,7 +397,7 @@ void hiver(int saisonActuel, SystemeAgricole *agriculture, EvenementExterne Evnm
      
 }
 
-void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo) {
+void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo) {
     *saisonActuel = 1;
 
     agriculture->quantitéGraines += agriculture->quantitéGraines * (25 + rand() % 11) / 100; // augmentation entre 25% et 35%
@@ -410,7 +422,7 @@ void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *
            nMalesAjoutes ,nSoldatsAjoutes, agriculture->quantitéGraines, agriculture->quantitéDeNourriture);
 */}
 
-void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo)
+void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo)
 {
     saisonActuel = 2;
 
@@ -422,7 +434,7 @@ void ete(int saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage
 
 }
 
-void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone phero, Colonie *colo) {
+void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo) {
     *saisonActuel = 3;
 
     agriculture->quantitéGraines -= agriculture->quantitéGraines * (30 + rand() % 21) / 100;
@@ -441,7 +453,8 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
 
     /*printf("Automne terminé : %d mâles supprimés, nouvelles graines : %d, nouvelle nourriture : %d\n",
            nMalesSupprimer, agriculture->quantitéGraines, agriculture->quantitéDeNourriture);
-*/}
+*/
+}
 
 /*
 // Fonction pour calculer les pertes en soldats et les appliquer directement
