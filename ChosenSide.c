@@ -171,7 +171,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     }
 
     int nReines = colo->nombreReines;
-    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
+    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100; // Calcul du nombre de soldats : 5% à 10% des ouvrières, valeur aléatoire
     printf("Le nombre de soldats: %d\n", nSoldats);
     printf("Le nombre de reines: %d\n", nReines);
     printf("(Le nombre de mâles dépendra de la saison)\n");
@@ -180,6 +180,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     colo->males = NULL;
     colo->soldats = NULL;
 
+    // Calcul des ressources agricoles et d'élevage en fonction du nombre d'ouvrières
     elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
     agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
     agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 3);      // 2 - 4 * proportion d'ouvrières
@@ -415,6 +416,7 @@ void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, 
         }
         else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
         {
+            // Mise à jour des paramètres en fonction de l'impact
             if (EvnmtExt.impact == 1)
             {
                 phero->reine = 2 + (rand() % 2);
@@ -1011,7 +1013,9 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
         OuvrieresReste1 = tempOuvrieres - 804 + colo->nombreReines; // car les reines sont sur la même liste chainee mais pas dans la même salle
         tempOuvrieres = 700;
         OuvrieresReste = 100;
-    } else {
+    } 
+    else 
+    {
         tempOuvrieres = tempOuvrieres - 4;
     }
         // limite des pucerons

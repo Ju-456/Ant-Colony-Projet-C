@@ -528,12 +528,14 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
 
     // limite des pucerons  
     int tempPucerons = elevage->nombrePucerons;
-    if (tempPucerons > 1000){
+    if (tempPucerons > 1000)
+    {
         tempPucerons = 999;
     } elevage->nombrePucerons =  tempPucerons;
 
     int tempMales = compterFourmisMales(colo->males);
-    if (tempMales > 60){
+    if (tempMales > 60)
+    {
         tempMales = 59;
     } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire (idem Ouvrieres)
 

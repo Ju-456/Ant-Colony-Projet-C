@@ -1,7 +1,3 @@
-#ifndef ANNEXE_FUNCTIONS_H
-#define ANNEXE_FUNCTIONS_H
-#endif // ANNEXE_FUNCTIONS_H
-
 #include "fourmi.h"
 #include <stdio.h>
 #include <string.h>
@@ -19,10 +15,10 @@ void ajouterFourmi(Fourmi **tete, int role) // Fonction générique pour ajouter
     }
 
     static int prochainId = 1;
-    
+
     nouvelle->id = prochainId++; // Une fourmi = un ID unique
-    nouvelle->age = 0;
-    nouvelle->role = role;
+    nouvelle->age = 0;          // Age fourmi déclaré à 0
+    nouvelle->role = role;      // Déclaration du role de la fourmi
     nouvelle->suivante = *tete;
     *tete = nouvelle;
 }
@@ -73,35 +69,40 @@ void supprimerFourmi(Fourmi **tete, Fourmi *cible)
 // Suppression des fourmis les plus âgées (hors reines)
 void supprimerFourmiVieille(Fourmi **tete, int ignorerReines)
 {
+    // Vérifie que la liste des fourmis n'est pas vide
     if (!tete || !*tete)
         return;
 
     Fourmi *courant = *tete;
-    Fourmi *Vieille = NULL;
-    Fourmi *precedent = NULL;
-    Fourmi *precedentVieille = NULL;
+    Fourmi *Vieille = NULL; // Pointeur vers la fourmi la plus âgée trouvée
+    Fourmi *precedent = NULL; // Pointeur vers la fourmi précédente
+    Fourmi *precedentVieille = NULL; // Pointeur vers la fourmi précédant la plus âgée
 
-    int index = 0;
+    int index = 0; // Index utilisé pour ignorer les reines si nécessaire
 
+    // Parcourt la liste des fourmis
     while (courant)
     {
+        // Ignore les premières fourmis (reines) si l'index est inférieur à `ignorerReines`
+        // Trouve la fourmi la plus âgée (hors reines si `ignorerReines > 0`)
         if (index >= ignorerReines && (!Vieille || courant->age > Vieille->age))
         {
-            Vieille = courant;
-            precedentVieille = precedent;
+            Vieille = courant; // Met à jour la fourmi la plus âgée
+            precedentVieille = precedent; // Mémorise la fourmi précédente
         }
         precedent = courant;
         courant = courant->suivante;
         index++;
     }
 
-    // Suppression de la plus vieille fourmi
+    // Suppression de la fourmi la plus âgée trouvée
     if (Vieille)
     {
+        // Si la fourmi la plus âgée n'est pas en tête de liste
         if (precedentVieille)
             precedentVieille->suivante = Vieille->suivante;
         else
-            *tete = Vieille->suivante;
+            *tete = Vieille->suivante; // La plus âgée était en tête de liste
 
         free(Vieille);
     }
@@ -111,7 +112,7 @@ void supprimerFourmiVieille(Fourmi **tete, int ignorerReines)
 void supprimerFourmiMale(FourmiMale **tete)
 {
     if (!tete || !*tete)
-    return;
+        return;
 
     FourmiMale *aSupprimer = *tete;
     *tete = aSupprimer->suivante;
@@ -272,9 +273,12 @@ int compterFourmis(Fourmi *tete)
     return count;
 }
 
-int compterFourmisMales(FourmiMale *tete) {
+// Fonction pour compter les fourmis males dans une liste
+int compterFourmisMales(FourmiMale *tete)
+{
     int count = 0;
-    while (tete) {
+    while (tete)
+    {
         count++;
         tete = tete->suivante;
     }
@@ -282,16 +286,19 @@ int compterFourmisMales(FourmiMale *tete) {
 }
 
 // Fonction pour libérer la mémoire de la colonie
-void libererColonie(Colonie *colo) {
-    // Implémentez la libération de chaque liste de fourmis
-    // Exemple :
-    while (colo->ouvrieres) {
+void libererColonie(Colonie *colo)
+{
+    // Implémente la libération de chaque liste de fourmis
+    while (colo->ouvrieres)
+    {
         supprimerFourmi(&colo->ouvrieres, colo->ouvrieres);
     }
-    while (colo->soldats) {
+    while (colo->soldats)
+    {
         supprimerFourmi(&colo->soldats, colo->soldats);
     }
-    while (colo->males) {
+    while (colo->males)
+    {
         supprimerFourmiMale(&colo->males);
     }
 }
