@@ -1,3 +1,7 @@
+#ifndef ANNEXE_FUNCTIONS_H
+#define ANNEXE_FUNCTIONS_H
+#endif // ANNEXE_FUNCTIONS_H
+
 #include "fourmi.h"
 #include <stdio.h>
 #include <string.h>

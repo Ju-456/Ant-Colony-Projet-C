@@ -171,7 +171,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     }
 
     int nReines = colo->nombreReines;
-    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100; // Calcul du nombre de soldats : 5% à 10% des ouvrières, valeur aléatoire
+    int nSoldats = nOuvrieres * (5 + rand() % 6) / 100;
     printf("Le nombre de soldats: %d\n", nSoldats);
     printf("Le nombre de reines: %d\n", nReines);
     printf("(Le nombre de mâles dépendra de la saison)\n");
@@ -180,10 +180,9 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     colo->males = NULL;
     colo->soldats = NULL;
 
-    // Calcul des ressources agricoles et d'élevage en fonction du nombre d'ouvrières
     elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
     agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
-    agriculture->quantitéGraines = nOuvrieres * (2 + rand() % 3);      // 2 - 4 * proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (3 + rand() % 3);      // 3 - 5 * proportion d'ouvrières
 
     printf("=== Systeme Agricole ===\n");
     printf("La quantité de nourriture : %d\n", agriculture->quantitéDeNourriture);
@@ -242,7 +241,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
         scanf("%d", &secu->niveauProtection);
     }
 
-    printf("Entrez le nombre d'attaques reçues (1 - 3): "); 
+    printf("Entrez le nombre d'attaques reçues (1 - 3): ");
     scanf("%d", &secu->attaquesReçues);
 
     if (secu->attaquesReçues < 1 || secu->attaquesReçues > 3)
@@ -284,13 +283,11 @@ void afficherEtatColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeEle
     printf("\n");
 }
 */
-void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Architecture archi)
+void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi)
 {
-    static int saisonChoice = -1;
-
-    // Demande initiale de la saison de départ
-    if (saisonChoice == -1)
-    {
+    static int EvnmtChoice = -1;
+    int saisonChoice;
+    if (EvnmtChoice == -1){
         printf("Choisissez une saison de départ :\n"
                "0. Hiver\n"
                "1. Printemps\n"
@@ -305,7 +302,8 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             printf("Saisie invalide. Veuillez rechoisir une saison (entier compris entre 0 et 3) : ");
             scanf("%d", &saisonChoice);
         }
-    }
+        *saisonActuel = saisonChoice;
+    } EvnmtChoice = 0;  // On marque qu'un choix a été effectué
 
     // Simulation d'une saison
     switch (saisonChoice)
@@ -313,44 +311,39 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 
     case 0: // HIVER
         hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
-        printf("************************************** Fin de l'HIVER ****************************\n");
+        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        printf("\n************************* Récapitulatif de l'HIVER ****************************\n");
         break;
 
     case 1:
-        /*
-        int nMales;
-        printf("Nous sommes au printemps, saison des fleurs et de la reproduction ! Il y a donc des mâles dans la colonie.\nIndications : mâles = 15% de la pop des ouvrières.\nChoississez un nombre de mâles :")
-        scanf("%d", &nMales);
-        compterFourmis(colo->males)
-        */
-        printemps(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
-        printf("************************************** Fin du PRINTEMPS **************************\n");
+        printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        printf("\n****************************** Récapitulatif du PRINTEMPS **************************\n");
         break;
 
     case 2: // ETE
         ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
-        printf("************************************** Fin de l'ÉTÉ ******************************\n");
+        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        printf("\n****************************** Récapitulatif de l'ÉTÉ ******************************\n");
         break;
 
     case 3: // AUTOMNE
-        automne(&saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(saisonActuel, EvnmtExt, phero, colo);
-        printf("************************************** Fin de l'AUTOMNE ******************************\n");
+        automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        printf("\n****************************** Récapitulatif de l'AUTOMNE ******************************\n");
         break;
 
     default:
         break;
     }
 
-    // Passer à la saison suivante
+    printf("saisonChoice : %d",saisonChoice);
     saisonChoice++;
     if (saisonChoice > 3)
     {
         saisonChoice = 0;
     }
+    printf("saisonChoice après opé: %d",saisonChoice);
 
     // Simuler le vieillissement des fourmis
     Fourmi *current = colo->ouvrieres;
@@ -373,429 +366,139 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
     }
 }
 
-void GestionEvenementExterneChosen(int saisonActuel, EvenementExterne EvnmtExt, Pheromone *phero, Colonie *colo)
+void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel)
 {
     static int EvnmtChoice = -1;
+    int SaisonAExecuter = *saisonActuel;
 
-    if (saisonActuel == 0) // HIVER
-    {
-        // le 4 (hiver glacial) ne parait qu'en hiver
-        if (EvnmtChoice == -1)
+        if (SaisonAExecuter == 0) // HIVER
         {
             printf("\n");
-            printf("Voici le tableau des événement disponible en hiver :\n"
-                   "Hiv[5] = {0, 1, 2, 3, 4};\n Liste des types d'évènements :\n"
-                   "0 = aucun  ; \n"
-                   "1 =  tempete ; \n"
-                   "2 = inondation ; \n"
-                   "3 = invasion ;  \n"
-                   "4 = hiver glacial (exclusivité hivernale !)\n");
-            printf("\n");
-            printf("Choisissez un type d'évènement parmis les choix proposés :");
-            scanf("%d", &EvnmtExt.type);
-
-            if (EvnmtExt.type > 0)
+            if (EvnmtChoice == -1)
             {
-                printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                scanf("%d", &EvnmtExt.impact);
-            }
-            else
-            {
-                EvnmtExt.impact = 0;
-            }
-        }
-
-        if (EvnmtExt.type == 0) // AUCUN
-        {
-            EvnmtExt.impact = 0;
-            phero->alarme = EvnmtExt.impact;
-            phero->reine = 2 + (rand() % 2);
-            phero->cohesion = 2 + (rand() % 2);
-            printf("Tout va bien dans la fourmilière cet hiver,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis\n!");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
-        {
-            // Mise à jour des paramètres en fonction de l'impact
-            if (EvnmtExt.impact == 1)
-            {
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 2 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            if (EvnmtExt.type == 1)
-            {
-                printf("La fourmilière subit une tempête d'impact %d,\n"
-                       "c'est un hiver compliqué pour la fourmilière..\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
+                printf("Voici le tableau des événement disponible en hiver :\n"
+                       "Hiv[5] = {0, 1, 2, 3, 4};\n Liste des types d'évènements :\n"
+                       "0 = aucun  ; \n"
+                       "1 =  tempete ; \n"
+                       "2 = inondation ; \n"
+                       "3 = invasion ;  \n"
+                       "4 = hiver glacial (exclusivité hivernale !)\n"); // le 4 (hiver glacial) ne parait qu'en hiver
                 printf("\n");
+                printf("Choisissez un type d'évènement parmis les choix proposés :");
+                scanf("%d", &EvnmtExt->type);
+
+                if (EvnmtExt->type > 0)
+                {
+                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+                    scanf("%d", &EvnmtExt->impact);
+                }
+                else
+                {
+                    EvnmtExt->impact = 0;
+                }
             }
-            else
+            EvenementExterieurHiver(EvnmtExt, phero, colo, saisonActuel);
+        }
+
+        else if (SaisonAExecuter == 1) // PRINTEMPS
+        {
+            // Print[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
+            // les risques de 3 (invasion) sont plus eleves pdt le printemps
+            printf("\n");
+            if (EvnmtChoice == -1)
             {
-                printf("La fourmilière subit une inondation d'impact %d,\n"
-                       "c'est un hiver compliqué pour la fourmilière..\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                printf("Voici le tableau des événement disponible pour le printemps :\n"
+                       "Print[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
+                       "0 = aucun  ; \n"
+                       "1 =  tempete ; \n"
+                       "2 = inondation ; \n"
+                       "3 = invasion ;  \n");
                 printf("\n");
+                printf("Choisissez un type d'évènement parmis les choix proposés :");
+                scanf("%d", &EvnmtExt->type);
+
+                if (EvnmtExt->type > 0)
+                {
+                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+                    scanf("%d", &EvnmtExt->impact);
+                }
+                else
+                {
+                    EvnmtExt->impact = 0;
+                }
             }
+
+            EvenementExterieurPrintemps(EvnmtExt, phero, saisonActuel);
         }
-        else if (EvnmtExt.type == 3) // INVASION
+        else if (SaisonAExecuter == 2) // ETE
         {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->reine = 1 + (rand() % 3);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            printf("La fourmilière subit une invasion d'impact %d,\n"
-                   "c'est un hiver TRES compliqué pour la fourmilière..\n",
-                   EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
+            // Ete[3] = {0, 1, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
+            // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
             printf("\n");
-        }
-        if (EvnmtExt.type == 4) // HIVER GLACIAL
-        {
-            if (EvnmtExt.impact == 1)
+            if (EvnmtChoice == -1)
             {
-                phero->reine = phero->cohesion = 0;
-                phero->alarme = EvnmtExt.impact + (rand() % 2);
-                printf("La fourmilière subit un hiver glacial d'impact %d,\n"
-                       "c'est un hiver est très compliqué pour la fourmilière..\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                printf("Voici le tableau des événement disponible pour l'été' :\n"
+                       "Ete[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
+                       "0 = aucun  ; \n"
+                       "1 =  tempete ; \n"
+                       "3 = invasion ;  \n");
                 printf("\n");
+                printf("Choisissez un type d'évènement parmis les choix proposés :");
+                scanf("%d", &EvnmtExt->type);
+
+                if (EvnmtExt->type > 0)
+                {
+                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+                    scanf("%d", &EvnmtExt->impact);
+                }
+                else
+                {
+                    EvnmtExt->impact = 0;
+                }
             }
-            else if (EvnmtExt.impact == 2)
+            EvenementExterieurEte(EvnmtExt, phero, saisonActuel);
+        }
+        else if (SaisonAExecuter == 3) // AUTOMNE
+        {
+            // Aut[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
+            // Les invasions (3) et inondations (2) sont plus probables en automne.
+            printf("\n");
+            if (EvnmtChoice == -1)
             {
-                phero->reine = phero->cohesion = 0;
-                phero->alarme = EvnmtExt.impact + (rand() % 2);
-                printf("La fourmilière subit un hiver glacial d'impact %d,\n"
-                       "c'est un hiver est EXTREMEMENT compliqué pour la fourmilière..\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+                printf("Voici le tableau des événement disponible pour l'automne' :\n"
+                       "Aut[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
+                       "0 = aucun  ; \n"
+                       "1 =  tempete ; \n"
+                       "2 = inondation ; \n"
+                       "3 = invasion ;  \n");
                 printf("\n");
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = phero->cohesion = 0;
-                phero->alarme = EvnmtExt.impact + (rand() % 2);
+                printf("Choisissez un type d'évènement parmis les choix proposés :");
+                scanf("%d", &EvnmtExt->type);
 
-                printf("La fourmilière subit un hiver glacial d'impact %d,\n"
-                       "c'est un hiver est presque FATAL pour la fourmilière.\nL'aventure aurait pu s'arrête ici...\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 6,25%%\n");
-                
-                int ReductionReines = 2;
-                for (int i = 0; i < ReductionReines; ++i)// a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
-                    {
-                        colo->nombreReines--; // les reines sont dans la même liste chainée que les ouvrières mais elles sont en tête de listes
-                    }
-                printf("\n");
+                if (EvnmtExt->type > 0)
+                {
+                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+                    scanf("%d", &EvnmtExt->impact);
+                }
+                else
+                {
+                    EvnmtExt->impact = 0;
+                }
             }
+            EvenementExterieurAutomne(EvnmtExt, phero, saisonActuel);
         }
-    }
-    else if (saisonActuel == 1) // PRINTEMPS
-    {
-        // Print[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
-        // les risques de 3 (invasion) sont plus eleves pdt le printemps
-        if (EvnmtChoice == -1)
-        {
-            printf("Voici le tableau des événement disponible pour le printemps :\n"
-                   "Print[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                   "0 = aucun  ; \n"
-                   "1 =  tempete ; \n"
-                   "2 = inondation ; \n"
-                   "3 = invasion ;  \n");
-            printf("\n");
-            printf("Choisissez un type d'évènement parmis les choix proposés :");
-            scanf("%d", &EvnmtExt.type);
-
-            if (EvnmtExt.type > 0)
-            {
-                printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                scanf("%d", &EvnmtExt.impact);
-            }
-            else
-            {
-                EvnmtExt.impact = 0;
-            }
-        }
-
-        if (EvnmtExt.type == 0) // aucun
-        {
-            EvnmtExt.impact = 0;
-            phero->alarme = EvnmtExt.impact;
-            phero->reine = 4 + (rand() % 5);
-            phero->cohesion = 3 + (rand() % 3);
-            printf("Tout va bien dans la fourmilière ce printemps,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 1 || EvnmtExt.type == 2) // TEMPETE OU INONDATION
-        {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->reine = 3 + (rand() % 5);
-                phero->cohesion = 2 + (rand() % 3);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de PonteEtMortalite de tte façon => even ext rend encore + bas
-            {
-                phero->reine = 2 + (rand() % 3);
-                phero->cohesion = 2 + (rand() % 3);
-                phero->alarme = EvnmtExt.impact;
-            }
-            if (EvnmtExt.impact == 1)
-            {
-                printf("La fourmilière subit une tempête d'impact %d,\n"
-                       "nous pensons qu'elle s'en sortira, on est au printemps quand même !\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
-                printf("\n");
-            }
-            else // ( EvnmtExt.type == 2)
-            {
-                printf("La fourmilière subit une inondation d'impact %d,\n"
-                       "nous pensons qu'elle s'en sortira, on est au printemps quand même !\n",
-                       EvnmtExt.impact);
-                printf("La probabilité que cet événement survienne en hiver est de 25%%\n");
-                printf("\n");
-            }
-        }
-        else if (EvnmtExt.type == 3) // INVASION
-        {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 2)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            printf("La fourmilière subit une invasion d'impact %d,\n"
-                   "c'est un printemps compliqué !\n",
-                   EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en hiver est de 50%%\n");
-            printf("\n");
-        }
-    }
-    else if (saisonActuel == 2) // ETE
-    {
-        // Ete[3] = {0, 1, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
-        // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
-        if (EvnmtChoice == -1)
-        {
-            printf("Voici le tableau des événement disponible pour l'été' :\n"
-                   "Print[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                   "0 = aucun  ; \n"
-                   "1 =  tempete ; \n"
-                   "3 = invasion ;  \n");
-            printf("\n");
-            printf("Choisissez un type d'évènement parmis les choix proposés :");
-            scanf("%d", &EvnmtExt.type);
-
-            if (EvnmtExt.type > 0)
-            {
-                printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                scanf("%d", &EvnmtExt.impact);
-            }
-            else
-            {
-                EvnmtExt.impact = 0;
-            }
-        }
-
-        if (EvnmtExt.type == 0) // aucun
-        {
-            EvnmtExt.impact = 0;
-            phero->alarme = EvnmtExt.impact;
-            phero->cohesion = 5;
-            phero->reine = 4 + (rand() % 5);
-            printf("Tout va bien dans la fourmilière cet été,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 1) // Tempête
-        {
-            if (EvnmtExt.impact == 1 || EvnmtExt.impact == 2) // reste une période de forte PonteEtMortalite malgré even ext d'ou regrouper
-            {
-                phero->reine = 3 + (rand() % 5);
-                phero->cohesion = 2 + (rand() % 3);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 3 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            printf("La fourmilière subit une tempête d'impact %d,\n"
-                   "elle s'en sortira !\n",
-                   EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en été est de 37,5%%\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 3) // Invasion
-        {
-            if (EvnmtExt.impact == 1 || EvnmtExt.impact == 2) // reste une période de forte PonteEtMortalite malgré even ext d'ou regrouper
-            {
-                phero->reine = 3 + (rand() % 5);
-                phero->cohesion = 2 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 2 + (rand() % 2);
-                phero->alarme = EvnmtExt.impact;
-            }
-            printf("La fourmilière subit une invasion d'impact %d.\n", EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en été est de 50%%\n");
-            printf("\n");
-        }
-    }
-    else if (saisonActuel == 3) // AUTOMNE
-    {
-        // Aut[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
-        // Les invasions (3) et inondations (2) sont plus probables en automne.
-        if (EvnmtChoice == -1)
-        {
-            printf("Voici le tableau des événement disponible pour l'automne' :\n"
-                   "Aut[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                   "0 = aucun  ; \n"
-                   "1 =  tempete ; \n"
-                   "2 = inondation ; \n"
-                   "3 = invasion ;  \n");
-            printf("\n");
-            printf("Choisissez un type d'évènement parmis les choix proposés :");
-            scanf("%d", &EvnmtExt.type);
-
-            if (EvnmtExt.type > 0)
-            {
-                printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                scanf("%d", &EvnmtExt.impact);
-            }
-            else
-            {
-                EvnmtExt.impact = 0;
-            }
-        }
-
-        if (EvnmtExt.type == 0) // aucun
-        {
-            EvnmtExt.impact = 0;
-            phero->alarme = EvnmtExt.impact;
-            phero->reine = 4;
-            phero->cohesion = 4;
-            printf("Tout va bien dans la fourmilière cet automne,\naucun evenement exterieur n'a impacté la tranquilité de nos fourmis !\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 1) // Tempête
-        {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-            }
-            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de PonteEtMortalite de tte façon => even ext rend encore + bas
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-            }
-            printf("La fourmilière subit une tempête d'impact %d,\n"
-                   "un peu cocasse mais habituel, ça devrait aller pour un automne !\n",
-                   EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en hiver est de 50%%\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 2) // Inondation
-        {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-            }
-            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3) // regrouper car pas bcp de PonteEtMortalite de tte façon => even ext rend encore + bas
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 2 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 2);
-            }
-            else if (EvnmtExt.impact == 3)
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 1 + (rand() % 2);
-                phero->cohesion = 1 + (rand() % 3);
-            }
-            printf("La fourmilière subit une inondation d'impact %d\n", EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
-            printf("\n");
-        }
-        else if (EvnmtExt.type == 3) // Invasion
-        {
-            if (EvnmtExt.impact == 1)
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 1;
-                phero->cohesion = (EvnmtExt.impact == 3) ? 0 : 1; // Impact fort peut affecter les mâles
-            }
-            else if (EvnmtExt.impact == 2 || EvnmtExt.impact == 3)
-            {
-                phero->alarme = EvnmtExt.impact;
-                phero->reine = 0;
-                phero->cohesion = 0;
-            }
-            printf("La fourmilière subit une invasion d'impact %d,\n"
-                   "un peu cocasse mais gérable!",
-                   EvnmtExt.impact);
-            printf("La probabilité que cet événement survienne en hiver est de 37,5%%\n");
-            printf("\n");
-        }
-    }
-    EvnmtChoice++;
+    if (EvnmtChoice != -1) // Au moins la deuxième exécution
+    {   
+        SaisonAExecuter = *saisonActuel;
+        GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+    }EvnmtChoice++;
 }
 
 void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone *phero)
-{   
+{
 
     if (archi.salles == 7)
-    {   
+    {
         // limite des stocks de graines
         int tempGraines = agriculture->quantitéGraines;
         if (tempGraines > 12000)
@@ -996,28 +699,28 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
 
         // limite des ouvrieres
         // limite des ouvrieres
-    int tempOuvrieres = compterFourmis(colo->ouvrieres);
-    if (tempOuvrieres > 900)
-    {
-        tempOuvrieres = 700;
-        OuvrieresReste = 100;
-        OuvrieresReste1 = 99;
-    int nOuvrièresSupprimes = tempOuvrieres * (50 + rand() % 21) / 100; // suppression entre 50% et 70%
-    for (int j = 0; j < nOuvrièresSupprimes; ++j)
-    {
-        supprimerFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
-    }
-    }
-    else if (tempOuvrieres > 800)
-    {
-        OuvrieresReste1 = tempOuvrieres - 804 + colo->nombreReines; // car les reines sont sur la même liste chainee mais pas dans la même salle
-        tempOuvrieres = 700;
-        OuvrieresReste = 100;
-    } 
-    else 
-    {
-        tempOuvrieres = tempOuvrieres - 4;
-    }
+        int tempOuvrieres = compterFourmis(colo->ouvrieres);
+        if (tempOuvrieres > 900)
+        {
+            tempOuvrieres = 700;
+            OuvrieresReste = 100;
+            OuvrieresReste1 = 99;
+            int nOuvrièresSupprimes = tempOuvrieres * (50 + rand() % 21) / 100; // suppression entre 50% et 70%
+            for (int j = 0; j < nOuvrièresSupprimes; ++j)
+            {
+                supprimerFourmi(&colo->ouvrieres, ROLE_OUVRIERE);
+            }
+        }
+        else if (tempOuvrieres > 800)
+        {
+            OuvrieresReste1 = tempOuvrieres - 804 + colo->nombreReines; // car les reines sont sur la même liste chainee mais pas dans la même salle
+            tempOuvrieres = 700;
+            OuvrieresReste = 100;
+        }
+        else
+        {
+            tempOuvrieres = tempOuvrieres - 4;
+        }
         // limite des pucerons
         int tempPucerons = elevage->nombrePucerons;
         if (tempPucerons > 1000)
@@ -1065,8 +768,8 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
             "                \x1b[48;2;115;71;60m-----\x1b[48;2;139;93;78m                      \x1b[48;2;210;160;135m-  %d -\x1b[48;2;139;93;78m                   \x1b\x1b[0m\x1b[48;2;115;71;60m-----\n"
             "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b\x1b[0m\x1b[48;2;115;71;60m------\n"
             "                             \x1b[48;2;115;71;60m--------------------------------\n",
-            tempGraines, GrainesReste, GrainesReste1, tempSoldats, SoldatsReste, tempOuvrieres , tempNourriture, OuvrieresReste, tempPucerons, OuvrieresReste1, tempMales, phero->ambiance, colo->nombreReines);
-        printf("\n"); 
+            tempGraines, GrainesReste, GrainesReste1, tempSoldats, SoldatsReste, tempOuvrieres, tempNourriture, OuvrieresReste, tempPucerons, OuvrieresReste1, tempMales, phero->ambiance, colo->nombreReines);
+        printf("\n");
         sleep(2);
     }
 }
