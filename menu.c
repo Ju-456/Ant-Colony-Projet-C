@@ -26,7 +26,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
     {
     case 1:
 
-        // FourmiliereEnEvolution(colo);
+        FourmiliereEnEvolution(colo);
 
         RandomColonie(colo, hyg, secu, elevage, agriculture);
 
