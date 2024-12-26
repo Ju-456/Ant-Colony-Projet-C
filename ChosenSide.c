@@ -184,15 +184,12 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
     agriculture->quantitéGraines = nOuvrieres * (3 + rand() % 3);      // 3 - 5 * proportion d'ouvrières
 
-    printf("=== Systeme Agricole ===\n");
+    printf("\n=== Systeme Agricole ===\n");
     printf("La quantité de nourriture : %d\n", agriculture->quantitéDeNourriture);
     printf("La quantité de graines : %d\n", agriculture->quantitéGraines);
 
-    printf("\n");
-
     printf("\n=== Systeme Elevage ===\n");
     printf("Le nombre de pucerons: %d\n", elevage->nombrePucerons);
-    printf("\n");
 
     for (int i = 0; i < nReines; ++i) // Ajout des reines à la liste chaînee
     {
@@ -228,9 +225,6 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
         scanf("%d", &hyg->niveauMaladie);
     }
 
-    printf("\n");
-
-    // faire sys tableau doubles entrer
     printf("\n=== Sécurité ===\n");
     printf("Entrez le niveau de protection (1 - 3): "); // le niveau de protection allant de 0 à 3
     scanf("%d", &secu->niveauProtection);
@@ -253,6 +247,8 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
     printf("\n");
 
     printf("Voici votre fourmilière de départ avant les changements :\n");
+    
+    printf("\n");
 }
 
 /* affichage simple pour test
@@ -283,11 +279,13 @@ void afficherEtatColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeEle
     printf("\n");
 }
 */
-void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi)
+
+void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, Hygiène *hyg, Sécurité *secu, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi)
 {
     static int EvnmtChoice = -1;
     int saisonChoice;
-    if (EvnmtChoice == -1){
+    if (EvnmtChoice == -1)
+    {
         printf("Choisissez une saison de départ :\n"
                "0. Hiver\n"
                "1. Printemps\n"
@@ -303,47 +301,90 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             scanf("%d", &saisonChoice);
         }
         *saisonActuel = saisonChoice;
-    } EvnmtChoice = 0;  // On marque qu'un choix a été effectué
 
+        if (saisonChoice == 0)
+        {
+            printf("\n");
+            printf("\n******************************** Récapitulatif de l'HIVER ****************************\n");
+        }
+    }
     // Simulation d'une saison
-    switch (saisonChoice)
-    { // Répartition des saisons : 0 = HIVER, 1 = PRINTEMPS, 2 = ETE, 3 = AUTOMNE
-
-    case 0: // HIVER
-        hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
-        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
-        printf("\n************************* Récapitulatif de l'HIVER ****************************\n");
-        break;
-
-    case 1:
-        printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
-        printf("\n****************************** Récapitulatif du PRINTEMPS **************************\n");
-        break;
-
-    case 2: // ETE
-        ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
-        printf("\n****************************** Récapitulatif de l'ÉTÉ ******************************\n");
-        break;
-
-    case 3: // AUTOMNE
-        automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
-        GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
-        printf("\n****************************** Récapitulatif de l'AUTOMNE ******************************\n");
-        break;
-
-    default:
-        break;
-    }
-
-    printf("saisonChoice : %d",saisonChoice);
-    saisonChoice++;
-    if (saisonChoice > 3)
+    if (*saisonActuel == 0)
     {
-        saisonChoice = 0;
+        // printf("\n******************************** Récapitulatif de l'HIVER ****************************\n");
+        hiver(saisonActuel, agriculture, EvnmtExt, phero, colo, elevage);
+        if (EvnmtChoice == -1)
+        {
+            GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        }
+        else
+        {
+            GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+        }
+        PonteEtMortalite(phero, colo);
+        NiveauPropreteEtMaladie(hyg, colo);
+        NiveauSecuritéEtProtection(secu, colo);
+        affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
     }
-    printf("saisonChoice après opé: %d",saisonChoice);
+    else if (*saisonActuel == 1)
+    {
+        printf("\n********************************** Récapitulatif du PRINTEMPS **************************\n");
+        printemps(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        if (EvnmtChoice == -1)
+        {
+            GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        }
+        else
+        {
+            GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+        }
+        PonteEtMortalite(phero, colo);
+        NiveauPropreteEtMaladie(hyg, colo);
+        NiveauSecuritéEtProtection(secu, colo);
+        affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+    }
+    else if (*saisonActuel == 2)
+    {
+        printf("\n********************************** Récapitulatif de l'ÉTÉ ******************************\n");
+        ete(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        if (EvnmtChoice == -1)
+        {
+            GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        }
+        else
+        {
+            GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+        }
+        PonteEtMortalite(phero, colo);
+        NiveauPropreteEtMaladie(hyg, colo);
+        NiveauSecuritéEtProtection(secu, colo);
+        affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+    }
+    else if (*saisonActuel == 3)
+    {
+        printf("\n****************************** Récapitulatif de l'AUTOMNE ******************************\n");
+        automne(saisonActuel, agriculture, elevage, EvnmtExt, phero, colo);
+        if (EvnmtChoice == -1)
+        {
+            GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+        }
+        else
+        {
+            GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+        }
+        PonteEtMortalite(phero, colo);
+        NiveauPropreteEtMaladie(hyg, colo);
+        NiveauSecuritéEtProtection(secu, colo);
+        affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+    }
+    (*saisonActuel)++;
+
+    if (*saisonActuel > 3)
+    {
+        *saisonActuel = 0;
+    } // afin de perpétuer le cycle 3,0,1,2,3 ects...
+
+    EvnmtChoice = 0; // On marque qu'un choix a été effectué
 
     // Simuler le vieillissement des fourmis
     Fourmi *current = colo->ouvrieres;
@@ -368,130 +409,103 @@ void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 
 void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel)
 {
-    static int EvnmtChoice = -1;
-    int SaisonAExecuter = *saisonActuel;
 
-        if (SaisonAExecuter == 0) // HIVER
+    if (*saisonActuel == 0) // HIVER
+    {
+        printf("\n");
+        printf("Voici le tableau des événement disponible en hiver :\n"
+               "Hiv[5] = {0, 1, 2, 3, 4};\nListe des types d'évènements :\n"
+               "0 = aucun  ; \n"
+               "1 =  tempete ; \n"
+               "2 = inondation ; \n"
+               "3 = invasion ;  \n"
+               "4 = hiver glacial (exclusivité hivernale !)\n"); // le 4 (hiver glacial) ne parait qu'en hiver
+        printf("\n");
+        printf("Choisissez un type d'évènement parmis les choix proposés :");
+        scanf("%d", &EvnmtExt->type);
+
+        if (EvnmtExt->type > 0)
         {
-            printf("\n");
-            if (EvnmtChoice == -1)
-            {
-                printf("Voici le tableau des événement disponible en hiver :\n"
-                       "Hiv[5] = {0, 1, 2, 3, 4};\n Liste des types d'évènements :\n"
-                       "0 = aucun  ; \n"
-                       "1 =  tempete ; \n"
-                       "2 = inondation ; \n"
-                       "3 = invasion ;  \n"
-                       "4 = hiver glacial (exclusivité hivernale !)\n"); // le 4 (hiver glacial) ne parait qu'en hiver
-                printf("\n");
-                printf("Choisissez un type d'évènement parmis les choix proposés :");
-                scanf("%d", &EvnmtExt->type);
-
-                if (EvnmtExt->type > 0)
-                {
-                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                    scanf("%d", &EvnmtExt->impact);
-                }
-                else
-                {
-                    EvnmtExt->impact = 0;
-                }
-            }
-            EvenementExterieurHiver(EvnmtExt, phero, colo, saisonActuel);
+            printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+            scanf("%d", &EvnmtExt->impact);
         }
-
-        else if (SaisonAExecuter == 1) // PRINTEMPS
+        else
         {
-            // Print[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
-            // les risques de 3 (invasion) sont plus eleves pdt le printemps
-            printf("\n");
-            if (EvnmtChoice == -1)
-            {
-                printf("Voici le tableau des événement disponible pour le printemps :\n"
-                       "Print[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                       "0 = aucun  ; \n"
-                       "1 =  tempete ; \n"
-                       "2 = inondation ; \n"
-                       "3 = invasion ;  \n");
-                printf("\n");
-                printf("Choisissez un type d'évènement parmis les choix proposés :");
-                scanf("%d", &EvnmtExt->type);
-
-                if (EvnmtExt->type > 0)
-                {
-                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                    scanf("%d", &EvnmtExt->impact);
-                }
-                else
-                {
-                    EvnmtExt->impact = 0;
-                }
-            }
-
-            EvenementExterieurPrintemps(EvnmtExt, phero, saisonActuel);
+            EvnmtExt->impact = 0;
         }
-        else if (SaisonAExecuter == 2) // ETE
+    }
+
+    else if (*saisonActuel == 1) // PRINTEMPS
+    {
+        // les risques de 3 (invasion) sont plus eleves pdt le printemps
+        printf("\n");
+        printf("Voici le tableau des événement disponible pour le printemps :\n"
+               "Print[4] = {0, 1, 2, 3};\nListe des types d'évènements :\n"
+               "0 = aucun  ; \n"
+               "1 =  tempete ; \n"
+               "2 = inondation ; \n"
+               "3 = invasion ;  \n");
+        printf("\n");
+        printf("Choisissez un type d'évènement parmis les choix proposés :");
+        scanf("%d", &EvnmtExt->type);
+
+        if (EvnmtExt->type > 0)
         {
-            // Ete[3] = {0, 1, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
-            // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
-            printf("\n");
-            if (EvnmtChoice == -1)
-            {
-                printf("Voici le tableau des événement disponible pour l'été' :\n"
-                       "Ete[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                       "0 = aucun  ; \n"
-                       "1 =  tempete ; \n"
-                       "3 = invasion ;  \n");
-                printf("\n");
-                printf("Choisissez un type d'évènement parmis les choix proposés :");
-                scanf("%d", &EvnmtExt->type);
-
-                if (EvnmtExt->type > 0)
-                {
-                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                    scanf("%d", &EvnmtExt->impact);
-                }
-                else
-                {
-                    EvnmtExt->impact = 0;
-                }
-            }
-            EvenementExterieurEte(EvnmtExt, phero, saisonActuel);
+            printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+            scanf("%d", &EvnmtExt->impact);
         }
-        else if (SaisonAExecuter == 3) // AUTOMNE
+        else
         {
-            // Aut[4] = {0, 1, 2, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
-            // Les invasions (3) et inondations (2) sont plus probables en automne.
-            printf("\n");
-            if (EvnmtChoice == -1)
-            {
-                printf("Voici le tableau des événement disponible pour l'automne' :\n"
-                       "Aut[4] = {0, 1, 2, 3};\n Liste des types d'évènements :\n"
-                       "0 = aucun  ; \n"
-                       "1 =  tempete ; \n"
-                       "2 = inondation ; \n"
-                       "3 = invasion ;  \n");
-                printf("\n");
-                printf("Choisissez un type d'évènement parmis les choix proposés :");
-                scanf("%d", &EvnmtExt->type);
-
-                if (EvnmtExt->type > 0)
-                {
-                    printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
-                    scanf("%d", &EvnmtExt->impact);
-                }
-                else
-                {
-                    EvnmtExt->impact = 0;
-                }
-            }
-            EvenementExterieurAutomne(EvnmtExt, phero, saisonActuel);
+            EvnmtExt->impact = 0;
         }
-    if (EvnmtChoice != -1) // Au moins la deuxième exécution
-    {   
-        SaisonAExecuter = *saisonActuel;
-        GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
-    }EvnmtChoice++;
+    }
+    else if (*saisonActuel == 2) // ETE
+    {
+        // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
+        printf("\n");
+        printf("Voici le tableau des événement disponible pour l'été :\n"
+               "Ete[4] = {0, 1, 2, 3};\nListe des types d'évènements :\n"
+               "0 = aucun  ; \n"
+               "1 =  tempete ; \n"
+               "3 = invasion ;  \n");
+        printf("\n");
+        printf("Choisissez un type d'évènement parmis les choix proposés :");
+        scanf("%d", &EvnmtExt->type);
+
+        if (EvnmtExt->type > 0)
+        {
+            printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+            scanf("%d", &EvnmtExt->impact);
+        }
+        else
+        {
+            EvnmtExt->impact = 0;
+        }
+    }
+    else if (*saisonActuel == 3) // AUTOMNE
+    {
+        // Les invasions (3) et inondations (2) sont plus probables en automne.
+        printf("\n");
+        printf("Voici le tableau des événement disponible pour l'automne :\n"
+               "Aut[4] = {0, 1, 2, 3};\nListe des types d'évènements :\n"
+               "0 = aucun  ; \n"
+               "1 =  tempete ; \n"
+               "2 = inondation ; \n"
+               "3 = invasion ;  \n");
+        printf("\n");
+        printf("Choisissez un type d'évènement parmis les choix proposés :");
+        scanf("%d", &EvnmtExt->type);
+
+        if (EvnmtExt->type > 0)
+        {
+            printf("Choisissez l'impact de l'évènement sur une échelle de 1 à 3 :");
+            scanf("%d", &EvnmtExt->impact);
+        }
+        else
+        {
+            EvnmtExt->impact = 0;
+        }
+    }
 }
 
 void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, Pheromone *phero)

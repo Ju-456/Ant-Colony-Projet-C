@@ -147,8 +147,7 @@ void RandomCalculAfterChosen(Colonie *colo, SystemeAgricole *agriculture, System
 // --- Gestion des Saisons ---
 // simuleUneSaison (appeler une saison) -> ex : hiver -> GestionEvenementExterne -> PonteEtMortalite -> affichageCycleSaison
 void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, Hygiène *hyg, Sécurité *secu, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi);
-void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi);
-
+void simuleUneSaisonChosen(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, int nbSaison, int *saisonActuel, Hygiène *hyg, Sécurité *secu, EvenementExterne *EvnmtExt, Pheromone *phero, Architecture archi);
 void PonteEtMortalite(Pheromone *phero, Colonie *colo);
 void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo);
 void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo);

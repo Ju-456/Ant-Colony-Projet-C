@@ -26,7 +26,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
     {
     case 1:
 
-        //FourmiliereEnEvolution(colo);
+        // FourmiliereEnEvolution(colo);
 
         RandomColonie(colo, hyg, secu, elevage, agriculture);
 
@@ -38,14 +38,19 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
         while (colo->nombreReines > 0)
         {
             simuleUneSaisonRandom(colo, agriculture, elevage, nbSaison, saisonActuel, hyg, secu, EvnmtExt, phero, archi);
-            //GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
-            PonteEtMortalite(phero, colo);
-            // NiveauPropreteEtMaladie(hyg, colo);
-            // NiveauSecuritéEtProtection(secu, colo);
-            //affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
+            // GestionEvenementExterneRandom(EvnmtExt, phero, colo, saisonActuel);
+            // PonteEtMortalite(phero, colo);
+            //  NiveauPropreteEtMaladie(hyg, colo);
+            //  NiveauSecuritéEtProtection(secu, colo);
+            // affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
+
+            /* ATTENTION : les fonctions en commentaires sont déja appeler dans simuleUneSaisonRandom,
+            c'est simplement pour la compréhesion du code qu'on a laissé une trace ici*/
+
             if (colo->nombreReines <= 0)
             {
                 colo->nombreReines = 0;
+                printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
                 affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
                 printf("Toutes les reines sont mortes, la colonie s'arrête ici..\n");
             }
@@ -59,15 +64,20 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
 
         while (colo->nombreReines > 0)
         {
-            simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, EvnmtExt, phero, archi);
-            GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
-            PonteEtMortalite(phero, colo);
-            NiveauPropreteEtMaladie(hyg, colo);
-            NiveauSecuritéEtProtection(secu, colo);
-            affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+            simuleUneSaisonChosen(colo, agriculture, elevage, nbSaison, saisonActuel, hyg, secu, EvnmtExt, phero, archi);
+            // GestionEvenementExterneChosen(EvnmtExt, phero, colo, saisonActuel);
+            // PonteEtMortalite(phero, colo);
+            // NiveauPropreteEtMaladie(hyg, colo);
+            // NiveauSecuritéEtProtection(secu, colo);
+            // affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
+
+            /* ATTENTION : les fonctions en commentaires sont déja appeler dans simuleUneSaisonRandom,
+            c'est simplement pour la compréhesion du code qu'on a laissé une trace ici*/
+
             if (colo->nombreReines <= 0)
             {
                 colo->nombreReines = 0;
+                printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
                 affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
                 printf("Toutes les reines sont mortes, la colonie s'arrête ici..\n");
             }
@@ -463,7 +473,7 @@ void EvenementExterieurPrintemps(EvenementExterne *EvnmtExt, Pheromone *phero, i
         int Print[8] = {0, 1, 2, 2, 3, 3, 3, 3}; // 0 = aucun  ; 1 =  tempete ; 2 = inondation ; 3 = invasion ;
         // les risques de 3 (invasion) sont plus eleves pdt le printemps
 
-        int index = rand() % 8;       // Génère un index aléatoire entre 0 et 7
+        int index = rand() % 8;        // Génère un index aléatoire entre 0 et 7
         EvnmtExt->type = Print[index]; // selectionne une valeur du tableau
 
         EvnmtExt->impact = 1 + (rand() % 3); // Impact entre 1 et 3
@@ -549,14 +559,14 @@ void EvenementExterieurPrintemps(EvenementExterne *EvnmtExt, Pheromone *phero, i
 }
 
 void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel)
-{   
+{
     static int EvnmtChoice = -1;
     if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
     {
         int Ete[8] = {0, 1, 1, 1, 3, 3, 3, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
         // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
 
-        int index = rand() % 8;     // Génère un index aléatoire entre 0 et 7
+        int index = rand() % 8;      // Génère un index aléatoire entre 0 et 7
         EvnmtExt->type = Ete[index]; // Sélectionne une valeur du tableau
 
         EvnmtExt->impact = 1 + (rand() % 3); // Impact entre 1 et 3
@@ -574,7 +584,7 @@ void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *sa
     }
     else if (EvnmtExt->type == 1) // Tempête
     {
-        EvnmtExt->impact = 1 + (rand() % 3);               // Impact entre 1 et 3
+        EvnmtExt->impact = 1 + (rand() % 3);                // Impact entre 1 et 3
         if (EvnmtExt->impact == 1 || EvnmtExt->impact == 2) // reste une période de forte PonteEtMortalite malgré even ext d'ou regrouper
         {
             phero->reine = 3 + (rand() % 5);
@@ -595,7 +605,7 @@ void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *sa
     }
     else if (EvnmtExt->type == 3) // Invasion
     {
-        EvnmtExt->impact = 1 + (rand() % 3);               // Impact entre 1 et 3
+        EvnmtExt->impact = 1 + (rand() % 3);                // Impact entre 1 et 3
         if (EvnmtExt->impact == 1 || EvnmtExt->impact == 2) // reste une période de forte PonteEtMortalite malgré even ext d'ou regrouper
         {
             phero->reine = 3 + (rand() % 5);
@@ -615,14 +625,14 @@ void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *sa
 }
 
 void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel)
-{   
+{
     static int EvnmtChoice = -1;
     if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
     {
         int Aut[8] = {0, 0, 1, 1, 2, 3, 3, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
         // Les invasions (3) et inondations (2) sont plus probables en automne.
 
-        int index = rand() % 8;     // Génère un index aléatoire entre 0 et 7
+        int index = rand() % 8;      // Génère un index aléatoire entre 0 et 7
         EvnmtExt->type = Aut[index]; // Sélectionne une valeur du tableau
 
         EvnmtExt->impact = 1 + (rand() % 3); // Impact entre 1 et 3
@@ -705,7 +715,6 @@ void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, int
         printf("La probabilité que cet événement survienne en automne est de 37,5%%\n");
         printf("\n");
     }
-
 }
 
 void PonteEtMortalite(Pheromone *phero, Colonie *colo)
@@ -850,10 +859,15 @@ void automne(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *el
 
 void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
 {
+    static int EvnmtChoice = -1;
+    if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
+    {
+        secu->niveauProtection = rand() % 3 + 1; // Genere aleaatoirement des valeurs entre 1 à 3
+        secu->attaquesReçues = rand() % 3 + 1;
+    }
 
-    // Genere aleaatoirement des valeurs entre 1 à 3
-    secu->niveauProtection = rand() % 3 + 1;
-    secu->attaquesReçues = rand() % 3 + 1;
+    EvnmtChoice++;
+
     int pertes = 0;
     int impact = secu->attaquesReçues - secu->niveauProtection;
     if (impact <= 0)
@@ -887,9 +901,13 @@ void NiveauSecuritéEtProtection(Sécurité *secu, Colonie *colo)
 
 void NiveauPropreteEtMaladie(Hygiène *hyg, Colonie *colo)
 {
-    // Genere aleaatoirement des valeurs entre 1 à 3
-    hyg->niveauProprete = rand() % 3 + 1;
-    hyg->niveauMaladie = rand() % 3 + 1;
+    static int EvnmtChoice = -1;
+    if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
+    {
+        hyg->niveauProprete = rand() % 3 + 1; // Genere aleaatoirement des valeurs entre 1 à 3
+        hyg->niveauMaladie = rand() % 3 + 1;
+    }
+    EvnmtChoice++;
 
     int pertes = 0;
     int impact = hyg->niveauMaladie - hyg->niveauProprete;

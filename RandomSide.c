@@ -21,7 +21,7 @@ int RandomColonie(Colonie *colo, Hygiène *hyg, Sécurité *secu, SystemeElevage
     colo->soldats = NULL;
     colo->nombreReines = 5;
 
-    //Genere aleaatoirement des valeurs entre 1 à 3
+    // Genere aleaatoirement des valeurs entre 1 à 3
     hyg->niveauProprete = rand() % 3 + 1;
     hyg->niveauMaladie = rand() % 3 + 1;
     secu->niveauProtection = rand() % 3 + 1;
@@ -51,7 +51,7 @@ int RandomColonie(Colonie *colo, Hygiène *hyg, Sécurité *secu, SystemeElevage
 
     elevage->nombrePucerons = nOuvrieres * (20 + rand() % 6) / 100;    // 20 - 25% de la proportion d'ouvrières
     agriculture->quantitéDeNourriture = nOuvrieres * (2 + rand() % 2); // 2 - 3 * proportion d'ouvrières
-    agriculture->quantitéGraines = nOuvrieres * (3 + rand() % 3);  // 3 - 5 * proportion d'ouvrières
+    agriculture->quantitéGraines = nOuvrieres * (3 + rand() % 3);      // 3 - 5 * proportion d'ouvrières
 
     return 0; // Succès
 }
@@ -69,7 +69,7 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             PonteEtMortalite(phero, colo);
             NiveauPropreteEtMaladie(hyg, colo);
             NiveauSecuritéEtProtection(secu, colo);
-            //printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
+            // printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
             break;
 
@@ -81,7 +81,7 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
             NiveauPropreteEtMaladie(hyg, colo);
             NiveauSecuritéEtProtection(secu, colo);
             affichageCycleSaisonRandom(colo, agriculture, elevage, phero);
-            
+
             break;
 
         case 2: // ETE
@@ -106,9 +106,9 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 
         default:
             break;
-        } 
+        }
         (*saisonActuel)++; // Incrémenter la valeur pointée par saisonActuel
-       
+
         // Simuler le vieillissement des fourmis
         Fourmi *current = colo->ouvrieres;
         while (current != NULL)
@@ -133,23 +133,20 @@ void simuleUneSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, SystemeE
 
 void GestionEvenementExterneRandom(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel)
 {
-    int SaisonAExecuter;
-    SaisonAExecuter = *saisonActuel;
-
-    if (SaisonAExecuter == 0)
+    if (*saisonActuel == 0)
     {
         printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
         EvenementExterieurHiver(EvnmtExt, phero, colo, saisonActuel);
     }
-    else if (SaisonAExecuter == 1)
+    else if (*saisonActuel == 1)
     {
         EvenementExterieurPrintemps(EvnmtExt, phero, saisonActuel);
     }
-    else if (SaisonAExecuter == 2)
+    else if (*saisonActuel == 2)
     {
         EvenementExterieurEte(EvnmtExt, phero, saisonActuel);
     }
-    else if (SaisonAExecuter == 3)
+    else if (*saisonActuel == 3)
     {
         EvenementExterieurAutomne(EvnmtExt, phero, saisonActuel);
     }
@@ -266,7 +263,7 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
         "                    \x1b[48;2;115;71;60m--------\x1b[48;2;139;93;78m               \x1b[48;2;210;160;135m------\x1b[48;2;139;93;78m             \x1b\x1b[0m\x1b[48;2;115;71;60m------\n"
         "                             \x1b[48;2;115;71;60m--------------------------------\n",
         tempGraines, GrainesReste, GrainesReste1, tempSoldats, SoldatsReste, tempOuvrieres - 5, tempNourriture, OuvrieresReste, tempPucerons, OuvrieresReste1, tempMales, phero->ambiance, colo->nombreReines);
-     // tempOuvrieres - 5, car on rappelle que les reines sont dans la même liste chainees que les ouvrières mais pas la même salle
+    // tempOuvrieres - 5, car on rappelle que les reines sont dans la même liste chainees que les ouvrières mais pas la même salle
     /*
         printf("\n--- DEBUG INFO APRES ---\n");
         printf("Nombre d'ouvrières : %d\n", compterFourmis(colo->ouvrieres));

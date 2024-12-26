@@ -21,8 +21,8 @@ void ajouterFourmi(Fourmi **tete, int role) // Fonction générique pour ajouter
     static int prochainId = 1;
 
     nouvelle->id = prochainId++; // Une fourmi = un ID unique
-    nouvelle->age = 0;          // Age fourmi déclaré à 0
-    nouvelle->role = role;      // Déclaration du role de la fourmi
+    nouvelle->age = 0;           // Age fourmi déclaré à 0
+    nouvelle->role = role;       // Déclaration du role de la fourmi
     nouvelle->suivante = *tete;
     *tete = nouvelle;
 }
@@ -78,8 +78,8 @@ void supprimerFourmiVieille(Fourmi **tete, int ignorerReines)
         return;
 
     Fourmi *courant = *tete;
-    Fourmi *Vieille = NULL; // Pointeur vers la fourmi la plus âgée trouvée
-    Fourmi *precedent = NULL; // Pointeur vers la fourmi précédente
+    Fourmi *Vieille = NULL;          // Pointeur vers la fourmi la plus âgée trouvée
+    Fourmi *precedent = NULL;        // Pointeur vers la fourmi précédente
     Fourmi *precedentVieille = NULL; // Pointeur vers la fourmi précédant la plus âgée
 
     int index = 0; // Index utilisé pour ignorer les reines si nécessaire
@@ -91,7 +91,7 @@ void supprimerFourmiVieille(Fourmi **tete, int ignorerReines)
         // Trouve la fourmi la plus âgée (hors reines si `ignorerReines > 0`)
         if (index >= ignorerReines && (!Vieille || courant->age > Vieille->age))
         {
-            Vieille = courant; // Met à jour la fourmi la plus âgée
+            Vieille = courant;            // Met à jour la fourmi la plus âgée
             precedentVieille = precedent; // Mémorise la fourmi précédente
         }
         precedent = courant;
