@@ -159,15 +159,15 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
 
     // limite des stocks de graines
     int tempGraines = agriculture->quantitéGraines;
-    if (tempGraines > 4000)
+    if (tempGraines > 10000)
     {
         tempGraines = 1000;
         GrainesReste = 8000;
         GrainesReste1 = 999;
     }
-    else if (tempGraines > 10000)
+    else if (tempGraines > 9000)
     {
-        GrainesReste1 = tempGraines - 3000;
+        GrainesReste1 = tempGraines - 9000;
         GrainesReste = 8000;
         tempGraines = 1000;
     }
@@ -203,9 +203,15 @@ void affichageCycleSaisonRandom(Colonie *colo, SystemeAgricole *agriculture, Sys
     }
     else if (tempOuvrieres > 800)
     {
-        OuvrieresReste1 = tempOuvrieres - 804 + colo->nombreReines; // car les reines sont sur la même liste chainee mais pas dans la même salle
+        OuvrieresReste1 = tempOuvrieres - 800 + colo->nombreReines; // car les reines sont sur la même liste chainee mais pas dans la même salle
         tempOuvrieres = 700;
         OuvrieresReste = 100;
+    }
+    else if (tempOuvrieres > 700)
+    {
+        OuvrieresReste = tempOuvrieres - 700 + colo->nombreReines;
+        tempOuvrieres = 700;
+        OuvrieresReste1 = 0;
     }
 
     // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire qui = valeur réelle décomposée en plusieurs partie pour respecter la limite de taille des cases

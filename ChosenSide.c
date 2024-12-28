@@ -515,9 +515,9 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
     {
         // limite des stocks de graines
         int tempGraines = agriculture->quantitéGraines;
-        if (tempGraines > 12000)
+        if (tempGraines > 9000)
         {
-            tempGraines = 11999;
+            tempGraines = 8999;
         }
         agriculture->quantitéGraines = tempGraines;
 
@@ -618,12 +618,13 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
         int tempOuvrieres = compterFourmis(colo->ouvrieres);
         if (tempOuvrieres > 200)
         {
-            tempOuvrieres = 199;
+            tempOuvrieres = 150;
+            OuvrieresReste = 49;
         }
         else if (tempOuvrieres > 150)
         {
             OuvrieresReste = tempOuvrieres - 150;
-            tempOuvrieres = 100;
+            tempOuvrieres = 150;
         } // comme ce n'est que pour de l'affichage, on affichera pas la valeur réelle mais temporaire qui = valeur réelle décomposée en plusieurs partie pour respecter la limite de taille des cases
 
         // limite des pucerons
@@ -677,7 +678,7 @@ void affichageCycleSaisonChosen(Architecture archi, Colonie *colo, SystemeAgrico
         sleep(2);
     }
 
-    else if (archi.salles == 13)
+    else if (archi.salles == 13) // vu la taille de la colonie, elle devrait contenir 6 reines. Mais on a mit 4 pour faciliter la condition de sortie
     {
         int GrainesReste = 0, GrainesReste1 = 0, SoldatsReste = 0, OuvrieresReste = 0, OuvrieresReste1 = 0;
 
