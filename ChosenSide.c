@@ -464,7 +464,7 @@ void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero,
         // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
         printf("\n");
         printf("Voici le tableau des événement disponible pour l'été :\n"
-               "Ete[4] = {0, 1, 2, 3};\nListe des types d'évènements :\n"
+               "Ete[4] = {0, 1, 3};\nListe des types d'évènements :\n"
                "0 = aucun  ; \n"
                "1 =  tempete ; \n"
                "3 = invasion ;  \n");

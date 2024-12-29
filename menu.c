@@ -563,7 +563,7 @@ void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *sa
     static int EvnmtChoice = -1;
     if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
     {
-        int Ete[8] = {0, 1, 1, 1, 3, 3, 3, 3}; // 0 = aucun  ; 1 = tempete ; 2 = inondation ; 3 = invasion
+        int Ete[8] = {0, 1, 1, 1, 3, 3, 3, 3}; // 0 = aucun  ; 1 = tempete ; 3 = invasion
         // Les inondations (2) sont inexistantes en été, et les invasions (3) sont fréquentes.
 
         int index = rand() % 8;      // Génère un index aléatoire entre 0 et 7
