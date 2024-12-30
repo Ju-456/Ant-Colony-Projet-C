@@ -148,7 +148,7 @@ void GestionEvenementExterneRandom(EvenementExterne *EvnmtExt, Pheromone *phero,
     }
     else if (*saisonActuel == 3)
     {
-        EvenementExterieurAutomne(EvnmtExt, phero, saisonActuel);
+        EvenementExterieurAutomne(EvnmtExt, phero,colo, saisonActuel);
     }
 }
 

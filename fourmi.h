@@ -160,7 +160,7 @@ void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero,
 void EvenementExterieurHiver(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel);
 void EvenementExterieurPrintemps(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel);
 void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel);
-void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel);
+void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel);
 
 void hiver(int *saisonActuel, SystemeAgricole *agriculture, EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, SystemeElevage *elevage);
 void printemps(int *saisonActuel, SystemeAgricole *agriculture, SystemeElevage *elevage, EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo);

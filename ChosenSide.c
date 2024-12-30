@@ -484,14 +484,17 @@ void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero,
     }
     else if (*saisonActuel == 3) // AUTOMNE
     {
-        // Les invasions (3) et inondations (2) sont plus probables en automne.
+        /* Les invasions (3) et inondations (2) sont plus probables en automne 
+        (5) est un évènement exclusif à l'automne.
+        Les parasites sont typiques de l'automne à cause de l'humidité accrue*/
         printf("\n");
         printf("Voici le tableau des événement disponible pour l'automne :\n"
-               "Aut[4] = {0, 1, 2, 3};\nListe des types d'évènements :\n"
+               "Aut[4] = {0, 1, 2, 3, 5};\nListe des types d'évènements :\n"
                "0 = aucun  ; \n"
                "1 =  tempete ; \n"
                "2 = inondation ; \n"
-               "3 = invasion ;  \n");
+               "3 = invasion ;  \n"
+               "5 = parasite ;  \n");
         printf("\n");
         printf("Choisissez un type d'évènement parmis les choix proposés :");
         scanf("%d", &EvnmtExt->type);

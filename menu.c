@@ -453,7 +453,7 @@ void EvenementExterieurHiver(EvenementExterne *EvnmtExt, Pheromone *phero, Colon
 
             printf("La fourmilière subit un hiver glacial,\n"
                    "c'est un hiver est presque FATAL pour la fourmilière.\nL'aventure aurait pu s'arrête ici...\n");
-            printf("La probabilité que cet événement survienne en hiver est de 6,25%%\n");
+            printf("La probabilité que cet événement survienne en hiver couplé à cet impact est de 4,16%%\n");
 
             int ReductionReines = 2;
             for (int i = 0; i < ReductionReines; ++i) // a chaque hiver glacial, -2 Reines, while(colo->nombreReines == 0) est la condition de sortie de l'algo
@@ -624,12 +624,12 @@ void EvenementExterieurEte(EvenementExterne *EvnmtExt, Pheromone *phero, int *sa
     }
 }
 
-void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, int *saisonActuel)
+void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, Colonie *colo, int *saisonActuel)
 {
     static int EvnmtChoice = -1;
     if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
     {
-        int Aut[8] = {0, 0, 1, 1, 2, 3, 3, 3}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
+        int Aut[8] = {0, 0, 1, 1, 2, 2, 3, 5}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
         // Les invasions (3) et inondations (2) sont plus probables en automne.
 
         int index = rand() % 8;      // Génère un index aléatoire entre 0 et 7
@@ -714,6 +714,43 @@ void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, int
                EvnmtExt->impact);
         printf("La probabilité que cet événement survienne en automne est de 37,5%%\n");
         printf("\n");
+    }
+    if (EvnmtExt->type == 5) // Parasite
+    {
+        if (EvnmtExt->impact == 1)
+        {
+            phero->reine = phero->cohesion = 0;
+            phero->alarme = EvnmtExt->impact + (rand() % 2);
+            printf("La fourmilière est affecté par un parasite à cause d'un taux d'humidité trop élevé,\n"
+                   "c'est un automne très compliqué pour la fourmilière..\n");
+            printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+            printf("\n");
+        }
+        else if (EvnmtExt->impact == 2)
+        {
+            phero->reine = phero->cohesion = 0;
+            phero->alarme = EvnmtExt->impact + (rand() % 2);
+            printf("La fourmilière est affecté par un parasite à cause d'un taux d'humidité trop élevé,\n"
+                   "c'est un automne est EXTREMEMENT compliqué pour la fourmilière..\n");
+            printf("La probabilité que cet événement survienne en hiver est de 12,5%%\n");
+            printf("\n");
+        }
+        else if (EvnmtExt->impact == 3)
+        {
+            phero->reine = phero->cohesion = 0;
+            phero->alarme = EvnmtExt->impact + (rand() % 2);
+
+            printf("La fourmilière est affecté par un parasite à cause d'un taux d'humidité trop élevé,\n"
+                   "c'est un automne est presque FATAL pour la fourmilière.\nL'aventure aurait pu s'arrête ici...\n");
+            printf("La probabilité que cet événement survienne en automne couplé à cet impact est de 4,16%%\n");
+
+            int ReductionReines = 1;
+            for (int i = 0; i < ReductionReines; ++i) // while(colo->nombreReines == 0) est la condition de sortie de l'algo
+            {
+                colo->nombreReines--; // les reines sont dans la même liste chainée que les ouvrières mais elles sont en tête de listes
+            }
+            printf("\n");
+        }
     }
 }
 
