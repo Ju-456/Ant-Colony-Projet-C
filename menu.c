@@ -630,6 +630,7 @@ void EvenementExterieurAutomne(EvenementExterne *EvnmtExt, Pheromone *phero, Col
     if (EvnmtChoice != -1) // si EvnmtChoice = !-1, ça veut dire que l'utilisateur a déjà choisit au départ
     {
         int Aut[8] = {0, 0, 1, 1, 2, 2, 3, 5}; // 0 = aucun  ; 1 = tempête ; 2 = inondation ; 3 = invasion
+        // 5 = parasite, evenement exclusif à l'automne
         // Les invasions (3) et inondations (2) sont plus probables en automne.
 
         int index = rand() % 8;      // Génère un index aléatoire entre 0 et 7
