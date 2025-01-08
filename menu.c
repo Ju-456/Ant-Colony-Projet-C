@@ -79,7 +79,7 @@ void menu(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *elevage, 
                 colo->nombreReines = 0;
                 printf("\n****************************** Récapitulatif de l'HIVER ****************************\n");
                 affichageCycleSaisonChosen(archi, colo, agriculture, elevage, phero);
-                printf("Toutes les reines sont mortes, la colonie s'arrête ici..\n");
+                printf("Il n'y a plus de reines dans la colonie, l'aventure s'arrête ici..\n");
             }
         }
         break;

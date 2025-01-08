@@ -22,11 +22,11 @@ void ChosenColonie(Colonie *colo, SystemeAgricole *agriculture, SystemeElevage *
         ">>> Salles Complémentaires Disponibles :\n"
         " - +2 Ouvrières, +2 Soldats\n\n"
         "=== Choix des Configurations ===\n"
-        " 1. Configuration **Minimale** :\n"
+        " 1. Configuration **Minimale** : (monogyne)\n"
         "    - Salles obligatoires uniquement (7 salles)\n\n"
-        " 2. Configuration **Moyenne** :\n"
+        " 2. Configuration **Moyenne** (polygyne) :\n"
         "    - Salles obligatoires +1 Ouvrières +1 Soldats (9 salles)\n\n"
-        " 3. Configuration **Maximale** :\n"
+        " 3. Configuration **Maximale** (polygyne) :\n"
         "    - Salles obligatoires +2 Ouvrières +2 Soldats (12 salles)\n\n"
         "*****************************************\n"
         ">>> Veuillez entrer 1, 2 ou 3 selon la configuration choisie : ");
@@ -494,7 +494,7 @@ void GestionEvenementExterneChosen(EvenementExterne *EvnmtExt, Pheromone *phero,
                "1 =  tempete ; \n"
                "2 = inondation ; \n"
                "3 = invasion ;  \n"
-               "5 = parasite ;  \n");
+               "5 = parasite ; (exclusivité automnale !) \n");
         printf("\n");
         printf("Choisissez un type d'évènement parmis les choix proposés :");
         scanf("%d", &EvnmtExt->type);
